@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Jan 21 16:40:45 CET 2002 - mvidner@suse.cz
+
+- Using Wizard module.
+- Moved etc_exports.scr from yast2-agent-any.
+- Keyboard shortcut fixes.
+- 2.5.6
+
+-------------------------------------------------------------------
 Wed Jan  9 10:07:49 CET 2002 - mvidner@suse.cz
 
 - Removed old menu entry. (2.5.5)
