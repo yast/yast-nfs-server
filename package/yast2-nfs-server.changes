@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 12 14:51:55 CEST 2002 - mvidner@suse.cz
+
+- Fixed dependencies, using devtools 2.6.6.
+- 2.6.5
+
+-------------------------------------------------------------------
 Thu Jul 04 21:31:21 CEST 2002 - arvin@suse.de
 
 - moved non binary files to /usr/share/YaST2
