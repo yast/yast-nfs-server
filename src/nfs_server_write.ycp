@@ -28,17 +28,17 @@
 
     import "NfsServer";
 
-    if (size (Args ()) != 1)
+    if (size (WFM::Args ()) != 1)
     {
 	y2error ("Exactly one argument required.");
 	return false;
     }
-    if (! is (Args (0), map))
+    if (! is (WFM::Args (0), map))
     {
 	y2error ("The argument must be a map.");
 	return false;
     }
 
     // The write is a simple one so we don't use Progress
-    return NfsServer::Import (Args (0)) && NfsServer::Write ();
+    return NfsServer::Import (WFM::Args (0)) && NfsServer::Write ();
 }
