@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug 22 19:59:27 CEST 2003 - nashif@suse.de
+
+- return required packages during autoinstallation
+
+-------------------------------------------------------------------
 Thu Aug 14 16:45:46 CEST 2003 - jsuchome@suse.cz
 
 - removed confirmation dialog, success dialog and added writing
