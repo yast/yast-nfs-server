@@ -86,10 +86,10 @@ else if (func == "Export") {
 /* Write givven settings */
 else if (func == "Write") {
     import "Progress";
-    Progress::off();
+    boolean progress_orig = Progress::set (false);
 	NfsServer::write_only = true;
     ret = NfsServer::Write();
-    Progress::on();
+    Progress::set (progress_orig);
 }
 /* Unknown function */
 else {

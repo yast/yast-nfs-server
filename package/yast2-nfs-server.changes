@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan  3 15:51:42 CET 2005 - mvidner@suse.cz
+
+- Adjusted for firewall's move to yast2.rpm.
+- Using Progress::set.
+- 2.11.1
+
+-------------------------------------------------------------------
 Wed Nov 10 13:09:29 CET 2004 - mvidner@suse.cz
 
 - Updated to new Mode.
