@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Mar  9 10:39:09 CET 2004 - lslezak@suse.cz
+
+- use Service::, Sequencer::
+- set icon
+- testsuite update
+- version 2.9.5
+
+-------------------------------------------------------------------
 Sun Mar  7 22:39:02 CET 2004 - kkaempf@suse.de
 
 - fix testsuite

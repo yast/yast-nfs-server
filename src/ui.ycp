@@ -29,6 +29,7 @@
     include "nfs_server/routines.ycp";
     import "Label";
     import "Popup";
+    import "Sequencer";
 
     /**
      * The kernel-based server can handle spaces in paths,
@@ -557,7 +558,9 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
     ];
 
     Wizard::CreateDialog ();
-	symbol ret = WizardSequencer (Aliases, Sequence);
+    Wizard::SetDesktopIcon("nfs_server");
+
+	symbol ret = Sequencer::Run(Aliases, Sequence);
 	UI::CloseDialog ();
 	return ret;
 	}

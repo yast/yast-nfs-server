@@ -32,7 +32,8 @@
     import "Require";
     import "Wizard";
     import "Popup";
-    include "wizard/sequencer.ycp";
+    import "Sequencer";
+
     include "nfs_server/ui.ycp";
 
     map Aliases = $[
@@ -76,8 +77,9 @@
     }
 
     Wizard::CreateDialog ();
+    Wizard::SetDesktopIcon("nfs_server");
 
-    any result = WizardSequencer (Aliases, Sequence);
+    any result = Sequencer::Run(Aliases, Sequence);
 
     if (result == `ws_finish)
     {
