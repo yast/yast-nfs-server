@@ -1,0 +1,48 @@
+#
+# spec file for package @RPMNAME@
+#
+# Copyright  (c)  2000  SuSE GmbH  Nuernberg, Germany.
+#
+# please send bugfixes or comments to @MAINTAINER@
+#
+
+# neededforbuild  autoconf automake ycpdoc yast2-testsuite dejagnu expect tcl yast2-base libycp liby2 libyui libscr yast2-core-wfm yast2-core-scr yast2-agent-system
+
+Vendor:		SuSE GmbH, Nuernberg, Germany
+Distribution:	SuSE Linux 6.4 (i386)
+Name:		@RPMNAME@
+Release:	1
+Copyright:	(c) 2000 SuSE GmbH
+Group:		System Environment/YaST
+Requires:	yast2 yast2-trans-nfs-server yast2-lib-wizard yast2-lib-sequencer
+BuildArchitectures:	noarch
+
+Packager:	@MAINTAINER@
+
+Summary:	Configuration of nfs server
+Version:	@VERSION@
+Source0:	@RPMNAME@-@VERSION@.tar.bz2
+
+%description
+-
+
+%prep
+%setup -n @RPMNAME@-@VERSION@
+
+%build
+./configure
+make
+
+%install
+make install
+make check
+%{?suse_check}
+
+%files
+%dir @YAST2DIR@/include/nfs_server
+@YAST2DIR@/include/nfs_server/*
+@YAST2DIR@/clients/nfs_server.ycp
+@YAST2DIR@/clients/nfs_server_write.ycp
+@YAST2DIR@/menuentries/menuentry_nfs_server.ycp
+%dir @DOCDIR@
+@DOCDIR@/*
