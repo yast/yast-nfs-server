@@ -1,12 +1,11 @@
 #
-# Makefile.am for nfs_server/doc
+# Makefile.am for nfs-server/doc
 #
 # $Id$
 #
 
 SUBDIRS = autodocs
 
-docdir = @DOCDIR@
 htmldir = $(docdir)
 
 screenshots = \
