@@ -19,7 +19,7 @@ no_wdelay,wdelay,nohide,hide,no_subtree_check,subtree_check,\
 insecure_locks,secure_locks,no_auth_nlm,auth_nlm,root_squash,\
 no_root_squash,all_squash,no_all_squash";
 
-    list exports = [$["allowed":["proj*.local.domain(rw)"], 
+    list<map<string,any> > exports = [$["allowed":["proj*.local.domain(rw)"], 
 		      "mountpoint":"/projects"], 
 		    $["allowed":["*.local.domain(ro)", "@trusted(rw)"], 
 		      "mountpoint":"/usr"], 

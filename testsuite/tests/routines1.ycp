@@ -14,7 +14,7 @@
     include "testsuite.ycp";
     include "nfs_server/routines.ycp";
 
-    list<map> exports = [$["allowed":["proj*.local.domain(rw)"], 
+    list<map<string,any> > exports = [$["allowed":["proj*.local.domain(rw)"], 
 		      "mountpoint":"/projects"], 
 		    $["allowed":["*.local.domain(ro)", "@trusted(rw)"], 
 		      "mountpoint":"/usr"], 

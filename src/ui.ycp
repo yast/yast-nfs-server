@@ -34,7 +34,7 @@
      * The kernel-based server can handle spaces in paths,
      * the user-mode server cannot.
      */
-    global boolean spaces_allowed = false;
+    boolean spaces_allowed = false;
 
     /**
      * Ask user for a directory to export. Allow browsing.
@@ -42,7 +42,7 @@
      * @param exports		exports list to check for duplicates
      * @return			a path to export or nil if cancelled
      */
-    global define string GetDirectory(string mountpoint, list<map> exports) ``{
+    define string GetDirectory(string mountpoint, list<map> exports) ``{
 	Wizard::SetScreenShotName ("nfs-server-2a-dir");
 
 	if (mountpoint == nil)
@@ -137,7 +137,7 @@ Create it?")) ? `ok : nil;
      * only with an unqualified name. We must not use "*" there
      * to mean an anonymous client.
      */
-    global boolean use_star_for_anonymous = false;
+    boolean use_star_for_anonymous = false;
 
     /**
      * Ask user for an entry for the allowed hosts list.
@@ -146,7 +146,7 @@ Create it?")) ? `ok : nil;
      * @param allowed	current list, to check for duplicates
      * @return		[newhosts, newopts] or nil if cancelled. Options without parentheses.
      */
-    global define list<string> GetAllowedHosts(string hosts, string opts, list<string> allowed) ``{
+    define list<string> GetAllowedHosts(string hosts, string opts, list<string> allowed) ``{
 	Wizard::SetScreenShotName ("nfs-server-2b-hosts");
 
 	if (hosts == nil)   hosts = "";
@@ -214,7 +214,7 @@ are already set."));
      * Opening NFS server dialog
      * @return `back, `abort, `next `or finish
      */
-    global define symbol BeginDialog () ``{
+    define symbol BeginDialog () ``{
 	Wizard::SetScreenShotName ("nfs-server-1-start");
 
 	boolean start_nfs_server = NfsServer::start;
@@ -296,7 +296,7 @@ a configuration dialog where you can specify the directories to export.</P>");
      * Exports dialog itself
      * @return `back, `abort, `next
      */
-    global define symbol ExportsDialog () ``{
+    define symbol ExportsDialog () ``{
 	Wizard::SetScreenShotName ("nfs-server-2-exports");
 
 	// Help, part 1 of 3
@@ -315,7 +315,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	help_text = help_text + _("<P>Please have a look at <B>man exports</B> for further information.</P>
 ");
 
-	list<map> exports = NfsServer::exports;
+	list<map<string,any> > exports = NfsServer::exports;
 
 	term contents =
 	    `VBox(
@@ -429,7 +429,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 						     }));
 
 		    if (mountpoint != nil) {
-			exports = maplist(map ent, exports, ``{
+			exports = maplist(map<string,any> ent, exports, ``{
 			    string tmp = ent["mountpoint"]:"";
 			    if (tmp == mp)
 			    return add(ent, "mountpoint", mountpoint);
@@ -444,7 +444,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    {
 		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil)
-		    exports = (list<map>) filter(map entry, exports,
+		    exports = filter(map<string,any> entry, exports,
 				     ``(entry["mountpoint"]:"" != mountpoint));
 
 		UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
@@ -504,7 +504,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		    integer alwno = (integer) UI::QueryWidget(`id(`allowedtab), `CurrentItem);
 		    if (allowed != nil && alwno != nil) {
 			allowed = remove (allowed, alwno);
-			exports = maplist(map entry, exports, ``{
+			exports = maplist(map<string,any> entry, exports, ``{
 			    if (entry["mountpoint"]:"" == mountpoint)
 			    entry = add(entry, "allowed", allowed);
 			    return entry;
@@ -536,7 +536,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	 * For use with autoinstallation.
 	 * @return sequence result
 	 */
-	global define symbol NfsServerAutoSequence() ``{
+	define symbol NfsServerAutoSequence() ``{
 
     map Aliases = $[
     "begin"   : ``(BeginDialog ()),

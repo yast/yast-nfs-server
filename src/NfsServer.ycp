@@ -59,7 +59,7 @@
      * ]
      *
      */
-    global list<map> exports = [];
+    global list<map<string,any> > exports = [];
 
     /**
      * Do we have nfslock? (nfs-utils: yes, nfs-server: no)
@@ -75,10 +75,10 @@
      * @see	exports
      */
     global define boolean Import (map settings) ``{
-	if (size (settings) == 0)
+/*	if (size (settings) == 0)
 	{
 	    // Reset - just continue with Set (#24544).
-	}
+	}*/
 
 	Set (settings);
 	return true;
@@ -115,7 +115,7 @@
      */
     global define boolean Read () ``{
 	start = Runlevel::ServiceEnabled ("nfsserver");
-	exports = (list<map>) SCR::Read (.etc.exports);
+	exports = (list<map<string,any> >) SCR::Read (.etc.exports);
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
 
 	return exports != nil;
