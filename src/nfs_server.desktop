@@ -1,0 +1,57 @@
+[Desktop Entry]
+Type=Application
+Categories=Qt;X-SuSE-YaST-Net_advanced;
+
+X-KDE-ModuleType=Library
+X-KDE-RootOnly=true
+X-KDE-HasReadOnlyMode=true
+X-KDE-Library=yast2
+X-KDE-FactoryName=nfs_server
+
+X-SuSE-YaST-Group=Net_advanced
+X-SuSE-YaST-Argument=
+X-SuSE-YaST-RootOnly=true
+X-SuSE-YaST-AutoInst=all
+X-SuSE-YaST-Geometry=
+X-SuSE-YaST-SortKey=
+X-SuSE-YaST-AutoinstResource=
+
+Icon=nfs
+Exec=/sbin/yast2 nfs_server 
+
+Name=NFS Server
+GenericName=Configure NFS server.
+Name[cs]=NFS server
+GenericName[cs]=Konfigurovat NFS server.
+Name[de]=NFS-Server
+GenericName[de]=Konfiguration des NFS-Servers
+Name[es]=Servidor NFS
+GenericName[es]=Configurar el servidor NFS
+Name[hu]=NFS szerver
+GenericName[hu]=Az NFS szerver beállítása.
+Name[it]=Server NFS
+GenericName[it]=Configura il server NFS.
+Name[ko]=NFS 서버
+GenericName[ko]=NFS 서버 구성
+Name[nl]=NFS server
+GenericName[nl]=Configureer NFS server
+Name[pt]=Servidor NFS
+GenericName[pt]=Configurar servidor NFS.
+Name[sk]=NFS server
+GenericName[sk]=Konfigurovať NFS server
+Name[sv]=NFS-server
+GenericName[sv]=Ställ in NFS-server
+Name[bg]=NFS сървър
+GenericName[bg]=Настройка на NFS сървър.
+GenericName[da]=Konfigurér NFS-server.
+Name[el]=Διακομιστής NFS
+GenericName[el]=Ρυθμίστε τον διακομιστή NFS.
+Name[fr]=Serveur NFS
+GenericName[fr]=Configuration du serveur NFS.
+Name[ja]=NFS サーバ
+GenericName[ja]=NFS サーバの設定
+GenericName[lt]=Konfigūruoti NFS serverį.
+GenericName[ru]=Настройка NFS-сервера.
+Name[sl]=Strežnik NFS
+GenericName[sl]=Nastavi NFS strežnik
+GenericName[tr]=NFS sunucusunu yapılandır.
