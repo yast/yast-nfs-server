@@ -1,9 +1,9 @@
 /**
  * File:             
- *   lan_nfs_client_dialogs.ycp
+ *   ui.ycp
  *
  * Module:
- *   Network
+ *   NFS server
  *
  * Summary:
  *   Network NFS server dialogs
@@ -26,7 +26,12 @@
     include "ui/common_popups.ycp";
     include "ui/file_popups.ycp";
 
-    /* Ask user for an entry. */
+    /**
+     * Ask user for a directory to export. Allow browsing.
+     * @param mountpoint	default value
+     * @param exports		exports list to check for duplicates
+     * @return string		path to export
+     */
     global define GetDirectory(string mountpoint, list exports) ``{
         if (mountpoint == nil)
             mountpoint = "";
@@ -91,7 +96,13 @@ contains this directory.")));
         return nil;
     };
 
-    /* Ask user for an entry. */
+    /**
+     * Ask user for an entry for the allowed hosts list.
+     * @param hosts	hosts default value
+     * @param opts	options default value
+     * @param allowed	current list, to check for duplicates
+     * @return list	[newhosts, newopts] or nil if cancelled. Options without parentheses.
+     */
     global define GetAllowedHosts(string hosts, string opts, list allowed) ``{
         if (hosts == nil)   hosts = "";
         if (opts == nil)    opts = "";
@@ -133,13 +144,14 @@ contains this directory.")));
 are already set.")));
                 ret = nil;
             }
+
       
         } while (ret != `ok && ret != `cancel);
 
         UI(`CloseDialog());
     
         if (ret == `ok)
-            return [ hosts, opts ];
+            return [ hosts, removechars (opts, "()") ];
         return nil;
     };
   
@@ -210,7 +222,10 @@ a configuration dialog where you can specify the directories to export.</P>"));
         
     }
 
-
+    /**
+     * Enable or disable the Edit and Delete buttons.
+     * @param enable	true/false
+     */
     global define EnableExportsButtons (boolean enable) ``{
 
         UI (`ChangeWidget (`id (`mpeditbut), `Enabled, enable));
@@ -438,8 +453,6 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
         {
             nfs_config = add (nfs_config, "exports", exports);
         }
-
-        UI(`ChangeWidget(`id(`next), `Label, _("&Back")));
 
         return ret;
 
