@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug  5 16:18:24 CEST 2002 - mvidner@suse.cz
+
+- Added autoyast interface (nashif).
+- 2.6.9
+
+-------------------------------------------------------------------
 Mon Jul 29 17:52:54 CEST 2002 - mvidner@suse.cz
 
 - After adding a directory to be exported, the restriction dialog
