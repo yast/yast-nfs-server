@@ -67,6 +67,10 @@ else if (func == "Reset") {
 else if (func == "Read") {
     ret = NfsServer::Read();
 }
+/* Install required packages */
+else if (func == "Packages") {
+    ret = NfsServer::required_packages;
+}
 /* Change configuration (run AutoSequence) */
 else if (func == "Change") {
     ret = NfsServerAutoSequence();
