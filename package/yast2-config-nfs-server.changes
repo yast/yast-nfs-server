@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Sep  3 14:16:37 CEST 2001 - mvidner@suse.cz
+
+- Start portmap only if not running already (Bug #9999). (2.4.10)
+
+-------------------------------------------------------------------
 Fri Aug 31 00:49:12 CEST 2001 - ro@suse.de
 
 - added <libycp-devel> to neededforbuild (for testsuite)
