@@ -30,6 +30,12 @@
     include "ui/file_popups.ycp";
 
     /**
+     * The kernel-based server can handle spaces in paths,
+     * the user-mode server cannot.
+     */
+    global boolean spaces_allowed = false;
+
+    /**
      * Ask user for a directory to export. Allow browsing.
      * @param mountpoint	default value
      * @param exports		exports list to check for duplicates
@@ -70,6 +76,14 @@
 		    // error popup message
 		    UI::MessagePopup(_("The exports table already
 contains this directory."));
+		    ret = nil;
+		}
+		else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
+		{
+		    UI::MessagePopup(sformat (_(
+"The user-mode NFS server (%1) cannot export directories
+with spaces in their names.
+Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
 		    ret = nil;
 		}
 		else if (SCR::Read (.target.size, mountpoint) < 0) {
