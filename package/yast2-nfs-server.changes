@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Mar 15 10:42:20 CET 2004 - mvidner@suse.cz
+
+- fixed canceling Abort (#35991)
+- re-enabled testsuite
+- 2.9.8
+
+-------------------------------------------------------------------
 Wed Mar 10 09:01:45 CET 2004 - kkaempf@suse.de
 
 - disable testsuite
