@@ -232,10 +232,6 @@ a configuration dialog where you can specify the directories to export.</P>");
 
 	/* The end of the definitions */
 
-	term finish_button = `PushButton (`id (`next),
-					  `opt (`default, `key_F10),
-					  Label::FinishButton());
-
 	term contents =
 	    `HVSquash(
 		// frame label
@@ -256,14 +252,13 @@ a configuration dialog where you can specify the directories to export.</P>");
 	do {
 	    if (!start_nfs_server)
 	    {
-		//UI::ChangeWidget (`id (`next), `Label, Label::FinishButton());
-		Wizard::ReplaceNextButton (finish_button);
+		Wizard::SetNextButton(`next, Label::FinishButton() );
+
 	    }
 	    else
 	    {
-		//UI::ChangeWidget (`id (`next), `Label, Label::NextButton());
-		Wizard::RestoreNextButton ();
-		UI::SetFocus(`id(`next));
+		Wizard::RestoreNextButton();
+		Wizard::SetFocusToNextButton();
 	    }
 
 	    ret = UI::UserInput ();
