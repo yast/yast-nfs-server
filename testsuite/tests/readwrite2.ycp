@@ -15,6 +15,7 @@
     import "NfsServer";
     import "Report";
 
+    NfsServer::write_only = false;
     Report::DisplayErrors (false, 0);
 
     map service_on = $[
@@ -103,7 +104,7 @@
     // Stop services!
     NfsServer::start = false;
     // And Write
-    TEST (``(NfsServer::Write (false)), [READ, WRITE, EXECUTE], nil);
+    TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
 
     // nfsserver and portmap are running
     DUMP ("\nRead  - services are running\n");
@@ -112,7 +113,7 @@
     // Start services (nfsserver)
     NfsServer::start = true;
     // And Write
-    TEST (``(NfsServer::Write (false)), [READ, WRITE, EXECUTE], nil);
+    TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
 
     // nfsserver and portmap are stopped
     DUMP ("\nRead  - services are stopped\n");
@@ -121,7 +122,7 @@
     // Leave services stopped
     NfsServer::start = false;
     // And Write
-    TEST (``(NfsServer::Write (false)), [READ3, WRITE, EXECUTE], nil);
+    TEST (``(NfsServer::Write ()), [READ3, WRITE, EXECUTE], nil);
 
     // nfsserver and portmap are stopped
     DUMP ("\nRead  - services are stopped\n");
@@ -130,5 +131,5 @@
     // Start services
     NfsServer::start = true;
     // And Write
-    TEST (``(NfsServer::Write (false)), [READ3, WRITE, EXECUTE], nil);
+    TEST (``(NfsServer::Write ()), [READ3, WRITE, EXECUTE], nil);
 }
