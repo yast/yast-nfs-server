@@ -1,4 +1,4 @@
 cat << END
-Exports ("$IN")
-Read (.)
+\`Exports ("$IN")
+\`Read (.)
 END
