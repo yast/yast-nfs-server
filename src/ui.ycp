@@ -1,0 +1,467 @@
+/**
+ * File:             
+ *   lan_nfs_client_dialogs.ycp
+ *
+ * Module:
+ *   Network
+ *
+ * Summary:
+ *   Network NFS server dialogs
+ *
+ * Authors:
+ *   Jan Holesovky <kendy@suse.cz>
+ *   Dan Vesely (dan@suse.cz)
+ *
+ * $Id$
+ *
+ * Network NFS server dialogs
+ *
+ */
+
+{
+
+    textdomain "lan";
+    
+    include "lan/lan_nfs_routines.ycp";
+    include "ui/file_popups.ycp";
+
+    /* Ask user for an entry. */
+    global define GetDirectory(string mountpoint, list exports) ``{
+        if (mountpoint == nil)
+            mountpoint = "";
+
+        UI(`OpenDialog(`opt(`decorated),
+                       `HBox(`HSpacing(1),
+                             `VBox(`VSpacing(0.2),
+                                   `HBox (
+                                           // text entry label
+                                           `TextEntry(`id(`mpent),
+                                                      _("&Directory to export:"), mountpoint),
+                                           `VBox (`VStretch(),
+                                                  `Bottom(`PushButton (`id (`browse), _("&Browse")))
+                                               )),
+                                   `VSpacing(0.2),
+                                   // ok pushbutton: confirm the dialog
+                                   `HBox(`PushButton(`id(`ok), `opt(`default), _("&OK")),
+                                         `PushButton(`id(`cancel), _("&Cancel"))),
+                                   `VSpacing(0.2)),
+                             `HSpacing(1)
+                           )));
+    
+        any ret = nil;
+        do {
+            ret = UI(`UserInput());
+      
+            mountpoint = UI(`QueryWidget(`id(`mpent), `Value));
+            list allowed = FindAllowed(exports, mountpoint);
+            if (ret == `ok &&
+                (allowed != nil ||
+                 !CheckPath(mountpoint))) {
+                if (allowed != nil) {
+                    // error popup message
+                    UI(`MessagePopup(_("The exports table already
+contains this directory.")));
+                }
+                ret = nil;
+            }
+            if (ret == `browse)
+            {
+                string dir = UI (`QueryWidget (`id (`mpent), `Value));
+                if (size (dir) == 0)
+                {
+                    dir = "/";
+                }
+                
+                dir = PopupDir (dir);
+                
+                if (size (dir) > 0)
+                {
+                    UI (`ChangeWidget (`id (`mpent), `Value, dir));
+                }
+                
+            }
+      
+        } while (ret != `ok && ret != `cancel);
+
+        UI(`CloseDialog());
+
+        if (ret == `ok)
+            return mountpoint;
+        return nil;
+    };
+
+    /* Ask user for an entry. */
+    global define GetAllowedHosts(string hosts, string opts, list allowed) ``{
+        if (hosts == nil)   hosts = "";
+        if (opts == nil)    opts = "";
+        if (allowed == nil) allowed = [];
+        list allowed_names = maplist(`str, allowed, ``{
+            integer brpos = findfirstof(str, "(");
+            if (str != nil)
+            str = substring(str, 0, brpos);
+            return str;
+        });
+
+        UI(`OpenDialog(`opt(`decorated),
+                       `HBox(`HSpacing(1),
+                             `VBox(`VSpacing(0.2),
+                                   // text entry label
+                                   `TextEntry(`id(`hostsent), _("&Hosts wildcard:"), hosts),
+                                   // text entry label
+                                   `TextEntry(`id(`optsent), _("&Options:"), opts),
+                                   `VSpacing(0.2),
+                                   // ok pushbutton: confirm the dialog
+                                   `HBox(`PushButton(`id(`ok), `opt(`default), _("&OK")),
+                                         `PushButton(`id(`cancel), _("&Cancel"))),
+                                   `VSpacing(0.2)),
+                             `HSpacing(1)
+                           )));
+    
+        any ret = nil;
+        do {
+            ret = UI(`UserInput());
+
+            hosts = UI(`QueryWidget(`id(`hostsent), `Value));
+            opts = UI(`QueryWidget(`id(`optsent), `Value));
+            if (ret == `ok && 
+                (!CheckNoSpaces(hosts) || !CheckNoSpaces(opts)))
+                ret = nil;
+            if (ret == `ok && contains(allowed_names, hosts)) {
+                // error popup message
+                UI(`MessagePopup(_("Options for this wildcard
+are already set.")));
+                ret = nil;
+            }
+      
+        } while (ret != `ok && ret != `cancel);
+
+        UI(`CloseDialog());
+    
+        if (ret == `ok)
+            return [ hosts, opts ];
+        return nil;
+    };
+  
+
+    /**
+     * Opening NFS server dialog
+     */
+    global define BeginDialog () ``{
+        
+        boolean start_nfs_server = (lookup(nfs_config, "start_server") == true);
+  
+        // Help, part 1 of 2
+        string help_text = UI(_(
+            "<P>Here you can choose whether you want to start NFS server on your computer
+and export some of your directories to the others.</P>"));
+        
+        // Help, part 2 of 2
+        help_text = help_text + UI(_(
+            "<P>If you choose <B>Start NFS server</B>, the <B>Next</B> button will open
+a configuration dialog where you can specify the directories to export.</P>"));
+        
+        /* The end of the definitions */
+        
+        term contents = 
+            `HVSquash(
+                // frame label
+                `Frame(_("NFS server"),
+                       `VBox(`VSpacing(0.2),
+                             `RadioButtonGroup(`id(`rbgroup),
+				// radio button label
+                                               `VBox(`Left(`RadioButton(`id(`servyes), `opt (`notify), _("&Start NFS server"), start_nfs_server)),
+				//radio button label
+                                                     `Left(`RadioButton(`id(`servno), `opt (`notify), _("Do &not start NFS server"), !start_nfs_server)))),
+                             `VSpacing(0.2))));
+        
+        // dialog title
+        UI(`SetWizardContents(_("Configuration of the NFS server"),
+                              contents, help_text, true, true));
+        
+        any ret = nil;
+        do {
+            if (!start_nfs_server)
+            {
+                UI (`ChangeWidget (`id (`next), `Label, _("&Finish")));
+            }
+            else
+            {
+                UI (`ChangeWidget (`id (`next), `Label, _("&Next")));
+            }
+            
+            ret = UI (`UserInput ());
+            start_nfs_server = (UI (`QueryWidget(`id(`rbgroup), `CurrentButton)) == `servyes);
+            
+        } while (ret != `back && ret != `next && ret != `cancel);
+        
+        if (ret == `next) 
+        {
+            nfs_config = add (nfs_config, "start_server", start_nfs_server);
+
+            if (!start_nfs_server)
+            {
+                return `finish;
+            }
+            
+        }
+
+        return ret;
+        
+    }
+
+
+    global define EnableExportsButtons (boolean enable) ``{
+
+        UI (`ChangeWidget (`id (`mpeditbut), `Enabled, enable));
+        UI (`ChangeWidget (`id (`mpdelbut), `Enabled, enable));
+        UI (`ChangeWidget (`id (`alweditbut), `Enabled, enable));
+        UI (`ChangeWidget (`id (`alwdelbut), `Enabled, enable));
+
+    }
+
+    /**
+     * Exports dialog itself
+     */
+    global define ExportsDialog () ``{
+
+        // Help, part 1 of 3
+        string help_text = UI(_("<P>The upper box contains all the directories which will be exported.
+If a directory is selected, the lower box shows the hosts allowed to
+mount this directory.</P>
+"));
+
+        // Help, part 2 of 3
+        help_text = help_text + UI(_("<P>Hosts wildcard sets which hosts can access the selected directory.
+It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
+<I>IP networks</I>.</P>
+"));
+
+        // Help, part 3 of 3
+        help_text = help_text + UI(_("<P>Please have a look at <B>man exports</B> for further information.</P>
+"));
+
+
+
+
+
+        list exports = lookup (nfs_config, "exports");
+
+        if (exports == nil)
+            exports = [];
+    
+        term contents =
+            `VBox(
+                `ReplacePoint(`id(`exportsrep), ExportsSelBox(exports)),
+                // push button label
+                `HBox(`PushButton(`id(`mpnewbut), _("Ne&w")),
+                      // push button label
+                      `PushButton(`id(`mpeditbut), _("Ed&it")),
+                      // push button label
+                      `PushButton(`id(`mpdelbut), _("De&lete"))),
+                // push button label
+                `VBox(`Left(`Label(`id(`allowedlab), "                                          ")),
+                      `Table(`id(`allowedtab), `opt(`notify, `immediate),
+                             // table headers "Host wildcards", "Options"
+                             `header(UI(_("Hosts wildcard"))+"  ", UI(_("Options"))+"  "),
+                             [])),
+                `HBox(`PushButton(`id(`alwnewbut), _("&New")),
+                      // push button label
+                      `PushButton(`id(`alweditbut), _("&Edit")),
+                      // push button label
+                      `PushButton(`id(`alwdelbut), _("&Delete")))
+                );
+
+        // dialog title
+        UI(`SetWizardContents(_("Directories to export to the others"),
+                              contents, help_text, true, true));
+        UI(`ChangeWidget(`id(`next), `Label, _("&Finish")));
+
+        EnableExportsButtons (false);
+
+
+        any ret = nil;
+        list hosts = nil;
+        do {
+            ret = UI(`UserInput());
+
+            if (ret == `exportsbox) {
+
+                UI (`ChangeWidget (`id (`mpeditbut), `Enabled, true));
+                UI (`ChangeWidget (`id (`mpdelbut), `Enabled, true));
+
+                string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+                UI(`ChangeWidget(`id(`allowedlab), `Value, mountpoint));
+      
+                list allowed = FindAllowed(exports, mountpoint);
+                if (allowed != nil)
+                    UI(`ChangeWidget(`id(`allowedtab), `Items,
+                                     AllowedTableItems(allowed)));
+
+                //UI(`ChangeWidget(`id(`mountpointent), `Value, mountpoint));
+            }
+            if (ret == `mpnewbut) {
+                string mountpoint = GetDirectory(nil, exports);
+      
+                if (mountpoint != nil) {
+                    exports = add(exports, $[ "mountpoint" : mountpoint,
+                                            "allowed"    : [] ]);
+                    UI(`ChangeWidget(`id(`allowedlab), `Value, mountpoint));
+                    UI(`ChangeWidget(`id(`allowedtab), `Items, []));
+                    UI(`ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports)));
+                    UI(`ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint));
+                }
+            }
+            if (ret == `mpeditbut) {
+                string mp = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+                if (mp != nil) {
+                    string mountpoint = GetDirectory(mp,
+                                                          filter(`ent, exports, ``{
+                                                              return lookup(ent, "mountpoint") != mp;
+                                                          }));
+        
+                    if (mountpoint != nil) {
+                        exports = maplist(`ent, exports, ``{
+                            string tmp = lookup(ent, "mountpoint");
+                            if (tmp == mp)
+                            return add(ent, "mountpoint", mountpoint);
+                            return ent;
+                        });
+                        UI(`ChangeWidget(`id(`allowedlab), `Value, mountpoint));
+                        UI(`ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports)));
+                        UI(`ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint));
+                    }
+                }
+            }
+            if (ret == `mpdelbut) {
+                string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+                if (mountpoint != nil)
+                    exports = filter(`entry, exports,
+                                     ``(lookup(entry, "mountpoint") != mountpoint));
+	  
+                UI(`ChangeWidget(`id(`allowedlab), `Value, "                     "));
+                UI(`ChangeWidget(`id(`allowedtab), `Items, []));
+                UI(`ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports)));
+            }
+
+            if (ret == `allowedtab) 
+            {
+                UI (`ChangeWidget (`id (`alweditbut), `Enabled, true));
+                UI (`ChangeWidget (`id (`alwdelbut), `Enabled, true));
+                
+            }
+    
+            /*if (ret == `allowedtab) {
+              string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+              list allowed = FindAllowed(exports, mountpoint);
+              if (allowed != nil) {
+              list ho = AllowedToHostsOpts(
+              select(allowed, UI(`QueryWidget(`id(`allowedtab), `CurrentItem))));
+	  
+              UI(`ChangeWidget(`id(`hostsent), `Value, select(ho, 0)));
+              UI(`ChangeWidget(`id(`optsent), `Value, select(ho, 1)));
+              }
+              }*/
+            if (ret == `alwnewbut) {
+                string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+                if (mountpoint != nil) {
+                    list allowed = FindAllowed(exports, mountpoint);
+	
+                    list hostopt = GetAllowedHosts(nil, nil, allowed);
+                    if (hostopt != nil) {
+                        allowed = add(allowed, select(hostopt, 0)+"("+select(hostopt, 1)+")");
+                        exports = ReplaceInExports(exports, mountpoint, allowed);
+	  
+                        UI(`ChangeWidget(`id(`allowedtab), `Items,
+                                         AllowedTableItems(allowed)));
+                    }
+                }
+            }
+            if (ret == `alweditbut) {
+                string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+                if (mountpoint != nil) {
+                    list allowed = FindAllowed(exports, mountpoint);
+                    string hosts = "";
+                    string opts = "";
+                    if (allowed != nil) {
+                        integer alw_no = UI(`QueryWidget(`id(`allowedtab), `CurrentItem));
+                        if (alw_no != nil) {
+                            list ho = AllowedToHostsOpts(select(allowed, alw_no));
+                            hosts = select(ho, 0);
+                            opts = select(ho, 1);
+                        }
+                        integer count = 0;
+                        allowed = filter(`str, allowed, ``{
+                            count = count+1;
+                            if (count-1 == alw_no)
+                            return false;
+                            return true;
+                        });
+                    }
+                    list hostopt = GetAllowedHosts(hosts, opts, allowed);
+                    if (hostopt != nil) {
+                        allowed = add(allowed, select(hostopt, 0)+"("+select(hostopt, 1)+")");
+                        exports = ReplaceInExports(exports, mountpoint, allowed);
+	  
+                        UI(`ChangeWidget(`id(`allowedtab), `Items,
+                                         AllowedTableItems(allowed)));
+                    }
+                }
+            }
+            if (ret == `alwdelbut) {
+                string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
+                if (mountpoint != nil) {
+                    list allowed = FindAllowed(exports, mountpoint);
+                    integer alwno = UI(`QueryWidget(`id(`allowedtab), `CurrentItem));
+                    if (allowed != nil && alwno != nil) {
+                        integer count = 0;
+                        allowed = filter(`str, allowed, ``{
+                            boolean dont_delete_this = (count != alwno);
+                            count = count+1;
+                            return dont_delete_this;
+                        });
+                        exports = maplist(`entry, exports, ``{
+                            if (lookup(entry, "mountpoint") == mountpoint)
+                            entry = add(entry, "allowed", allowed);
+                            return entry;
+                        });
+
+                        UI(`ChangeWidget(`id(`allowedtab), `Items,
+                                         AllowedTableItems(allowed)));
+                    }
+                }
+            }
+
+        } while (ret != `back && ret != `next && ret != `cancel);
+
+        if (ret == `next) 
+        {
+            nfs_config = add (nfs_config, "exports", exports);
+        }
+
+        UI(`ChangeWidget(`id(`next), `Label, _("&Back")));
+
+        return ret;
+
+
+    }
+
+
+    
+    /**
+     * Last confirmation dialog to use with sequencer
+     */
+    global define SaveDialog () ``{
+        
+        string message = UI (_("The entered values will be written now.
+Do you really want to use the new settings?"));
+        
+        if (UI(`YesNoPopup (message)))
+        {
+            return `finish;
+        }
+        
+        return `back;
+    }
+
+
+}

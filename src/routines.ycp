@@ -1,0 +1,253 @@
+/**
+ * File:
+ *   routines.ycp
+ *
+ * Module:
+ *   Configuration of nfs
+ *
+ * Summary:
+ *   Network NFS routines
+ *
+ * Authors:
+ *   Jan Holesovsky <kendy@suse.cz>
+ *   Dan Vesely <dan@suse.cz>
+ *
+ * $Id$
+ *
+ * Network NFS routines
+ *
+ */
+
+{
+    textdomain "lan";
+
+    /**
+     * Cleates a list of items for fstab entries 
+     * @param fstab list of fstab entries
+     * @return list of itemized table entries
+     */
+    global define FstabTableItems(list fstab) ``{
+        integer count = 0;
+        return maplist(`entry, fstab, ``{
+            term sp = SpecToServPath(lookup(entry, "spec"));
+            term it = `item(`id(count), select(sp, 0)+" ", select(sp, 1)+" ",
+                            lookup(entry, "file")+" ", lookup(entry, "mntops")+" ");
+            
+            count = count+1;
+            return it;
+        });
+    }
+
+    /* Split the "server:path" string into `couple("server", "path") */
+    global define SpecToServPath(string spec) ``{
+        integer colonpos = findfirstof(spec, ":");
+        string serv = "";
+        if (colonpos != nil) {
+            serv = substring(spec, 0, colonpos);
+            spec = substring(spec, colonpos+1);
+        }
+        return `couple(serv, spec);
+    }
+    
+
+    /* Cleates a list of items for fstab entries */
+    global define FstabTableItems(list fstab) ``{
+        integer count = 0;
+        return maplist(`entry, fstab, ``{
+            term sp = SpecToServPath(lookup(entry, "spec"));
+            term it = `item(`id(count), select(sp, 0)+" ", select(sp, 1)+" ",
+                            lookup(entry, "file")+" ", lookup(entry, "mntops")+" ");
+            
+            count = count+1;
+            return it;
+        });
+    }
+
+
+    /* Split the "hosts(opts)" string into `couple("hosts", "opts") */
+    global define AllowedToHostsOpts(string hosts) ``{
+        integer  brpos = findfirstof(hosts, "(");
+        string opts = "";
+        if (brpos != nil) {
+            opts = substring(hosts, brpos+1);
+            hosts = substring(hosts, 0, brpos);
+
+            brpos = findfirstof(opts, ")");
+            if (brpos != nil)
+                opts = substring(opts, 0, brpos);
+        }
+        return [ hosts, opts ];
+    };
+
+    /* allowed -> list of items */
+    global define AllowedTableItems(list allowed) ``{
+        integer count = 0;
+        return maplist(`str, allowed, ``{
+            list sp = AllowedToHostsOpts(str);
+            term it = `item(`id(count), select(sp, 0)+" ", select(sp, 1)+" ");
+	
+            count = count+1;
+            return it;
+        });
+    };
+
+    /* Find entry in exports according to the mountpoint */
+    global define FindAllowed(list exports, string mp) ``{
+        list flt = filter(`ent, exports, ``{
+            return (lookup(ent, "mountpoint") == mp);
+        });
+        if (flt == nil || size(flt) == 0)
+            return nil;
+    
+        return lookup(select(flt, 0), "allowed");
+    };
+
+    /* Cleates a list of items for mountpoints */
+    global define ExportsItems(list exports) ``{
+        return maplist(`entry, exports, ``{
+            string str = lookup(entry, "mountpoint");
+            return `item(`id(str), str+" ");
+        });
+    };
+  
+    global define ExportsSelBox(list exports) ``{
+        // selection box label
+        return `SelectionBox(`id(`exportsbox), `opt(`notify),
+                             _("Di&rectories"), ExportsItems(exports));
+    };
+
+    /* Check for the validity of the hostname */
+    global define CheckHostName(string name) ``{
+        if (size(name) > 0 && 
+            size(name) < 50 &&
+            name == filterchars(name,
+                                "-_.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")) {
+            return true;
+        } else
+	    // error popup message
+            UI(`DisplayMessage(sformat(UI(_("You entered a wrong host name. It must be
+shorter than 50 characters and you can use
+just 0..9, A..Z, a..z, dots, - and _.")))));
+        return false;
+    };
+
+    /* Check for the validity of the options */
+    global define CheckOptions(string name) ``{
+        
+        list keywords = ["async", "atime", "defaults", "dev", "exec", "noatime", "noauto", "nodev", "noexec",
+                        "nosuid", "nouser", "remount", "ro", "rw", "suid", "sync", "user", "uid", "gid",
+                        "setuid", "setgid", "mode", "protect", "usemp", "verbose", "prefix", "volume", "reserved",
+                        "root", "bs", "grpquota", "noquota", "quota", "usrquota", "bsddf", "minixdf", "check", "errors",
+                        "grpid", "bsdgroups", "nogrpid", "sysvgroups", "resgid", ""];
+        
+        
+        list names = splitstring (name, ",");
+        boolean wrong = contains (maplist (`n, names, ``(findfirstnotof (n, "0123456789abcdefghijklmnopqrstuvwxyz=") != nil)), true);
+        
+        if (!wrong &&
+            size(name) > 0 && 
+            size(name) < 70 &&
+            findfirstof(name, " \t") == nil)
+            return true;
+        else
+	    // error popup message
+            UI(`DisplayMessage(sformat(UI(_("You entered a wrong options string.
+It must be shorter than 70 characters 
+and it must not contain spaces.")))));
+        return false;
+    };
+    
+    /* Is this mountpoint in the fstab? */
+    global define IsMpInFstab(list fstab, string mpoint) ``{
+        list tmp = filter(`fse, fstab, ``{
+            return (lookup(fse, "file") == mpoint);
+        });
+        
+        if (size(tmp) == 0)
+            return false;
+        else
+	    // error popup message
+            UI(`DisplayMessage(sformat(UI(_("The fstab already contains an entry
+with mount-point '%1'.")), mpoint)));
+        return true;
+    };
+    
+
+    /* Check for the validity of the path/mountpoint */
+    global define CheckPath(string name) ``{
+        if (size(name) > 0 && 
+            size(name) < 70 &&
+            substring(name, 0, 1) == "/" &&
+            findfirstof(name, " \t") == nil)
+            return true;
+        else
+	    // error popup message
+            UI(`MessagePopup(sformat(UI(_("You entered a wrong path. It must be
+shorter than 70 characters, it must begin
+with a / and it must not contain spaces.")))));
+        return false;
+    };
+
+    /* Check for the validity of the options */
+    global define CheckNoSpaces(string name) ``{
+        if (size(name) > 0 && 
+            size(name) < 70 &&
+            findfirstof(name, " \t") == nil)
+            return true;
+        else
+	    // error popup message
+            UI(`MessagePopup(sformat(UI(_("You entered a wrong wildcard or options string.
+It must be shorter than 70 characters and it
+must not contain spaces.")))));
+        return false;
+    };
+
+    /* Replaces 'allowed' list in exports (for specified mountpoint) */
+    global define ReplaceInExports(list exports, string mountpoint, list allowed) ``{
+        return maplist(`entry, exports, ``{
+            if (lookup(entry, "mountpoint") == mountpoint)
+                entry = add(entry, "allowed", allowed);
+            return entry;
+        });
+    };
+ 
+    /**
+     * Checks the '/etc/fstab' options
+     * @return string with error message, emtpy string if ok
+     */
+    global define check_options (string options) ``{
+        
+        // To translators: error popup
+        if (size (options) == 0)   return _("Empty options string not allowed!");
+        if (options == "defaults") return "";
+        
+
+        list option_list = splitstring (options, ",");
+        list non_value   = ["bg", "fg", "soft", "hard", "intr", "posix", "cto", "ac", 
+                            "lock", "tcp", "udp", "defaults"];
+        list with_value  = ["rsize", "wsize", "timeo", "retrans", "acregmin", "acregmax", 
+                            "acdirmin", "acdirmin", "acdirmax", "actimeo", "retry", "namlen", 
+                            "port", "mountport", "mountport", "mounthost", "mountprog", 
+                            "mountvers", "nfsprog", "nfsvers"];
+        integer i = 0;
+        string current_option = "";
+
+        // first fiter out non value options and its nooptions forms (see nfs(5))
+        option_list = filter (`e, option_list, ``(!contains (non_value, e)));
+        non_value   = maplist (`e, non_value, ``(sformat ("no%1", e)));
+        option_list = filter (`e, option_list, ``(!contains (non_value, e)));
+        
+        while (i < size (option_list))
+        {
+            list value = splitstring (select (option_list, i), "=");
+            // To translators: error popup
+            if (size (value) != 2) return sformat (UI (_("Wrong option format: %1")), select (option_list, i));
+            // To translators: error popup
+            if (!contains (with_value, select (value, 0))) return sformat (UI (_("Wrong option: %1")), select (value, 0));
+            if (size (select (value, 1)) == 0) return sformat (UI (_("Empty value for option: %1")), select (value, 0));
+            i = i + 1;
+        }
+     
+        return "";
+    }
+}

@@ -13,7 +13,7 @@ clients_DATA =		\
 	nfs_server_write.ycp
 
 include_DATA =		\
-	io.ycp		\
+	routines.ycp	\
 	ui.ycp
 
 menu_DATA = menuentry_nfs_server.ycp

@@ -1,0 +1,76 @@
+/**
+ * File:
+ *   nfs_server.ycp
+ *
+ * Module:
+ *   Configuration of nfs_server
+ *
+ * Summary:
+ *   Module for the configuration of the nfs server
+ *
+ * Authors:
+ *   Jan Holesovsky <kendy@suse.cz>
+ *   Dan Vesely <dan@suse.cz>
+ *
+ * $Id$
+ *
+ * Module for the configuration of the nfs server
+ */
+
+/***
+ * <h3>Configuration of the nfs_server</h3>
+ */
+
+{
+
+    textdomain "lan";
+
+    include "ui/wizard_dialog.ycp";
+    include "wizard/sequencer.ycp";
+    include "nfs_server/ui.ycp";
+
+    map Aliases = $[
+        "begin"   : ``(BeginDialog ()),
+        "exports"   : ``(ExportsDialog ()),
+        "end"     : ``(SaveDialog ())
+        ];
+
+    map Sequence = $[
+        "ws_start"  : "begin",
+        "begin"     : $[
+            `next   : "exports",
+            `finish : "end"
+            ],
+        "exports"       : $[
+            `next   : "end"
+            ],
+        "end"       : $[
+            `finish    : `ws_finish
+            ]
+        ];
+
+    map nfs_config = $[
+        "start_server" : (SCR(`Read(.rc.system.NFS_SERVER)) == "yes"),
+        "exports"      : SCR(`Read(.etc.exports))
+        ];
+
+    UI (`CreateWizardDialog ());
+    UI (`ReplaceWizardAbortButton(`Empty (`id (`abort))));
+    
+    any result = WizardSequencer (Aliases, Sequence);
+
+    if (result == `ws_finish)
+    {
+        boolean start_nfs_server = lookup (nfs_config, "start_server", false);
+        list exports = lookup (nfs_config, "exports");
+
+	//FIXME
+	CallFunction(`nfs_server_write($[...]));
+        if (nfs_server_save (start_nfs_server, exports))
+        {
+            UI (`MessagePopup (_("All the settings were written and are ready to use.")));
+        }
+    }
+    
+    return UI(`CloseDialog());
+}
