@@ -1,0 +1,207 @@
+#!/usr/bin/perl -w
+#
+# $Id$
+# Author: Martin Vidner <mvidner@suse.cz>
+#
+
+# An agent for parsing and writing /etc/exports.
+# Improvements over the former any-agent:
+#  don't insert \\\n (#15937), handle spaces in paths (#15524).
+
+# For details about the file format, see
+# nfs-utils-0.3.3/support/nfs/xio.c
+
+# Read/write the whole chunk of data at once:
+# a list of maps like this: {
+#  "mountpoint"	=> "/projects",
+#  "allowed"	=> [ "*.local.domain(ro)", '@trusted(rw)'],
+# }
+# No caching/flushing is done.
+
+use lib "/usr/lib/YaST2/agents_non_y2";
+use ycp;
+use strict;
+use Errno qw(ENOENT);
+
+my @exports;
+
+my $filename;
+
+sub parse_file ()
+{
+    @exports = ();
+
+    if (!open (FILE, $filename))
+    {
+	return 1 if ($! == ENOENT); # ok if it is not there
+	y2error ("$filename: $!");
+	return 0;
+    }
+
+    my $prepend_line = "";
+    while (<FILE>)
+    {
+	# don't chomp
+	s/\#.*//s; # but cut also \n together with comments...
+
+
+	# line continuation:
+	$_ = $prepend_line . $_;
+	# ... so that we can check it here: "foo \#comment\n" will not match
+	if (/(.*)\\\n/)
+	{
+	    $prepend_line = $1 . " ";
+	    next;
+	}
+	else
+	{
+	    $prepend_line = "";
+	}
+
+	s/^\s+//;
+	next if /^$/;
+
+	my $mountpoint = parse_tok ();
+	my @allowed = ();
+	while ((my $export = parse_tok ()) ne "")
+	{
+	    push @allowed, $export;
+	}
+
+	push @exports, {mountpoint => $mountpoint, allowed => \@allowed};
+    }
+    close (FILE);
+    return 1;
+}
+
+sub parse_tok
+{
+    my $output = "";
+    my $quoted = 0;
+    for (;;)
+    {
+	# m/\G.../cg
+	# see perlop, Regexp Quote-Like Operators
+	# g:match multiple times,
+	# \G, start where last match left off,
+	# c: don't reset last match if this one failed
+	if    (/\G\"/cg)			{ $quoted ^= 1; }
+	elsif (!$quoted && /\G\s+(.*)/cg)	{ $_ = $1; last; }
+	elsif (/\G\\([0-3][0-7][0-7])/cg)	{ $output .= chr (oct $1); }
+	elsif (/\G(.)/cg)			{ $output .= $1; }
+	else { last; } # still inside a string. too bad.
+    }
+    return $output;
+}
+
+sub write_file ()
+{
+    open (FILE, ">$filename.YaST2.new") or return y2error ("$filename: $!"), 0;
+
+    foreach my $entry (@exports)
+    {
+	print FILE escape ($entry->{mountpoint}). "\t";
+	my $sep = "";
+	foreach my $e2 (@{$entry->{allowed}})
+	{
+	    print FILE $sep . escape ($e2);
+	    $sep = " ";
+	}
+	print FILE "\n";
+    }
+    close (FILE);
+
+    if (-f $filename)
+    {
+	rename $filename, "$filename.YaST2.save" or return y2error ("$filename: $!"), 0;
+    }
+    rename "$filename.YaST2.new", $filename or return  y2error ("$filename: $!"), 0;
+    return 1;
+}
+
+sub escape ($)
+{
+    my $in = shift;
+    # escape control chars, space, backslash, double quote
+    $in =~ s/([\000-\040\"\\])/sprintf "\\%03o",ord($1)/eg;
+    return $in;
+}
+
+#
+# MAIN cycle
+#
+
+# read the agent arguments
+$_ = <STDIN>;
+# no input at all - simply exit
+exit if ! defined $_;
+# reply to the client (this actually gets eaten by the ScriptingAgent)
+ycp::Return (undef);
+print "\n";
+
+my ($symbol, $fn, undef) = ycp::ParseTerm ($_);
+if ($symbol ne "Exports")
+{
+    y2error ("The first command must be the configuration.(Seen '$_')");
+    exit;
+}
+else
+{
+    $filename = $fn || "/etc/exports";
+}
+
+# if reading fails, defaulting to no exports
+parse_file ();
+
+while ( <STDIN> )
+{
+    my ($command, $path, $argument) = ycp::ParseCommand ($_);
+
+    if ($command eq "Dir")
+    {
+	ycp::Return ([]);
+    }
+
+    elsif ($command eq "Write")
+    {
+	my $result = "true";
+	if ($path eq "." && ref ($argument) eq "ARRAY")
+	{
+	    @exports = @{$argument};
+	    $result = write_file () ? "true":"false";
+	}
+	else
+	{
+	    y2error ("Wrong path $path or argument: ", ref ($argument));
+	    $result = "false";
+	}
+
+	ycp::Return ($result);
+    }
+
+    elsif ($command eq "Read")
+    {
+	if ($path eq ".")
+	{
+	    ycp::Return (\@exports);
+	}
+	else
+	{
+	    y2error ("Unrecognized path! '$path'");
+	    ycp::Return (undef);
+	}
+    }
+
+    elsif ($command eq "result")
+    {
+	exit;
+    }
+
+    # Unknown command
+    else
+    {
+	y2error ("Unknown instruction $command or argument: ", ref ($argument));
+	ycp::Return (undef);
+    }
+    print "\n";
+}

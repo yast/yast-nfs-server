@@ -27,7 +27,7 @@
  **
  *   Write(.etc.exports, $["allowed":["(ro,insecure,all_squash)"],
  *                         "mountpoint":"/pub"]]))
- *   (0)
+ *   (true)
  * 
  * $Id$
  *
@@ -37,24 +37,4 @@
  */
 .etc.exports
 
-`ag_anyagent(
-  Description(
-      ``(File("/etc/exports")),  // real file name
-      "#\n",			// Comment
-      false,			// read-only
-      ``(List(
-        Tuple(
-          `mountpoint(String("^\t \n")),
-          Optional(Whitespace()),
-	  Optional("\\\n"),
-          Optional(Whitespace()),
-	  `allowed(List(
-	    String("^\t \n\\"),
-	    //Or(Sequence(Optional(Whitespace()),
-	    //            "\\\n",
-	    //            Optional(Whitespace())),
-	       Whitespace()//)
-	  ))),
-	"\n"))
-    )
-)
+`ag_exports (Exports ())

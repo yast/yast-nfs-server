@@ -89,7 +89,7 @@
     }
 
     /**
-     * Reads NFS settings from the SCR (.etc.fstab)
+     * Reads NFS settings from the SCR (.etc.exports)
      * @return true on success
      */
     global define boolean Read () ``{
@@ -115,7 +115,7 @@
 	{
 	    SCR::Execute (.target.bash, "/bin/cp $ORIG $BACKUP", $["ORIG" : "/etc/exports", "BACKUP" : "/etc/exports.YaST2.save"]);
 
-	    if (SCR::Write(.etc.exports, exports) == nil)
+	    if (! SCR::Write(.etc.exports, exports))
 	    {
 		// error popup message
 		Report::Error (_("Unable to write to /etc/exports.
