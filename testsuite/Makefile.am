@@ -2,7 +2,7 @@
 # Makefile.am for .../testsuite
 #
 
-#AUTOMAKE_OPTIONS = dejagnu
+AUTOMAKE_OPTIONS = dejagnu
 
 ycp_testfiles = $(wildcard tests/*.out) $(wildcard tests/*.err) $(wildcard tests/*.ycp) $(wildcard tests/*.yh)
 
