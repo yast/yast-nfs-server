@@ -48,8 +48,8 @@
                                                )),
                                    `VSpacing(0.2),
                                    // ok pushbutton: confirm the dialog
-                                   `HBox(`PushButton(`id(`ok), `opt(`default), _("&OK")),
-                                         `PushButton(`id(`cancel), _("&Cancel"))),
+                                   `HBox(`PushButton(`id(`ok), `opt(`default), OKButtonLabel()),
+                                         `PushButton(`id(`cancel), CancelButtonLabel())),
                                    `VSpacing(0.2)),
                              `HSpacing(1)
                            )));
@@ -123,8 +123,8 @@ contains this directory.")));
                                    `TextEntry(`id(`optsent), _("&Options:"), opts),
                                    `VSpacing(0.2),
                                    // ok pushbutton: confirm the dialog
-                                   `HBox(`PushButton(`id(`ok), `opt(`default), _("&OK")),
-                                         `PushButton(`id(`cancel), _("&Cancel"))),
+                                   `HBox(`PushButton(`id(`ok), `opt(`default), OKButtonLabel()),
+                                         `PushButton(`id(`cancel), CancelButtonLabel())),
                                    `VSpacing(0.2)),
                              `HSpacing(1)
                            )));
@@ -151,7 +151,7 @@ are already set.")));
         UI(`CloseDialog());
     
         if (ret == `ok)
-            return [ hosts, removechars (opts, "()") ];
+            return [ hosts, deletechars (opts, "()") ];
         return nil;
     };
   
@@ -184,7 +184,7 @@ a configuration dialog where you can specify the directories to export.</P>"));
 				// radio button label
                                                `VBox(`Left(`RadioButton(`id(`servyes), `opt (`notify), _("&Start NFS server"), start_nfs_server)),
 				//radio button label
-                                                     `Left(`RadioButton(`id(`servno), `opt (`notify), _("Do &not start NFS server"), !start_nfs_server)))),
+                                                     `Left(`RadioButton(`id(`servno), `opt (`notify), _("&Don't start NFS server"), !start_nfs_server)))),
                              `VSpacing(0.2))));
         
         // dialog title
@@ -195,17 +195,21 @@ a configuration dialog where you can specify the directories to export.</P>"));
         do {
             if (!start_nfs_server)
             {
-                UI (`ChangeWidget (`id (`next), `Label, _("&Finish")));
+                UI (`ChangeWidget (`id (`next), `Label, FinishButtonLabel()));
             }
             else
             {
-                UI (`ChangeWidget (`id (`next), `Label, _("&Next")));
+                UI (`ChangeWidget (`id (`next), `Label, NextButtonLabel()));
             }
             
             ret = UI (`UserInput ());
+            if (ret == `abort && !UI (`ReallyAbortPopup (true)))
+	    {
+		continue;
+	    }
+
             start_nfs_server = (UI (`QueryWidget(`id(`rbgroup), `CurrentButton)) == `servyes);
-            
-        } while (ret != `back && ret != `next && ret != `cancel);
+        } while (ret != `back && ret != `next && ret != `abort);
         
         if (ret == `next) 
         {
@@ -269,9 +273,9 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
             `VBox(
                 `ReplacePoint(`id(`exportsrep), ExportsSelBox(exports)),
                 // push button label
-                `HBox(`PushButton(`id(`mpnewbut), _("Ne&w")),
+                `HBox(`PushButton(`id(`mpnewbut), _("Add &directory")),
                       // push button label
-                      `PushButton(`id(`mpeditbut), _("Ed&it")),
+                      `PushButton(`id(`mpeditbut), _("&Edit")),
                       // push button label
                       `PushButton(`id(`mpdelbut), _("De&lete"))),
                 // push button label
@@ -280,17 +284,17 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                              // table headers "Host wildcards", "Options"
                              `header(UI(_("Hosts wildcard"))+"  ", UI(_("Options"))+"  "),
                              [])),
-                `HBox(`PushButton(`id(`alwnewbut), _("&New")),
+                `HBox(`PushButton(`id(`alwnewbut), _("Add &host")),
                       // push button label
-                      `PushButton(`id(`alweditbut), _("&Edit")),
+                      `PushButton(`id(`alweditbut), _("Ed&it")),
                       // push button label
-                      `PushButton(`id(`alwdelbut), _("&Delete")))
+                      `PushButton(`id(`alwdelbut), _("Dele&te")))
                 );
 
         // dialog title
         UI(`SetWizardContents(_("Directories to export to the others"),
                               contents, help_text, true, true));
-        UI(`ChangeWidget(`id(`next), `Label, _("&Finish")));
+        UI(`ChangeWidget(`id(`next), `Label, FinishButtonLabel()));
 
         EnableExportsButtons (false);
 
@@ -300,8 +304,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
         do {
             ret = UI(`UserInput());
 
-            if (ret == `exportsbox) {
-
+            if (ret == `exportsbox)
+	    {
                 UI (`ChangeWidget (`id (`mpeditbut), `Enabled, true));
                 UI (`ChangeWidget (`id (`mpdelbut), `Enabled, true));
 
@@ -315,7 +319,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
                 //UI(`ChangeWidget(`id(`mountpointent), `Value, mountpoint));
             }
-            if (ret == `mpnewbut) {
+            else if (ret == `mpnewbut)
+	    {
                 string mountpoint = GetDirectory(nil, exports);
       
                 if (mountpoint != nil) {
@@ -327,7 +332,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                     UI(`ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint));
                 }
             }
-            if (ret == `mpeditbut) {
+            else if (ret == `mpeditbut)
+	    {
                 string mp = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
                 if (mp != nil) {
                     string mountpoint = GetDirectory(mp,
@@ -348,7 +354,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                     }
                 }
             }
-            if (ret == `mpdelbut) {
+            else if (ret == `mpdelbut)
+	    {
                 string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
                 if (mountpoint != nil)
                     exports = filter(`entry, exports,
@@ -358,15 +365,13 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                 UI(`ChangeWidget(`id(`allowedtab), `Items, []));
                 UI(`ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports)));
             }
-
-            if (ret == `allowedtab) 
+            else if (ret == `allowedtab) 
             {
                 UI (`ChangeWidget (`id (`alweditbut), `Enabled, true));
                 UI (`ChangeWidget (`id (`alwdelbut), `Enabled, true));
                 
             }
-    
-            /*if (ret == `allowedtab) {
+            /*else if (ret == `allowedtab) {
               string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
               list allowed = FindAllowed(exports, mountpoint);
               if (allowed != nil) {
@@ -377,7 +382,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
               UI(`ChangeWidget(`id(`optsent), `Value, select(ho, 1)));
               }
               }*/
-            if (ret == `alwnewbut) {
+            else if (ret == `alwnewbut)
+	    {
                 string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
                 if (mountpoint != nil) {
                     list allowed = FindAllowed(exports, mountpoint);
@@ -392,7 +398,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                     }
                 }
             }
-            if (ret == `alweditbut) {
+            else if (ret == `alweditbut)
+	    {
                 string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
                 if (mountpoint != nil) {
                     list allowed = FindAllowed(exports, mountpoint);
@@ -423,7 +430,8 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                     }
                 }
             }
-            if (ret == `alwdelbut) {
+            else if (ret == `alwdelbut)
+	    {
                 string mountpoint = UI(`QueryWidget(`id(`exportsbox), `CurrentItem));
                 if (mountpoint != nil) {
                     list allowed = FindAllowed(exports, mountpoint);
@@ -446,8 +454,11 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
                     }
                 }
             }
-
-        } while (ret != `back && ret != `next && ret != `cancel);
+	    else if (ret == `abort && !UI (`ReallyAbortPopup (true)))
+	    {
+		continue;
+	    }
+        } while (ret != `back && ret != `next && ret != `abort);
 
         if (ret == `next) 
         {
