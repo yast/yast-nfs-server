@@ -565,4 +565,36 @@ Do you really want to use the new settings?");
 	RestoreScreenShotName ();
 	return ret;
     }
+
+
+	/**
+	 * Whole configuration of NfsServer but without reading and writing.
+	 * For use with autoinstallation.
+	 * @return sequence result
+	 */
+	global define symbol NfsServerAutoSequence() ``{
+
+    map Aliases = $[
+    "begin"   : ``(BeginDialog ()),
+    "exports"   : ``(ExportsDialog ())
+    ];
+
+    map Sequence = $[
+    "ws_start"  : "begin",
+    "begin"     : $[
+	`next   : "exports",
+	`finish : `next,
+	`abort  : `abort
+	],
+    "exports"       : $[
+	`next   : `next,
+	`abort  : `abort
+	]
+    ];
+
+    Wizard::CreateDialog ();
+	symbol ret = WizardSequencer (Aliases, Sequence);
+	UI::CloseDialog ();
+	return ret;
+	}
 }
