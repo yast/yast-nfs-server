@@ -30,23 +30,6 @@
     include "ui/file_popups.ycp";
 
     /**
-     * Declare a name for the current dialog
-     * to ease making screenshots.
-     * @param s eg. "mail-1-conntype"
-     */
-    global define void SetScreenShotName (string s) ``{
-	UI::SetModulename (s);
-    }
-
-    /**
-     * Restore the screenshot name
-     * (currently sets fixed default name)
-     */
-    global define void RestoreScreenShotName () ``{
-	UI::SetModulename ("yast2");
-    }
-
-    /**
      * The kernel-based server can handle spaces in paths,
      * the user-mode server cannot.
      */
@@ -59,7 +42,7 @@
      * @return			a path to export or nil if cancelled
      */
     global define string GetDirectory(string mountpoint, list(map) exports) ``{
-	SetScreenShotName ("nfs-server-2a-dir");
+	Wizard::SetScreenShotName ("nfs-server-2a-dir");
 
 	if (mountpoint == nil)
 	    mountpoint = "";
@@ -139,7 +122,7 @@ Create it?")) ? `ok : nil;
 	} while (ret != `ok && ret != `cancel);
 
 	UI::CloseDialog();
-	RestoreScreenShotName ();
+	Wizard::RestoreScreenShotName ();
 
 	if (ret == `ok)
 	    return mountpoint;
@@ -162,7 +145,7 @@ Create it?")) ? `ok : nil;
      * @return		[newhosts, newopts] or nil if cancelled. Options without parentheses.
      */
     global define list(string) GetAllowedHosts(string hosts, string opts, list(string) allowed) ``{
-	SetScreenShotName ("nfs-server-2b-hosts");
+	Wizard::SetScreenShotName ("nfs-server-2b-hosts");
 
 	if (hosts == nil)   hosts = "";
 	if (opts == nil)    opts = "";
@@ -217,7 +200,7 @@ are already set."));
 	} while (ret != `ok && ret != `cancel);
 
 	UI::CloseDialog();
-	RestoreScreenShotName ();
+	Wizard::RestoreScreenShotName ();
 
 	if (ret == `ok)
 	    return [ hosts, opts ];
@@ -230,7 +213,7 @@ are already set."));
      * @return `back, `abort, `next `or finish
      */
     global define symbol BeginDialog () ``{
-	SetScreenShotName ("nfs-server-1-start");
+	Wizard::SetScreenShotName ("nfs-server-1-start");
 
 	boolean start_nfs_server = NfsServer::start;
 
@@ -302,7 +285,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 	    }
 	}
 
-	RestoreScreenShotName ();
+	Wizard::RestoreScreenShotName ();
 	return ret;
     }
 
@@ -311,7 +294,7 @@ a configuration dialog where you can specify the directories to export.</P>");
      * @return `back, `abort, `next
      */
     global define symbol ExportsDialog () ``{
-	SetScreenShotName ("nfs-server-2-exports");
+	Wizard::SetScreenShotName ("nfs-server-2-exports");
 
 	// Help, part 1 of 3
 	string help_text = _("<P>The upper box contains all the directories which will be exported.
@@ -540,7 +523,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    NfsServer::exports = exports;
 	}
 
-	RestoreScreenShotName ();
+	Wizard::RestoreScreenShotName ();
 	return ret;
     }
 
@@ -550,7 +533,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
      * @return `back or `finish
      */
     global define symbol SaveDialog () ``{
-	SetScreenShotName ("nfs-server-3-save");
+	Wizard::SetScreenShotName ("nfs-server-3-save");
 
 	// yes-no popup
 	string message = _("The entered values will be written now.
@@ -562,7 +545,7 @@ Do you really want to use the new settings?");
 	    ret = `finish;
 	}
 
-	RestoreScreenShotName ();
+	Wizard::RestoreScreenShotName ();
 	return ret;
     }
 
