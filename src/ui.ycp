@@ -177,6 +177,8 @@ Create it?")) ? `ok : nil;
 	UI::OpenDialog(`opt(`decorated),
 		       `HBox(`HSpacing(1),
 			     `VBox(`VSpacing(0.2),
+				   // make at least the default options fit
+				   `HSpacing (30),
 				   // text entry label
 				   `TextEntry(`id(`hostsent), _("&Hosts wildcard:"), hosts),
 				   // text entry label
@@ -244,6 +246,9 @@ a configuration dialog where you can specify the directories to export.</P>");
 
 	/* The end of the definitions */
 
+	term finish_button = `PushButton (`id (`next), `opt (`default),
+					  FinishButtonLabel());
+
 	term contents =
 	    `HVSquash(
 		// frame label
@@ -264,11 +269,13 @@ a configuration dialog where you can specify the directories to export.</P>");
 	do {
 	    if (!start_nfs_server)
 	    {
-		UI::ChangeWidget (`id (`next), `Label, FinishButtonLabel());
+		//UI::ChangeWidget (`id (`next), `Label, FinishButtonLabel());
+		Wizard::ReplaceNextButton (finish_button);
 	    }
 	    else
 	    {
-		UI::ChangeWidget (`id (`next), `Label, NextButtonLabel());
+		//UI::ChangeWidget (`id (`next), `Label, NextButtonLabel());
+		Wizard::RestoreNextButton ();
 	    }
 
 	    ret = UI::UserInput ();
@@ -348,10 +355,11 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		      `PushButton(`id(`alwdelbut), _("Dele&te")))
 		);
 
-	// dialog title
-	Wizard::SetContents(_("Directories to export to the others"),
-			      contents, help_text, true, true);
-	UI::ChangeWidget(`id(`next), `Label, FinishButtonLabel());
+	Wizard::SetContentsButtons (
+	    // dialog title
+	    _("Directories to export to the others"),
+	    contents, help_text,
+	    BackButtonLabel (), FinishButtonLabel());
 
 	any ret = nil;
 	any simulated = nil; // simulated user input
