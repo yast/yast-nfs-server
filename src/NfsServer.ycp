@@ -31,7 +31,7 @@
      * Required packages for this module to operate
      *
      */
-    global list required_packages = ["nfs-utils"];
+    global list<string> required_packages = ["nfs-utils"];
 
 
 	/**
