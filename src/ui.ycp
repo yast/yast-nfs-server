@@ -99,8 +99,8 @@ contains this directory."));
 		}
 		else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
 		{
-		    UI::MessagePopup(sformat (_(
-"The user-mode NFS server (%1) cannot export directories
+		    UI::MessagePopup(sformat (
+_("The user-mode NFS server (%1) cannot export directories
 with spaces in their names.
 Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
 		    ret = nil;
@@ -108,7 +108,7 @@ Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
 		else if (SCR::Read (.target.size, mountpoint) < 0) {
 		    // the dir does not exist
 		    ret = UI::YesNoPopup(_("The directory does not exist.
-Do you want to create it?")) ? `ok : nil;
+Create it?")) ? `ok : nil;
 		}
 	    }
 	    else if (ret == `browse)
@@ -225,13 +225,13 @@ are already set."));
 	boolean start_nfs_server = NfsServer::start;
 
 	// Help, part 1 of 2
-	string help_text = _(
-	    "<P>Here you can choose whether you want to start NFS server on your computer
+	string help_text =
+_("<P>Here you can choose whether you want to start NFS server on your computer
 and export some of your directories to the others.</P>");
 
 	// Help, part 2 of 2
-	help_text = help_text + _(
-	    "<P>If you choose <B>Start NFS server</B>, the <B>Next</B> button will open
+	help_text = help_text +
+_("<P>If you choose <B>Start NFS server</B>, the <B>Next</B> button will open
 a configuration dialog where you can specify the directories to export.</P>");
 
 	/* The end of the definitions */
