@@ -104,19 +104,31 @@
     }
 
     /**
-     * Saves NFS server configuration. (exports(5))
+     * Saves NFS server configuration without actually restarting any
+	 * services
      * Creates any missing directories.
-     * (No parameters because it is too short to abort)
      * @return true on success
      */
-    global define boolean Write () ``{
+    global define boolean WriteOnly () ``{
+		boolean ret = Write(true);
+		return (ret);
+	}
+
+
+    /**
+     * Saves NFS server configuration. (exports(5))
+     * Creates any missing directories.
+     * @return true on success
+     */
+    global define boolean Write (boolean writeonly) ``{
 	// if there is still work to do, don't return false immediately
 	// but remember the error
 	boolean ok = true;
 
 	if (!start)
 	{
-	    Runlevel::RunInitScript ("nfsserver", "stop");
+		if (!writeonly)
+			Runlevel::RunInitScript ("nfsserver", "stop");
 	    if (! Runlevel::ServiceAdjust ("nfsserver", "disable"))
 	    {
 		Report::Error (Runlevel::error_msg);
@@ -124,7 +136,8 @@
 	    }
 	    if (have_nfslock)
 	    {
-		Runlevel::RunInitScript ("nfslock", "stop");
+		if (!writeonly)
+			Runlevel::RunInitScript ("nfslock", "stop");
 		if (! Runlevel::ServiceAdjust ("nfslock", "disable"))
 		{
 		    Report::Error (Runlevel::error_msg);
@@ -176,27 +189,30 @@ exported directories.\n"));
 		ok = false;
 	    }
 
-	    if (Runlevel::ServiceStatus ("portmap") != 0)
-	    {
-		// portmap must not be started if it is running already (see bug # 9999)
-		Runlevel::RunInitScript ("portmap", "start");
-	    }
+		if (!writeonly)
+		{
+			if (Runlevel::ServiceStatus ("portmap") != 0 )
+			{
+			// portmap must not be started if it is running already (see bug # 9999)
+				Runlevel::RunInitScript ("portmap", "start");
+			}
 
-	    Runlevel::RunInitScript ("nfsserver", "stop");
-	    if (have_nfslock)
-	    {
-		Runlevel::RunInitScript ("nfslock", "restart");
-	    }
-	    Runlevel::RunInitScript ("nfsserver", "start");
+			Runlevel::RunInitScript ("nfsserver", "stop");
+			if (have_nfslock)
+			{
+				Runlevel::RunInitScript ("nfslock", "restart");
+			}
+			Runlevel::RunInitScript ("nfsserver", "start");
 
-	    if (Runlevel::ServiceStatus ("nfsserver") != 0)
-	    {
-		// error popup message
-		Report::Error (_("Unable to restart the NFS server.
+			if (Runlevel::ServiceStatus ("nfsserver") != 0)
+			{
+				// error popup message
+				Report::Error (_("Unable to restart the NFS server.
 Your changes will be active after reboot.
 "));
-		ok = false;
-	    }
+				ok = false;
+			}
+		}
 	}
 
 	return ok;
