@@ -268,7 +268,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 	    }
 	    if (ret == `abort && !Popup::ReallyAbort (true))
 	    {
-		continue;
+		ret = `again;
 	    }
 
 	    start_nfs_server = (UI::QueryWidget(`id(`rbgroup), `CurrentButton) == `servyes);
@@ -513,7 +513,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    }
 	    else if (ret == `abort && !Popup::ReallyAbort (true))
 	    {
-		continue;
+		ret = `again;
 	    }
 	} while (ret != `back && ret != `next && ret != `abort);
 
