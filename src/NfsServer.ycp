@@ -25,6 +25,7 @@
     import "Progress";
     import "Wizard";
 
+    global define void Set (map settings);
 
     /**
      * Required packages for this module to operate
@@ -58,7 +59,7 @@
      * ]
      *
      */
-    global list(map) exports = [];
+    global list<map> exports = [];
 
     /**
      * Do we have nfslock? (nfs-utils: yes, nfs-server: no)
@@ -114,10 +115,10 @@
      */
     global define boolean Read () ``{
 	start = Runlevel::ServiceEnabled ("nfsserver");
-	exports = SCR::Read (.etc.exports);
-	have_nfslock = SCR::Read (.init.scripts.exists, "nfslock");
+	exports = (list<map>) SCR::Read (.etc.exports);
+	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
 
-	return exports != nillist;
+	return exports != nil;
     }
 
 
@@ -127,11 +128,11 @@
      */
     global define boolean WriteExports () ``{
 	    // create missing directories.
-	    foreach (map entry, exports, ``{
-		string directory = entry["mountpoint"]:nil;
+	    foreach (map<string, any> entry, exports, ``{
+		string directory = (string) (entry["mountpoint"]:nil);
 		if (SCR::Read (.target.dir, directory) == nil)
 		{
-		    if (! SCR::Execute (.target.mkdir, directory))
+		    if (! (boolean) SCR::Execute (.target.mkdir, directory))
 		    {
 			// not fatal - write other dirs.
 			Report::Warning (sformat(_("Unable to create a missing directory:\n%1"), directory));
