@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 11 10:34:54 CEST 2001 - mvidner@suse.cz
+
+- Better export options checking; default options are nonempty ("*()")
+  to avoid warnings. (#11615) 
+- 2.5.1
+
+-------------------------------------------------------------------
 Thu Sep 20 18:56:55 CEST 2001 - mvidner@suse.cz
 
 - Leave disabled the Add host button until a mount point is selected
