@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<!-- $Id$ -->
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>Network Filesystem Server (NFS) - YaST2 configuration module</title>
+<style type="text/css">
+    .type {color: #c05000}
+</style>
+</head>
+<body bgcolor="white">
+<h1>Network Filesystem Server (NFS) - YaST2 configuration module</h1>
+
+<h2>Features</h2>
+
+<p>The NFS server config module manages the /etc/exports file and
+starts and stops the necessary init scripts: nfsserver and portmap.
+
+<p>Directories to export can be selected in a browse dialog.
+
+<h2>Background Documentation</h2>
+
+<ul>
+<li><a href="man:exports(5)">man exports(5)</a>
+<li><a
+href="http://www.linuxbase.org/spec/gLSB/gLSB/iniscrptact.html">Linux
+Standard Base, Init Script Actions</a>
+</ul>
+
+<h2>Workflow</h2>
+
+<h3>Changes since SL 7.2</h3>
+
+<p>The 'New' buttons changed names to 'Add directory' and 'Add host'.
+<p>Keyboard shortcuts have been made unique.
+<p>An 'Abort' button has been added.
+
+<h3>Overview</h3>
+
+<p><img src="nfs-server-flow.png">
+
+<h3>Individual dialogs</h3>
+
+<p><img src="nfs-server1.png">
+<p><img src="nfs-server2.png">
+<p><img src="save.png">
+
+<h2>Implementation</h2>
+
+<p><a href="autodocs/">Autodocs</a>
+
+<hr>
+<address><a href="mailto:mvidner@suse.cz">Martin Vidner</a></address>
+</body>
+</html>
