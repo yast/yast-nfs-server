@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jun 27 12:02:23 CEST 2002 - kkaempf@suse.de
+
+- renamed to "yast2-nfs-server"
+
+-------------------------------------------------------------------
 Wed Apr 24 13:55:14 CEST 2002 - mvidner@suse.cz
 
 - Check that the exported directory exists and ask if it should be created.
