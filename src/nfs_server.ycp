@@ -81,7 +81,7 @@
 
     if (result == `ws_finish)
     {
-	if (NfsServer::Write(false))
+	if (NfsServer::Write())
 	{
 	    // message popup
 	    UI::MessagePopup (_("All the settings were written and are ready to use."));
