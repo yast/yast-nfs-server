@@ -68,11 +68,11 @@
 
     // pretend nfslock does not exist
     //   not used
-    map READ2 = eval (READ);
+    map READ2 = READ;
     READ2["init","scripts","exists"] = false;
 
     // services portmap & nfsserver are stopped
-    map READ3 = eval (READ);
+    map READ3 = READ;
     READ3["init","scripts","runlevel","portmap"]   = service_off;
     READ3["init","scripts","runlevel","nfsserver"] = service_off;
 

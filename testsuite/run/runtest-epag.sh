@@ -18,7 +18,7 @@ ADD_LF_AFTER_LAST_COMMA='s/,\] $/,\
 ADD_LF_AFTER_COMMA_OR_COLON='s/\([:,]\)/\1\
 /g'
 
-NORMALIZE="parseycp -n"
+NORMALIZE="ycpc -E -"
 
 function run() {
     IN=$2
