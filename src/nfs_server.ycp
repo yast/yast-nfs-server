@@ -40,10 +40,12 @@
         "ws_start"  : "begin",
         "begin"     : $[
             `next   : "exports",
-            `finish : "end"
+            `finish : "end",
+	    `abort  : `abort
             ],
         "exports"       : $[
-            `next   : "end"
+            `next   : "end",
+	    `abort  : `abort
             ],
         "end"       : $[
             `finish    : `ws_finish
@@ -56,7 +58,6 @@
         ];
 
     UI (`CreateWizardDialog ());
-    UI (`ReplaceWizardAbortButton(`Empty (`id (`abort))));
     
     any result = WizardSequencer (Aliases, Sequence);
 
