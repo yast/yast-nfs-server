@@ -21,7 +21,7 @@
 
     import "Runlevel";
     import "Report";
-	import "Summary";
+    import "Summary";
 
     /**
      * Should the server be started?
@@ -57,7 +57,7 @@
 	    return true;
 	}
 
-	Set(settings);
+	Set (settings);
 	return true;
     }
 
@@ -158,23 +158,27 @@ Your changes will be active after reboot.
 	return true;
     }
 
-
-	global define string Summary()``{
-		string summary = "";
-		// summary header; directories exported by NFS
-		summary = Summary::AddHeader(summary, _("NFS Exports"));
-		if (size(exports)>0)
-		{
-			foreach(`e, exports, ``{
-					summary = Summary::OpenList(summary);
-					summary = Summary::AddListItem(summary,e["mountpoint"]:"");
-					summary = Summary::CloseList(summary);
-					});
-		}
-		else
-			summary = Summary::AddLine(summary, Summary::NotConfigured());
-		return summary;
+    /**
+     * @return A summary for autoyast
+     */
+    global define string Summary() ``{
+	string summary = "";
+	// summary header; directories exported by NFS
+	summary = Summary::AddHeader (summary, _("NFS Exports"));
+	if (size (exports) > 0)
+	{
+	    foreach(map e, exports, ``{
+		summary = Summary::OpenList (summary);
+		summary = Summary::AddListItem (summary, e["mountpoint"]:"");
+		summary = Summary::CloseList (summary);
+	    });
 	}
+	else
+	{
+	    summary = Summary::AddLine (summary, Summary::NotConfigured ());
+	}
+	return summary;
+    }
 
   /* The end of the definitions */
 
