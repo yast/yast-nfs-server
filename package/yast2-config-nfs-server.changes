@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 28 12:53:54 CEST 2001 - mvidner@suse.cz
+
+- Fixed a truncated table label (#9907). (2.4.8)
+
+-------------------------------------------------------------------
 Thu Aug 23 17:06:20 CEST 2001 - mvidner@suse.cz
 
 - Added documentation in a devel subpackage (2.4.7)
