@@ -25,6 +25,7 @@
 
     textdomain "nfs_server";
 
+    include "require.ycp";
     include "ui/wizard_dialog.ycp";
     include "wizard/sequencer.ycp";
     include "nfs_server/ui.ycp";
@@ -56,6 +57,13 @@
         "start_server" : (SCR(`Read(.rc.system.NFS_SERVER)) == "yes"),
         "exports"      : SCR(`Read(.etc.exports))
         ];
+
+    if (!RequireAndConflict (["nfs-utils"], [], 
+_("<p>To configure the Network Filesystem, the <b>%1</b> package must be installed.</p>
+<p>Do you wish to install it now?</p>")))
+    {
+	return;
+    }
 
     UI (`CreateWizardDialog ());
     
