@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Sep 20 18:56:55 CEST 2001 - mvidner@suse.cz
+
+- Leave disabled the Add host button until a mount point is selected
+  that the host will apply to. (#11075)
+- Allow empty export options (parens are supplied automatically) (#11076);
+  empty host wildcard is translated to "*".
+- 2.4.11
+
+-------------------------------------------------------------------
 Mon Sep  3 14:16:37 CEST 2001 - mvidner@suse.cz
 
 - Start portmap only if not running already (Bug #9999). (2.4.10)
