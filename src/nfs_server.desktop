@@ -21,7 +21,7 @@ Icon=nfs
 Exec=/sbin/yast2 nfs_server 
 
 Name=NFS Server
-GenericName=Configure NFS server.
+GenericName=Configure NFS server
 Name[cs]=NFS server
 GenericName[cs]=Konfigurovat NFS server.
 Name[de]=NFS-Server
