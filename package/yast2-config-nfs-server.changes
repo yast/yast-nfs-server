@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 24 15:09:39 CEST 2001 - mvidner@suse.cz
+
+- Fixed a stupid error in the specfile.
+- version 2.4.3
+
+-------------------------------------------------------------------
 Mon Jul 23 17:07:07 CEST 2001 - mvidner@suse.cz
 
 - Fixed calling the writing function. Fixed obsolete Shell call.
