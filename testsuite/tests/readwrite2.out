@@ -33,7 +33,6 @@ Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "portmap":$[]]
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_final start" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Read  - services are running
@@ -81,7 +80,6 @@ Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver start" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_final start" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Read  - services are stopped
@@ -117,7 +115,6 @@ Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
 Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "portmap":$[]]
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_final start" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Read  - services are stopped
@@ -167,5 +164,4 @@ Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver start" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_final start" $["TERM":"raw"] 0
 Return	true
