@@ -134,8 +134,14 @@ exported directories.\n"));
 		return false;
 	    }
 
-	    Runlevel::ServiceAdjust ("portmap", "enable");
-	    Runlevel::ServiceAdjust ("nfsserver", "enable");
+	    if (! Runlevel::ServiceAdjust ("portmap", "enable"))
+	    {
+		Report::Error (Runlevel::error_msg);
+	    }
+	    if (! Runlevel::ServiceAdjust ("nfsserver", "enable"))
+	    {
+		Report::Error (Runlevel::error_msg);
+	    }
 
 	    if (Runlevel::ServiceStatus ("portmap") != 0)
 	    {
