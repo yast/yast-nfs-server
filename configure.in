@@ -31,7 +31,7 @@ AM_CONDITIONAL(ISSPARC, test `uname -m` = sparc)
 AM_CONDITIONAL(ISPPC, test `uname -m` = ppc)
 
 AC_OUTPUT(Makefile
-	package/$RPMNAME.spec:$RPMNAME.spec.in
+	package/yast2-config-nfs-server.spec:yast2-config-nfs-server.spec.in
 	src/Makefile
 	doc/Makefile
 	doc/autodocs/Makefile
