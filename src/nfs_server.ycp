@@ -74,7 +74,7 @@
     if (result == `ws_finish)
     {
 	boolean start_nfs_server = lookup (nfs_config, "start_server", false);
-	list exports = lookup (nfs_config, "exports");
+	list exports = lookup (nfs_config, "exports", nil);
 
 	if (nfs_server_save (start_nfs_server, exports))
 	{

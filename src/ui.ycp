@@ -166,7 +166,7 @@ are already set."));
      */
     global define BeginDialog () ``{
 
-	boolean start_nfs_server = (lookup(nfs_config, "start_server") == true);
+	boolean start_nfs_server = (lookup(nfs_config, "start_server", "") == true);
 
 	// Help, part 1 of 2
 	string help_text = _(
@@ -269,10 +269,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
 
 
-	list exports = lookup (nfs_config, "exports");
-
-	if (exports == nil)
-	    exports = [];
+	list exports = lookup (nfs_config, "exports", []);
 
 	term contents =
 	    `VBox(
@@ -345,13 +342,13 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		string mp = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mp != nil) {
 		    string mountpoint = GetDirectory(mp,
-							  filter(`ent, exports, ``{
-							      return lookup(ent, "mountpoint") != mp;
-							  }));
+						     filter(`ent, exports, ``{
+							 return lookup(ent, "mountpoint", "") != mp;
+						     }));
 
 		    if (mountpoint != nil) {
 			exports = maplist(`ent, exports, ``{
-			    string tmp = lookup(ent, "mountpoint");
+			    string tmp = lookup(ent, "mountpoint", "");
 			    if (tmp == mp)
 			    return add(ent, "mountpoint", mountpoint);
 			    return ent;
@@ -367,7 +364,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil)
 		    exports = filter(`entry, exports,
-				     ``(lookup(entry, "mountpoint") != mountpoint));
+				     ``(lookup(entry, "mountpoint", "") != mountpoint));
 
 		UI::ChangeWidget(`id(`allowedlab), `Value, "                     ");
 		UI::ChangeWidget(`id(`allowedtab), `Items, []);
@@ -452,7 +449,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 			    return dont_delete_this;
 			});
 			exports = maplist(`entry, exports, ``{
-			    if (lookup(entry, "mountpoint") == mountpoint)
+			    if (lookup(entry, "mountpoint", "") == mountpoint)
 			    entry = add(entry, "allowed", allowed);
 			    return entry;
 			});

@@ -65,12 +65,12 @@
      */
     global define FindAllowed(list exports, string mp) ``{
 	list flt = filter(`ent, exports, ``{
-	    return (lookup(ent, "mountpoint") == mp);
+	    return (lookup(ent, "mountpoint", "") == mp);
 	});
 	if (flt == nil || size(flt) == 0)
 	    return nil;
 
-	return lookup(select(flt, 0), "allowed");
+	return lookup(select(flt, 0), "allowed", nil);
     };
 
     /**
@@ -79,7 +79,7 @@
      */
     global define ExportsItems(list exports) ``{
 	return maplist(`entry, exports, ``{
-	    string str = lookup(entry, "mountpoint");
+	    string str = lookup(entry, "mountpoint", "");
 	    return `item(`id(str), str+" ");
 	});
     };
@@ -181,7 +181,7 @@ must not contain spaces.
      */
     global define ReplaceInExports(list exports, string mountpoint, list allowed) ``{
 	return maplist(`entry, exports, ``{
-	    if (lookup(entry, "mountpoint") == mountpoint)
+	    if (lookup(entry, "mountpoint", "") == mountpoint)
 		entry = add(entry, "allowed", allowed);
 	    return entry;
 	});
