@@ -150,7 +150,7 @@ define boolean NfsServerAddHandler (map options) {
     if (mountpoint == "")
     {
 	// error
-	CommandLine::Print (_("No mountpont was specified."));
+	CommandLine::Print (_("No mount point specified."));
 	return false;
     }
     list<map<string,any> > exports = NfsServer::exports;
@@ -184,7 +184,7 @@ define boolean NfsServerDeleteHandler (map options) {
     if (mountpoint == "")
     {
 	// error
-	CommandLine::Print (_("No mountpont was specified."));
+	CommandLine::Print (_("No mount point specified."));
 	return false;
     }
     boolean deleted	= false;
@@ -212,17 +212,17 @@ map cmdline_description = $[
 	"summary"	: $[
 	    "handler"	: NfsServerSummaryHandler,
 	    // command line action help
-	    "help"	: _("NFS Server configuration summary"),
+	    "help"	: _("NFS server configuration summary"),
 	],
 	"start"		: $[
 	    "handler"	: NfsServerStartHandler,
 	    // command line action help
-	    "help"	: _("Start NFS Server"),
+	    "help"	: _("Start NFS server"),
 	],
 	"stop"		: $[
 	    "handler"	: NfsServerStopHandler,
 	    // command line action help
-	    "help"	: _("Stop NFS Server"),
+	    "help"	: _("Stop NFS server"),
 	],
 	"add"		: $[
 	    "handler"	: NfsServerAddHandler,
@@ -239,12 +239,12 @@ map cmdline_description = $[
 	"mountpoint"	: $[
 	    "type"	: "string",
 	    // command line option help
-	    "help"	: _("Directory which should be exported"),
+	    "help"	: _("Directory to export"),
 	],
 	"hosts"		: $[
 	    "type"	: "string",
 	    // command line option help
-	    "help"	: _("Host wildcard for setting the access to directory"),
+	    "help"	: _("Host wild card for setting the access to directory"),
 	],
 	"options"	: $[
 	    "type"	: "string",
