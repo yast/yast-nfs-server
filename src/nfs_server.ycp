@@ -55,7 +55,7 @@
 
     // If nfs-utils nor nfs-server is not installed, install nfs-utils.
     // TODO: require installation of alternate packages
-    if (!SCR::Read (.targetpkg.installed, "nfs-server"))
+    if (!IsPackageInstalled ("nfs-server"))
     {
 	use_star_for_anonymous = true;
 	spaces_allowed = true;
