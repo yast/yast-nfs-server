@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 13 10:57:20 CET 2001 - mvidner@suse.cz
+
+- Added default values for lookups.
+- 2.5.2
+
+-------------------------------------------------------------------
 Thu Oct 11 10:34:54 CEST 2001 - mvidner@suse.cz
 
 - Better export options checking; default options are nonempty ("*()")
