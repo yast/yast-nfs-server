@@ -129,9 +129,10 @@ with a / and it must not contain spaces.")));
 	    return true;
 	else
 	    // error popup message
-	    UI::MessagePopup(sformat(_("You entered a wrong wildcard or options string.
+	    UI::MessagePopup(sformat(_("You entered a wrong wild card or options string.
 It must be shorter than 70 characters and it
-must not contain spaces.")));
+must not contain spaces.
+")));
 	return false;
     };
 

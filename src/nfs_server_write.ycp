@@ -43,9 +43,10 @@
 		if (SCR::Write(.etc.exports, exports) == nil)
 		{
 		    // error popup message
-		    UI::MessagePopup(_("I was unable to write to /etc/exports.
+		    UI::MessagePopup(_("Unable to write to /etc/exports.
 There will be no changes in the exported
-directories."));
+directories.
+"));
 		    return false;
 		}
 
@@ -62,8 +63,9 @@ directories."));
 		if (SCR::Execute(.target.bash, "/etc/init.d/nfsserver status", $[]) != 0)
 		{
 		    // error popup message
-		    UI::MessagePopup(_("I was unable to restart the NFS server.
-Your changes will be active after reboot."));
+		    UI::MessagePopup(_("Unable to restart the NFS server.
+Your changes will be active after reboot.
+"));
 		    return false;
 		}
 	    }

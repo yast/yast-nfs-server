@@ -60,9 +60,9 @@
 
     if (!RequireAndConflict (["nfs-utils"], [],
 			     // notification 1/2
-			     _("<p>To configure the Network Filesystem, the <b>%1</b> package must be installed.</p>") +
+			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
 			     // notification 2/2
-			     _("<p>Do you wish to install it now?</p>")))
+			     _("<p>Do you want to install it now?</p>")))
     {
 	return;
     }

@@ -31,9 +31,18 @@
 	`widget       :  `RichText(
 
 	    _("Launch this module to configure NFS server.") +
-	    _("<p>You need to be logged in as <i>root</i> in order to do this.</p>")),
+	    _("<p>You need to be logged in as <i>root</i> to do this.</p>")),
 
-	`helptext     : _("Configure NFS server."),
+	`helptext     : _("Project-Id-Version: YaST2
+POT-Creation-Date: 2001-09-28 15:54:56+0200
+PO-Revision-Date: 2001-09-14 16:51+GMT
+Last-Translator: Antje Faber <afaber@suse.de>
+Language-Team: English_US <i18n@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Generator: KBabel 0.8
+"),
 
 	`codefragment : nil
 
