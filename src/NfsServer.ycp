@@ -115,9 +115,8 @@
 	    {
 		// error popup message
 		Report::Error (_("Unable to write to /etc/exports.
-There will be no changes in the exported
-directories.
-"));
+No changes will be made to the 
+exported directories.\n"));
 		return false;
 	    }
 
