@@ -1,0 +1,60 @@
+/**
+ * File:
+ *   etc_exports.scr
+ * Summary:
+ *   SCR Agent for reading/writing /etc/exports
+ * Access:
+ *   read/write
+ * Authors:
+ *   Unknown <yast2-hacker@suse.de>
+ * See:
+ *   anyagent
+ *   libscr
+ *   man exports
+ * Example:
+ *   Original /etc/exports:
+ *     /projects       proj*.local.domain(rw)
+ *     /usr            *.local.domain(ro) @trusted(rw)
+ *     /pub            (ro,insecure,all_squash)
+ **
+ *   Read(.etc.exports)
+ *   ([$["allowed":["proj*.local.domain(rw)"], 
+ *       "mountpoint":"/projects"], 
+ *     $["allowed":["*.local.domain(ro)", "@trusted(rw)"], 
+ *       "mountpoint":"/usr"], 
+ *     $["allowed":["(ro,insecure,all_squash)"], 
+ *       "mountpoint":"/pub"]])
+ **
+ *   Write(.etc.exports, $["allowed":["(ro,insecure,all_squash)"],
+ *                         "mountpoint":"/pub"]]))
+ *   (0)
+ * 
+ * $Id$
+ *
+ * Returns/Takes a <b>list of maps</b> containing the mountpoints and 
+ * their options.
+ * Keys for the maps are: "mountpoint" and "allowed".
+ */
+.etc.exports
+
+`ag_anyagent(
+  Description(
+      ``(File("/etc/exports")),  // real file name
+      "#\n",			// Comment
+      false,			// read-only
+      ``(List(
+        Tuple(
+          `mountpoint(String("^\t \n")),
+          Optional(Whitespace()),
+	  Optional("\\\n"),
+          Optional(Whitespace()),
+	  `allowed(List(
+	    String("^\t \n\\"),
+	    //Or(Sequence(Optional(Whitespace()),
+	    //            "\\\n",
+	    //            Optional(Whitespace())),
+	       Whitespace()//)
+	  ))),
+	"\n"))
+    )
+)

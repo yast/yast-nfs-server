@@ -40,6 +40,7 @@ Group:		System Environment/YaST
 @YAST2DIR@/clients/nfs_server_write.ycp
 @YAST2DIR@/modules/NfsServer.ycp
 @YAST2DIR@/menuentries/menuentry_nfs_server.y2cc
+@YAST2DIR@/scrconf/etc_exports.scr
 
 %files devel
 %defattr(-,root,root)
