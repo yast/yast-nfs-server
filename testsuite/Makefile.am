@@ -13,4 +13,7 @@ all-local: $(testsuite_prepare)
 clean-local: $(testsuite_prepare)
 	make -f $(testsuite_prepare) RPMNAME=$(RPMNAME) srcdir=$(srcdir) clean
 
+check-local: $(testsuite_prepare)
+	make -f $(testsuite_prepare) RPMNAME=$(RPMNAME) srcdir=$(srcdir) check
+
 # EOF
