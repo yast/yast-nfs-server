@@ -19,7 +19,7 @@
     module "NfsServer";
     textdomain "nfs_server";
 
-    import "Runlevel";
+    import "Service";
     import "Report";
     import "Summary";
     import "Progress";
@@ -114,7 +114,7 @@
      * @return true on success
      */
     global define boolean Read () ``{
-	start = Runlevel::ServiceEnabled ("nfsserver");
+	start = Service::Enabled("nfsserver");
 	exports = (list<map<string,any> >) SCR::Read (.etc.exports);
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
 
@@ -196,60 +196,60 @@ exported directories.\n"));
 	if (!start)
 	{
 		if (!write_only)
-			Runlevel::RunInitScript ("nfsserver", "stop");
-	    if (! Runlevel::ServiceAdjust ("nfsserver", "disable"))
+			Service::Stop ("nfsserver");
+	    if (! Service::Disable("nfsserver"))
 	    {
-		Report::Error (Runlevel::error_msg);
+		Report::Error(Service::Error());
 		ok = false;
 	    }
 	    if (have_nfslock)
 	    {
 		if (!write_only)
-			Runlevel::RunInitScript ("nfslock", "stop");
-		if (! Runlevel::ServiceAdjust ("nfslock", "disable"))
+			Service::Stop("nfslock");
+		if (! Service::Disable("nfslock"))
 		{
-		    Report::Error (Runlevel::error_msg);
+		    Report::Error(Service::Error());
 		    ok = false;
 		}
 	    }
 	}
 	else
 	{
-	    if (! Runlevel::ServiceAdjust ("portmap", "enable"))
+	    if (! Service::Enable("portmap"))
 	    {
-		Report::Error (Runlevel::error_msg);
+		Report::Error (Service::Error());
 		ok = false;
 	    }
 	    if (have_nfslock)
 	    {
-		if (! Runlevel::ServiceAdjust ("nfslock", "enable"))
+		if (! Service::Enable("nfslock"))
 		{
-		    Report::Error (Runlevel::error_msg);
+		    Report::Error(Service::Error());
 		    ok = false;
 		}
 	    }
-	    if (! Runlevel::ServiceAdjust ("nfsserver", "enable"))
+	    if (! Service::Enable("nfsserver"))
 	    {
-		Report::Error (Runlevel::error_msg);
+		Report::Error(Service::Error());
 		ok = false;
 	    }
 
 		if (!write_only)
 		{
-			if (Runlevel::ServiceStatus ("portmap") != 0 )
+			if (Service::Status("portmap") != 0 )
 			{
 			// portmap must not be started if it is running already (see bug # 9999)
-				Runlevel::RunInitScript ("portmap", "start");
+				Service::Start("portmap");
 			}
 
-			Runlevel::RunInitScript ("nfsserver", "stop");
+			Service::Stop("nfsserver");
 			if (have_nfslock)
 			{
-				Runlevel::RunInitScript ("nfslock", "restart");
+			    Service::Restart("nfslock");
 			}
-			Runlevel::RunInitScript ("nfsserver", "start");
+			Service::Start("nfsserver");
 
-			if (Runlevel::ServiceStatus ("nfsserver") != 0)
+			if (Service::Status("nfsserver") != 0)
 			{
 				// error popup message
 				Report::Error (_("Unable to restart the NFS server.

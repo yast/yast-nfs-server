@@ -31,10 +31,8 @@ textdomain "nfs_server";
 y2milestone("----------------------------------------");
 y2milestone("NfsServer auto started");
 
-import "Mode";
 import "NfsServer";
-import "Wizard";
-include "wizard/sequencer.ycp";
+
 include "nfs_server/ui.ycp";
 
 
