@@ -1,0 +1,46 @@
+/**
+ * Module:
+ *   NFS server configuration
+ *
+ * Summary:
+ *   Routines testuite
+ *
+ * Authors:
+ *   Martin Vidner <mvidner@suse.cz>
+ *
+ * $Id$
+ */
+{
+    include "testsuite.ycp";
+    include "nfs_server/routines.ycp";
+
+    list exports = [$["allowed":["proj*.local.domain(rw)"], 
+		      "mountpoint":"/projects"], 
+		    $["allowed":["*.local.domain(ro)", "@trusted(rw)"], 
+		      "mountpoint":"/usr"], 
+		    $["allowed":["(ro,insecure,all_squash)"], 
+		      "mountpoint":"/pub"]];
+
+    TEST (``(AllowedToHostsOpts ("host.com(options)")), [], nil);
+    TEST (``(AllowedToHostsOpts ("noopts.host.com")), [], nil);
+    TEST (``(AllowedToHostsOpts ("host.com(noclose")), [], nil);
+    TEST (``(AllowedToHostsOpts ("host.com((double))")), [], nil);
+    TEST (``(AllowedToHostsOpts ("")), [], nil);
+
+    TEST (``(AllowedTableItems (["*.local.domain(ro)", "@trusted(rw)"])), [], nil);
+    TEST (``(AllowedTableItems ([])), [], nil);
+
+    TEST (``(FindAllowed (exports, "/pub")), [], nil);
+    TEST (``(FindAllowed (exports, "/nosuchpath")), [], nil);
+    TEST (``(FindAllowed ([], "/pub")), [], nil);
+
+    TEST (``(ExportsItems (exports)), [], nil);
+    TEST (``(ExportsItems ([])), [], nil);
+
+    TEST (``(ExportsSelBox (exports)), [], nil);
+    TEST (``(ExportsSelBox ([])), [], nil);
+
+    TEST (``(ReplaceInExports (exports, "/usr", ["*.localdomain(ro)"])), [], nil);
+    TEST (``(ReplaceInExports (exports, "/nosuchpath", ["*.localdomain(ro)"])), [], nil);
+    TEST (``(ReplaceInExports ([], "/whatever", ["*.localdomain(ro)"])), [], nil);
+}

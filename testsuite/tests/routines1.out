@@ -1,0 +1,17 @@
+Return	["host.com", "options"]
+Return	["noopts.host.com", ""]
+Return	["host.com", "noclose"]
+Return	["host.com", "(double"]
+Return	["", ""]
+Return	[`item (`id (0), "*.local.domain ", "ro "), `item (`id (1), "@trusted ", "rw ")]
+Return	[]
+Return	["(ro,insecure,all_squash)"]
+Return	nil
+Return	nil
+Return	[`item (`id ("/projects"), "/projects "), `item (`id ("/usr"), "/usr "), `item (`id ("/pub"), "/pub ")]
+Return	[]
+Return	`SelectionBox (`id (`exportsbox), `opt (`notify), "Di&rectories", [`item (`id ("/projects"), "/projects "), `item (`id ("/usr"), "/usr "), `item (`id ("/pub"), "/pub ")])
+Return	`SelectionBox (`id (`exportsbox), `opt (`notify), "Di&rectories", [])
+Return	[$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.localdomain(ro)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
+Return	[$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
+Return	[]

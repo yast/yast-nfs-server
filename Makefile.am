@@ -2,7 +2,7 @@
 # Makefile.am
 #
 
-SUBDIRS = src doc #testsuite
+SUBDIRS = src doc testsuite
 
 VERSION = $(shell cat $(srcdir)/VERSION)
 RPMNAME = $(shell cat $(srcdir)/RPMNAME)
