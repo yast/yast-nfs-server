@@ -276,6 +276,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 	    {
 		//UI::ChangeWidget (`id (`next), `Label, NextButtonLabel());
 		Wizard::RestoreNextButton ();
+		UI::SetFocus(`id(`next));
 	    }
 
 	    ret = UI::UserInput ();
