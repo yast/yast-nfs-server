@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Jul 23 14:24:05 CEST 2003 - mvidner@suse.cz
+
+- Autoinst: if start_nfsserver is false, write /etc/exports anyway
+  (for heartbeat, #27001).
+- Using Label, Popup, Require.
+- 2.8.1
+
+-------------------------------------------------------------------
 Mon Mar  3 16:32:39 CET 2003 - mvidner@suse.de
 
 - Import accepts empty list and can reset settings (#24544).
