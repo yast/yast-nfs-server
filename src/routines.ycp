@@ -28,7 +28,7 @@
      * @param hosts	"hosts(opts)"
      * @return		["hosts", "opts"]
      */
-    global define list<string> AllowedToHostsOpts(string hosts) ``{
+    define list<string> AllowedToHostsOpts(string hosts) ``{
 	integer  brpos = findfirstof(hosts, "(");
 	string opts = "";
 	if (brpos != nil) {
@@ -47,7 +47,7 @@
      * @return		a ui table list of items
      * @example AllowedTableItems (["*.local.domain(ro)", "@trusted(rw)"])
      */
-    global define list<term> AllowedTableItems(list<string> allowed) ``{
+    define list<term> AllowedTableItems(list<string> allowed) ``{
 	integer count = 0;
 	return maplist(string str, allowed, ``{
 	    list<string> sp = AllowedToHostsOpts(str);
@@ -64,7 +64,7 @@
      * @param mp	mount point
      * @return		a list of allowed host specifications or nil if not found
      */
-    global define list<string> FindAllowed(list<map> exports, string mp) ``{
+    define list<string> FindAllowed(list<map> exports, string mp) ``{
 	list<map> flt = filter(map ent, exports, ``{
 	    return ent["mountpoint"]:"" == mp;
 	});
@@ -78,7 +78,7 @@
      * @param exports	list of exports
      * @return		a ui table list of mountpoints, id'ed by themselves
      */
-    global define list<term> ExportsItems(list<map> exports) ``{
+    define list<term> ExportsItems(list<map> exports) ``{
 	return maplist(map entry, exports, ``{
 	    string str = entry["mountpoint"]:"";
 	    return `item(`id(str), str+" ");
@@ -89,7 +89,7 @@
      * @param exports	list of exports
      * @return		a SelectionBox for the mountpoints, `id(`exportsbox)
      */
-    global define term ExportsSelBox(list<map> exports) ``{
+    define term ExportsSelBox(list<map> exports) ``{
 	return `SelectionBox(`id(`exportsbox), `opt(`notify),
 			     // selection box label
 			     _("Dire&ctories"), ExportsItems(exports));
@@ -102,7 +102,7 @@
      * @param name	options
      * @return		whether valid
      */
-    global define boolean CheckNoSpaces(string name) ``{
+    define boolean CheckNoSpaces(string name) ``{
 	if (size(name) < 70 &&
 	    findfirstof(name, " \t") == nil)
 	    return true;
@@ -122,7 +122,7 @@ must not contain spaces.
      * @param options	spaces and parentheses already removed
      * @return		whether valid
      */
-    global define boolean CheckExportOptions (string options) ``{
+    define boolean CheckExportOptions (string options) ``{
 	if (regexpmatch (options, "[^A-Za-z0-9=/.,_-]"))
 	{
 	    // error popup message
@@ -141,7 +141,7 @@ Only letters, digits and the characters =/.,_- are allowed."));
      * @param options	spaces and parentheses already removed
      * @return		whether valid
      */
-    global define boolean CheckExportOptions_strict (string options) ``{
+    define boolean CheckExportOptions_strict (string options) ``{
 	list<string> o1 = ["secure", "insecure", "rw", "ro", "sync", "async",
 		   "no_wdelay", "wdelay", "nohide", "hide",
 		   "no_subtree_check", "subtree_check",
@@ -179,7 +179,7 @@ Only letters, digits and the characters =/.,_- are allowed."));
      * @param allowed		new allowed host list for that mout point
      * @return			modified exports list
      */
-    global define list<map> ReplaceInExports(list<map> exports, string mountpoint, list<string> allowed) ``{
+    define list<map> ReplaceInExports(list<map> exports, string mountpoint, list<string> allowed) ``{
 	return maplist(map entry, exports, ``{
 	    if (entry["mountpoint"]:"" == mountpoint)
 		entry = add(entry, "allowed", allowed);
