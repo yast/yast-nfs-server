@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 17 09:45:24 CEST 2004 - mvidner@suse.cz
+
+- Added "testedfiles" to test cases to make it work with the new testsuite.
+- 2.10.0
+
+-------------------------------------------------------------------
 Fri Apr  2 15:09:50 CEST 2004 - mvidner@suse.cz
 
 - changed license to GPL
