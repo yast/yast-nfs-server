@@ -59,7 +59,7 @@
     {
 	use_star_for_anonymous = true;
 	spaces_allowed = true;
-	if (!Require::RequireAndConflictTarget (["nfs-utils"], [],
+	if (!Require::RequireAndConflictTarget (NfsServer::required_packages, [],
 			     // notification 1/2
 			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
 			     // notification 2/2

@@ -25,6 +25,12 @@
     import "Progress";
 
 
+    /**
+     * Required packages for this module to operate
+     *
+     */
+    global list required_packages = ["nfs-utils"];
+
 
 	/**
 	 * Write only, used during autoinstallation.
