@@ -101,6 +101,14 @@ contains this directory."));
     }
 
     /**
+     * The kernel based server complains about an empty host specification
+     * and wants us to use "*". But the user mode server would match it
+     * only with an unqualified name. We must not use "*" there
+     * to mean an anonymous client.
+     */
+    global boolean use_star_for_anonymous = false;
+
+    /**
      * Ask user for an entry for the allowed hosts list.
      * @param hosts	hosts default value
      * @param opts	options default value
@@ -139,7 +147,7 @@ contains this directory."));
 	    ret = UI::UserInput();
 
 	    hosts = UI::QueryWidget(`id(`hostsent), `Value);
-	    if (size (hosts) == 0)
+	    if (use_star_for_anonymous && size (hosts) == 0)
 	    {
 		hosts = "*";
 		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
@@ -324,7 +332,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
 		if (mountpoint != nil)
 		{
-		    list default_allowed = ["*()"];
+		    list default_allowed = [use_star_for_anonymous? "*()":"()"];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
 					    "allowed"    : default_allowed ]);
 		    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));

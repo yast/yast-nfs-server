@@ -57,6 +57,7 @@
     // TODO: require installation of alternate packages
     if (!SCR::Read (.targetpkg.installed, "nfs-server"))
     {
+	use_star_for_anonymous = true;
 	if (!RequireAndConflict (["nfs-utils"], [],
 			     // notification 1/2
 			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
