@@ -114,21 +114,17 @@
 	else
 	{
 	    // create missing directories.
-	    // implemented as finding one that fails.
-	    // the find is a workaround for nonfunctioning break in foreach
-	    map fail_entry = find (map entry, exports, ``{
+	    foreach (map entry, exports, ``{
 		string directory = entry["mountpoint"]:nil;
 		if (SCR::Read (.target.dir, directory) == nil)
 		{
-		    return ! SCR::Execute (.target.mkdir, directory);
+		    if (! SCR::Execute (.target.mkdir, directory))
+		    {
+			// not fatal - write other dirs.
+			Report::Warning (sformat(_("Unable to create a missing directory:\n%1"), directory));
+		    }
 		}
-		return false;
 	    });
-	    if (fail_entry != nil)
-	    {
-		Report::Error (sformat(_("Unable to create a missing directory:\n%1"), fail_entry["mountpoint"]:nil));
-		return false;
-	    }
 
 	    // (the backup is now done by the agent)
 	    if (! SCR::Write(.etc.exports, exports))
