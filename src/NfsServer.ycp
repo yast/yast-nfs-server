@@ -53,7 +53,7 @@
      */
     global define boolean Import (map settings) ``{
 	if (size (settings) == 0)
-	{	    
+	{
 	    return true;
 	}
 
@@ -70,9 +70,9 @@
 	``{
 	start = lookup (settings, "start_nfsserver", false);
 	exports = lookup (settings, "nfs_exports", []);
-	return;	
+	return;
     }
-    
+
 
     /**
      * Dump the NFS settings to a map, for autoinstallation use.
@@ -161,6 +161,7 @@ Your changes will be active after reboot.
 
 	global define string Summary()``{
 		string summary = "";
+		// summary header; directories exported by NFS
 		summary = Summary::AddHeader(summary, _("NFS Exports"));
 		if (size(exports)>0)
 		{

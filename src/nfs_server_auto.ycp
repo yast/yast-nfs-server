@@ -26,7 +26,7 @@
  */
 
 {
-    textdomain "nfs";
+    textdomain "nfs_server";
 	import "Mode";
 	Mode::config = true;
 
@@ -91,14 +91,14 @@
     map Sequence = $[
     "ws_start"  : "begin",
     "begin"     : $[
-        `next   : "exports",
-        `finish : `next,
-        `abort  : `abort
-        ],
+	`next   : "exports",
+	`finish : `next,
+	`abort  : `abort
+	],
     "exports"       : $[
-        `next   : `next,
-        `abort  : `abort
-        ]
+	`next   : `next,
+	`abort  : `abort
+	]
     ];
 
     // Create Summary and buttons for launching
@@ -131,4 +131,3 @@
 
     return [ret, settings];
 }
-
