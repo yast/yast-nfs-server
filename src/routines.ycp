@@ -137,13 +137,32 @@ must not contain spaces.
     }
 
     /**
-     * Check for the validity of export options: only those listed in
-     * exports(5) are accepted.
+     * Check for the validity of export options:
+     * [A-Za-z0-9=/.,_-]*
      * If invalid, a message is displayed.
      * @param options	spaces and parentheses already removed
      * @return		whether valid
      */
     global define boolean CheckExportOptions (string options) ``{
+	if (!regexpmatch (options, "[A-Za-z0-9=/.,_-]*"))
+	{
+	    // error popup message
+	    UI::ErrorPopup (_("Incorrect option format:
+Only letters, digits and the characters =/.,_- are allowed."));
+	    return false;
+	}
+	return true;
+    }
+
+    /**
+     * Check for the validity of export options: only those listed in
+     * exports(5) are accepted.
+     * Unused - to allow not only nfs-utils but also nfs-server.
+     * If invalid, a message is displayed.
+     * @param options	spaces and parentheses already removed
+     * @return		whether valid
+     */
+    global define boolean CheckExportOptions_strict (string options) ``{
 	list o1 = ["secure", "insecure", "rw", "ro", "sync", "async",
 		   "no_wdelay", "wdelay", "nohide", "hide",
 		   "no_subtree_check", "subtree_check",
@@ -159,12 +178,14 @@ must not contain spaces.
 	    list opt = splitstring (e, "=");
 	    if (!contains (o_value, select (opt, 0, "")))
 	    {
+		// error popup message
 		UI::ErrorPopup (sformat (_("Unknown option: '%1'"), e));
 		ret = false;
 	    }
 	    else if (size (opt) != 2 ||
 		     !regexpmatch (select (opt, 1, ""), "[0-9]+"))
 	    {
+		// error popup message
 		UI::ErrorPopup (sformat (_("Wrong option format: '%1'"), e));
 		ret = false;
 	    }

@@ -53,13 +53,18 @@
 	    ]
 	];
 
-    if (!RequireAndConflict (["nfs-utils"], [],
+    // If nfs-utils nor nfs-server is not installed, install nfs-utils.
+    // TODO: require installation of alternate packages
+    if (!SCR::Read (.targetpkg.installed, "nfs-server"))
+    {
+	if (!RequireAndConflict (["nfs-utils"], [],
 			     // notification 1/2
 			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
 			     // notification 2/2
 			     _("<p>Do you want to install it now?</p>")))
-    {
-	return;
+	{
+	    return;
+	}
     }
 
     if (! NfsServer::Read ())
