@@ -27,7 +27,7 @@ function run() {
     export IN OUT OUT_TMP
     sh $5 \
 	| $NORMALIZE \
-	| $6 \
+	| $6 -l /dev/stderr \
 	| $NORMALIZE \
 	| sed -e 1d \
 	| sed -e "$ADD_LF_BEFORE_MAP" -e "$ADD_LF_AFTER_LAST_COMMA" #-e "$ADD_LF_AFTER_COMMA_OR_COLON"
