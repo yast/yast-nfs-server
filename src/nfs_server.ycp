@@ -25,11 +25,14 @@
 
     textdomain "nfs_server";
 
+// TODO: leaving out the import triggers a strange bug
+// with (local) NfsServer::errorNoPopup.
+// Other functions work probably because ui.ycp does the import.
+//    import "NfsServer";
     include "require.ycp";
     include "ui/wizard_dialog.ycp";
     include "wizard/sequencer.ycp";
     include "nfs_server/ui.ycp";
-    include "nfs_server/nfs_server_write.ycp";
 
     map Aliases = $[
 	"begin"   : ``(BeginDialog ()),
@@ -53,11 +56,6 @@
 	    ]
 	];
 
-    map nfs_config = $[
-	"start_server" : (SCR::Read(.rc.system.NFS_SERVER) == "yes"),
-	"exports"      : SCR::Read(.etc.exports)
-	];
-
     if (!RequireAndConflict (["nfs-utils"], [],
 			     // notification 1/2
 			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
@@ -67,16 +65,19 @@
 	return;
     }
 
+    if (! NfsServer::Read ())
+    {
+	// TODO:log an error?
+	return;
+    }
+
     UI::CreateWizardDialog ();
 
     any result = WizardSequencer (Aliases, Sequence);
 
     if (result == `ws_finish)
     {
-	boolean start_nfs_server = lookup (nfs_config, "start_server", false);
-	list exports = lookup (nfs_config, "exports", nil);
-
-	if (nfs_server_save (start_nfs_server, exports))
+	if (NfsServer::Write())
 	{
 	    UI::MessagePopup (_("All the settings were written and are ready to use."));
 	}

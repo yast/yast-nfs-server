@@ -1,0 +1,159 @@
+/**
+ * File:
+ *   modules/NfsServer.ycp
+ *
+ * Module:
+ *   Configuration of nfs_server
+ *
+ * Summary:
+ *   NFS server configuration data, I/O functions.
+ *
+ * Authors:
+ *   Martin Vidner <mvidner@suse.cz>
+ *
+ * $Id$
+ *
+ */
+
+{
+    module "NfsServer";
+    textdomain "nfs_server";
+
+    import "Runlevel";
+
+    /**
+     * Should the server be started?
+     * If false, the exports file will not be touched.
+     */
+    global boolean start = false;
+
+    /**
+     * @example
+     * [
+     *   $[
+     *     "mountpoint": "/projects",
+     *     "allowed": [ "*.local.domain(ro)", "@trusted(rw)"]
+     *   ],
+     *   $[ ... ],
+     *   ...
+     * ]
+     *
+     */
+    global list(map) exports = [];
+
+    /**
+     * Get all NFS server configuration from a map.
+     * When called by nfs_server_auto (preparing autoinstallation data)
+     * the map may be empty.
+     * @param settings	$["start": "exports":]
+     * @return	success
+     */
+    global define boolean Import (map settings) ``{
+	if (size (settings) == 0)
+	{
+	    //Provide defaults for autoinstallation editing:
+	    //Leave empty.
+	    return true;
+	}
+
+	boolean missing = false;
+	foreach (`k, ["start", "exports"], ``{
+	    if (! haskey (settings, k))
+	    {
+		y2error ("Missing at Import: '%1'.", k);
+		missing = true;
+	    }
+	});
+	if (missing)
+	{
+	    return false;
+	}
+
+	start = lookup (settings, "start", false);
+	exports = lookup (settings, "exports", []);
+	return true;
+    }
+
+    /**
+     * Dump the NFS settings to a map, for autoinstallation use.
+     */
+    global define map Export () ``{
+	return $[
+	    "start": start,
+	    "exports": exports,
+	    ];
+    }
+
+    /**
+     * Log a message. TODO: let the user know?
+     * Before the conversion to a Module, these messages used to be
+     * UI::MessagePopup.
+     * @param message	a message to log
+     */
+    define void errorNoPopup (string message) ``{
+	y2error (message);
+    }
+
+    /**
+     * Reads NFS settings from the SCR (.etc.fstab)
+     */
+    global define boolean Read () ``{
+	start = Runlevel::ServiceEnabled ("nfsserver");
+	exports = SCR::Read (.etc.exports);
+
+	return exports != nillist;
+    }
+
+    /**
+     * Saves NFS server configuration. (exports(5))
+     * (No parameters because it is too short to abort)
+     * @return true on success
+     */
+    global define boolean Write () ``{
+	Runlevel::RunInitScript ("nfsserver", "stop");
+
+	if (!start)
+	{
+	    Runlevel::ServiceAdjust ("nfsserver", "disable");
+	}
+	else
+	{
+	    SCR::Execute (.target.bash, "/bin/cp $ORIG $BACKUP", $["ORIG" : "/etc/exports", "BACKUP" : "/etc/exports.YaST2.save"]);
+
+	    if (SCR::Write(.etc.exports, exports) == nil)
+	    {
+		// error popup message
+		errorNoPopup(_("Unable to write to /etc/exports.
+There will be no changes in the exported
+directories.
+"));
+		return false;
+	    }
+
+	    Runlevel::ServiceAdjust ("portmap", "enable");
+	    Runlevel::ServiceAdjust ("nfsserver", "enable");
+
+	    if (Runlevel::ServiceStatus ("portmap") != 0)
+	    {
+		// portmap must not be started if it is running already (see bug # 9999)
+		Runlevel::RunInitScript ("portmap", "start");
+	    }
+	    Runlevel::RunInitScript ("nfsserver", "start");
+
+	    if (Runlevel::ServiceStatus ("nfsserver") != 0)
+	    {
+		// error popup message
+		errorNoPopup(_("Unable to restart the NFS server.
+Your changes will be active after reboot.
+"));
+		return false;
+	    }
+	}
+
+	// FIXME: return errors from runlevel_adjust, when it produces any
+	return true;
+    }
+
+  /* The end of the definitions */
+
+}

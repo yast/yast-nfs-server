@@ -3,14 +3,13 @@
  *   nfs_server_write.ycp
  *
  * Module:
- *   Configuration of nfs_server
+ *   Configuration of NFS server
  *
  * Summary:
  *   Writing only client
  *
  * Authors:
- *   Jan Holesovsky <kendy@suse.cz>
- *   Dan Vesely <dan@suse.cz>
+ *   Martin Vidner <mvidner@suse.cz>
  *
  * $Id$
  *
@@ -18,67 +17,28 @@
  * write the settings.
  */
 
+/**
+ * @param first a map of NFS server settings
+ * @see NfsServer#Import
+ * @return boolean success of operation
+ */
 {
 
     textdomain "nfs_server";
 
-    include "ui/common_popups.ycp";
+    import "NfsServer";
 
-    /**
-     * Saves NFS server part. Reports errors to the user.
-     * @param start_nfs_server	start NFS server
-     * @param exports		list of export entries
-     * @return boolean		success
-     */
-    global define nfs_server_save (boolean start_nfs_server, list exports) ``{
-
-	SCR::Execute(.target.bash, "/etc/init.d/nfsserver stop", $[]);
-
-	if (start_nfs_server)
-	{
-	    if (exports != nil)
-	    {
-		SCR::Execute (.target.bash, "/bin/cp $ORIG $BACKUP", $["ORIG" : "/etc/exports", "BACKUP" : "/etc/exports.YaST2.save"]);
-
-		if (SCR::Write(.etc.exports, exports) == nil)
-		{
-		    // error popup message
-		    UI::MessagePopup(_("Unable to write to /etc/exports.
-There will be no changes in the exported
-directories.
-"));
-		    return false;
-		}
-
-		CallFunction (`runlevel_adjust ("portmap", "enable"));
-		CallFunction (`runlevel_adjust ("nfsserver", "enable"));
-
-		if (SCR::Execute(.target.bash, "/etc/init.d/portmap status") != 0)
-		{
-		    // portmap must not be started if it is running already (see bug # 9999)
-		    SCR::Execute(.target.bash, "/etc/init.d/portmap start", $[]);
-		}
-		SCR::Execute(.target.bash, "/etc/init.d/nfsserver start", $[]);
-
-		if (SCR::Execute(.target.bash, "/etc/init.d/nfsserver status", $[]) != 0)
-		{
-		    // error popup message
-		    UI::MessagePopup(_("Unable to restart the NFS server.
-Your changes will be active after reboot.
-"));
-		    return false;
-		}
-	    }
-	}
-	else
-	{
-	    CallFunction (`runlevel_adjust ("nfsserver", "disable"));
-	}
-
-	// FIXME: return errors from runlevel_adjust, when it produces any
-	return true;
+    if (size (Args ()) != 1)
+    {
+	y2error ("Exactly one argument required.");
+	return false;
+    }
+    if (! is (Args (0), map))
+    {
+	y2error ("The argument must be a map.");
+	return false;
     }
 
-  /* The end of the definitions */
-
+    // The write is a simple one so we don't use Progress
+    return NfsServer::Import (Args (0)) && NfsServer::Write ();
 }

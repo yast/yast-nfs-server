@@ -24,10 +24,10 @@
 
     /**
      * Split the allowed host specification
-     * @param hosts "hosts(opts)"
-     * @return term `couple("hosts", "opts")
+     * @param hosts	"hosts(opts)"
+     * @return		["hosts", "opts"]
      */
-    global define AllowedToHostsOpts(string hosts) ``{
+    global define list(string) AllowedToHostsOpts(string hosts) ``{
 	integer  brpos = findfirstof(hosts, "(");
 	string opts = "";
 	if (brpos != nil) {
@@ -39,60 +39,60 @@
 		opts = substring(opts, 0, brpos);
 	}
 	return [ hosts, opts ];
-    };
+    }
 
     /**
-     * @param allowed a list of allowed host specifications
-     * @return list a ui table list of items
+     * @param allowed	a list of allowed host specifications
+     * @return		a ui table list of items
      * @example AllowedTableItems (["*.local.domain(ro)", "@trusted(rw)"])
      */
-    global define AllowedTableItems(list allowed) ``{
+    global define list(term) AllowedTableItems(list(string) allowed) ``{
 	integer count = 0;
 	return maplist(`str, allowed, ``{
 	    list sp = AllowedToHostsOpts(str);
-	    term it = `item(`id(count), select(sp, 0)+" ", select(sp, 1)+" ");
+	    term it = `item(`id(count), select(sp, 0, "")+" ", select(sp, 1, "")+" ");
 
 	    count = count+1;
 	    return it;
 	});
-    };
+    }
 
     /**
      * Find entry in exports according to the mountpoint
-     * @param exports list of exports
-     * @param mp mount point
-     * @return list a list of allowed host specifications or nil if not found
+     * @param exports	list of exports
+     * @param mp	mount point
+     * @return		a list of allowed host specifications or nil if not found
      */
-    global define FindAllowed(list exports, string mp) ``{
+    global define list(string) FindAllowed(list(map) exports, string mp) ``{
 	list flt = filter(`ent, exports, ``{
 	    return (lookup(ent, "mountpoint", "") == mp);
 	});
 	if (flt == nil || size(flt) == 0)
 	    return nil;
 
-	return lookup(select(flt, 0), "allowed", nil);
-    };
+	return lookup(select(flt, 0, $[]), "allowed", nil);
+    }
 
     /**
      * @param exports	list of exports
-     * @return list	a ui table list of mountpoints, id'ed by themselves
+     * @return		a ui table list of mountpoints, id'ed by themselves
      */
-    global define ExportsItems(list exports) ``{
+    global define list(term) ExportsItems(list(map) exports) ``{
 	return maplist(`entry, exports, ``{
 	    string str = lookup(entry, "mountpoint", "");
 	    return `item(`id(str), str+" ");
 	});
-    };
+    }
 
     /**
      * @param exports	list of exports
-     * @return term	a SelectionBox for the mountpoints, `id(`exportsbox)
+     * @return		a SelectionBox for the mountpoints, `id(`exportsbox)
      */
-    global define ExportsSelBox(list exports) ``{
+    global define term ExportsSelBox(list(map) exports) ``{
 	// selection box label
 	return `SelectionBox(`id(`exportsbox), `opt(`notify),
 			     _("Di&rectories"), ExportsItems(exports));
-    };
+    }
 
     // duplicated in nfs/routines.ycp and nfs_server/routines.ycp
     /**
@@ -100,9 +100,9 @@
      * nonempty, fewer than 70 chars, no blanks, starts with a slash.
      * If invalid, a message is displayed.
      * @param name	path
-     * @return boolean	whether valid
+     * @return		whether valid
      */
-    global define CheckPath(string name) ``{
+    global define boolean CheckPath(string name) ``{
 	if (size(name) > 0 &&
 	    size(name) < 70 &&
 	    substring(name, 0, 1) == "/" &&
@@ -114,16 +114,16 @@
 shorter than 70 characters, it must begin
 with a / and it must not contain spaces.")));
 	return false;
-    };
+    }
 
     /**
      * Check for the validity of client specification:
      * fewer than 70 chars, no blanks.
      * If invalid, a message is displayed.
      * @param name	options
-     * @return boolean	whether valid
+     * @return		whether valid
      */
-    global define CheckNoSpaces(string name) ``{
+    global define boolean CheckNoSpaces(string name) ``{
 	if (size(name) < 70 &&
 	    findfirstof(name, " \t") == nil)
 	    return true;
@@ -134,16 +134,16 @@ It must be shorter than 70 characters and it
 must not contain spaces.
 ")));
 	return false;
-    };
+    }
 
     /**
      * Check for the validity of export options: only those listed in
      * exports(5) are accepted.
      * If invalid, a message is displayed.
-     * @param	options	spaces and parentheses already removed
-     * @return	boolean	whether valid
+     * @param options	spaces and parentheses already removed
+     * @return		whether valid
      */
-    global define CheckExportOptions (string options) ``{
+    global define boolean CheckExportOptions (string options) ``{
 	list o1 = ["secure", "insecure", "rw", "ro", "sync", "async",
 		   "no_wdelay", "wdelay", "nohide", "hide",
 		   "no_subtree_check", "subtree_check",
@@ -177,14 +177,14 @@ must not contain spaces.
      * @param exports		exports list
      * @param mountpoint	mount point
      * @param allowed		new allowed host list for that mout point
-     * @return list		modified exports list
+     * @return			modified exports list
      */
-    global define ReplaceInExports(list exports, string mountpoint, list allowed) ``{
+    global define list(map) ReplaceInExports(list(map) exports, string mountpoint, list(string) allowed) ``{
 	return maplist(`entry, exports, ``{
 	    if (lookup(entry, "mountpoint", "") == mountpoint)
 		entry = add(entry, "allowed", allowed);
 	    return entry;
 	});
-    };
+    }
 
 }

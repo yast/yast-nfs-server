@@ -11,6 +11,7 @@
  * Authors:
  *   Jan Holesovky <kendy@suse.cz>
  *   Dan Vesely (dan@suse.cz)
+ *   Martin Vidner <mvidner@suse.cz>
  *
  * $Id$
  *
@@ -22,6 +23,7 @@
 
     textdomain "nfs_server";
 
+    import "NfsServer";
     include "nfs_server/routines.ycp";
     include "ui/common_popups.ycp";
     include "ui/file_popups.ycp";
@@ -30,9 +32,9 @@
      * Ask user for a directory to export. Allow browsing.
      * @param mountpoint	default value
      * @param exports		exports list to check for duplicates
-     * @return string		path to export
+     * @return			a path to export
      */
-    global define GetDirectory(string mountpoint, list exports) ``{
+    global define string GetDirectory(string mountpoint, list(map) exports) ``{
 	if (mountpoint == nil)
 	    mountpoint = "";
 
@@ -94,16 +96,16 @@ contains this directory."));
 	if (ret == `ok)
 	    return mountpoint;
 	return nil;
-    };
+    }
 
     /**
      * Ask user for an entry for the allowed hosts list.
      * @param hosts	hosts default value
      * @param opts	options default value
      * @param allowed	current list, to check for duplicates
-     * @return list	[newhosts, newopts] or nil if cancelled. Options without parentheses.
+     * @return		[newhosts, newopts] or nil if cancelled. Options without parentheses.
      */
-    global define GetAllowedHosts(string hosts, string opts, list allowed) ``{
+    global define list(string) GetAllowedHosts(string hosts, string opts, list(string) allowed) ``{
 	if (hosts == nil)   hosts = "";
 	if (opts == nil)    opts = "";
 	if (allowed == nil) allowed = [];
@@ -158,15 +160,16 @@ are already set."));
 	if (ret == `ok)
 	    return [ hosts, opts ];
 	return nil;
-    };
+    }
 
 
     /**
      * Opening NFS server dialog
+     * @return `back, `abort, `next `or finish
      */
-    global define BeginDialog () ``{
+    global define symbol BeginDialog () ``{
 
-	boolean start_nfs_server = (lookup(nfs_config, "start_server", "") == true);
+	boolean start_nfs_server = NfsServer::start;
 
 	// Help, part 1 of 2
 	string help_text = _(
@@ -218,36 +221,34 @@ a configuration dialog where you can specify the directories to export.</P>");
 
 	if (ret == `next)
 	{
-	    nfs_config = add (nfs_config, "start_server", start_nfs_server);
+	    NfsServer::start = start_nfs_server;
 
 	    if (!start_nfs_server)
 	    {
 		return `finish;
 	    }
-
 	}
 
 	return ret;
-
     }
 
     /**
      * Enable or disable the Edit and Delete buttons.
      * @param enable	true/false
      */
-    global define EnableExportsButtons (boolean enable) ``{
+    global define void EnableExportsButtons (boolean enable) ``{
 
 	UI::ChangeWidget (`id (`mpeditbut), `Enabled, enable);
 	UI::ChangeWidget (`id (`mpdelbut), `Enabled, enable);
 	UI::ChangeWidget (`id (`alweditbut), `Enabled, enable);
 	UI::ChangeWidget (`id (`alwdelbut), `Enabled, enable);
-
     }
 
     /**
      * Exports dialog itself
+     * @return `back, `abort, `next
      */
-    global define ExportsDialog () ``{
+    global define symbol ExportsDialog () ``{
 
 	// Help, part 1 of 3
 	string help_text = _("<P>The upper box contains all the directories which will be exported.
@@ -265,11 +266,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	help_text = help_text + _("<P>Please have a look at <B>man exports</B> for further information.</P>
 ");
 
-
-
-
-
-	list exports = lookup (nfs_config, "exports", []);
+	list exports = NfsServer::exports;
 
 	term contents =
 	    `VBox(
@@ -376,17 +373,6 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		UI::ChangeWidget (`id (`alwdelbut), `Enabled, true);
 
 	    }
-	    /*else if (ret == `allowedtab) {
-	      string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
-	      list allowed = FindAllowed(exports, mountpoint);
-	      if (allowed != nil) {
-	      list ho = AllowedToHostsOpts(
-	      select(allowed, UI::QueryWidget(`id(`allowedtab), `CurrentItem)));
-
-	      UI::ChangeWidget(`id(`hostsent), `Value, select(ho, 0));
-	      UI::ChangeWidget(`id(`optsent), `Value, select(ho, 1));
-	      }
-	      }*/
 	    else if (ret == `alwnewbut)
 	    {
 		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
@@ -395,7 +381,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
 		    list hostopt = GetAllowedHosts(nil, nil, allowed);
 		    if (hostopt != nil) {
-			allowed = add(allowed, select(hostopt, 0)+"("+select(hostopt, 1)+")");
+			allowed = add(allowed, select(hostopt, 0, "")+"("+select(hostopt, 1, "")+")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
@@ -413,21 +399,15 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		    if (allowed != nil) {
 			integer alw_no = UI::QueryWidget(`id(`allowedtab), `CurrentItem);
 			if (alw_no != nil) {
-			    list ho = AllowedToHostsOpts(select(allowed, alw_no));
-			    hosts = select(ho, 0);
-			    opts = select(ho, 1);
+			    list(string) ho = AllowedToHostsOpts(select(allowed, alw_no, ""));
+			    hosts = select(ho, 0, "");
+			    opts = select(ho, 1, "");
 			}
-			integer count = 0;
-			allowed = filter(`str, allowed, ``{
-			    count = count+1;
-			    if (count-1 == alw_no)
-			    return false;
-			    return true;
-			});
+			allowed = remove (allowed, alw_no);
 		    }
 		    list hostopt = GetAllowedHosts(hosts, opts, allowed);
 		    if (hostopt != nil) {
-			allowed = add(allowed, select(hostopt, 0)+"("+select(hostopt, 1)+")");
+			allowed = add(allowed, select(hostopt, 0, "")+"("+select(hostopt, 1, "")+")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
@@ -442,12 +422,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		    list allowed = FindAllowed(exports, mountpoint);
 		    integer alwno = UI::QueryWidget(`id(`allowedtab), `CurrentItem);
 		    if (allowed != nil && alwno != nil) {
-			integer count = 0;
-			allowed = filter(`str, allowed, ``{
-			    boolean dont_delete_this = (count != alwno);
-			    count = count+1;
-			    return dont_delete_this;
-			});
+			allowed = remove (allowed, alwno);
 			exports = maplist(`entry, exports, ``{
 			    if (lookup(entry, "mountpoint", "") == mountpoint)
 			    entry = add(entry, "allowed", allowed);
@@ -467,20 +442,18 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
 	if (ret == `next)
 	{
-	    nfs_config = add (nfs_config, "exports", exports);
+	    NfsServer::exports = exports;
 	}
 
 	return ret;
-
-
     }
-
 
 
     /**
      * Last confirmation dialog to use with sequencer
+     * @return `back or `finish
      */
-    global define SaveDialog () ``{
+    global define symbol SaveDialog () ``{
 
 	string message = _("The entered values will be written now.
 Do you really want to use the new settings?");
@@ -492,6 +465,4 @@ Do you really want to use the new settings?");
 
 	return `back;
     }
-
-
 }
