@@ -29,7 +29,6 @@
     include "nfs_server/routines.ycp";
     import "Label";
     import "Popup";
-    include "ui/file_popups.ycp";
 
     /**
      * The kernel-based server can handle spaces in paths,
@@ -112,7 +111,8 @@ Create it?")) ? `ok : nil;
 		    dir = "/";
 		}
 
-		dir = PopupDir (dir);
+		// title in the file selection dialog
+		dir = UI::AskForExistingDirectory(dir, _("Select Directory to Export"));
 
 		if (size (dir) > 0)
 		{
