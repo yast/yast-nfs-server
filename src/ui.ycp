@@ -33,7 +33,7 @@
      * Ask user for a directory to export. Allow browsing.
      * @param mountpoint	default value
      * @param exports		exports list to check for duplicates
-     * @return			a path to export
+     * @return			a path to export or nil if cancelled
      */
     global define string GetDirectory(string mountpoint, list(map) exports) ``{
 	if (mountpoint == nil)
@@ -63,18 +63,22 @@
 	    ret = UI::UserInput();
 
 	    mountpoint = UI::QueryWidget(`id(`mpent), `Value);
-	    list allowed = FindAllowed(exports, mountpoint);
-	    if (ret == `ok &&
-		(allowed != nil ||
-		 !CheckPath(mountpoint))) {
+	    if (ret == `ok)
+	    {
+		list allowed = FindAllowed(exports, mountpoint);
 		if (allowed != nil) {
 		    // error popup message
 		    UI::MessagePopup(_("The exports table already
 contains this directory."));
+		    ret = nil;
 		}
-		ret = nil;
+		else if (SCR::Read (.target.size, mountpoint) < 0) {
+		    // the dir does not exist
+		    ret = UI::YesNoPopup(_("The directory does not exist.
+Do you want to create it?")) ? `ok : nil;
+		}
 	    }
-	    if (ret == `browse)
+	    else if (ret == `browse)
 	    {
 		string dir = UI::QueryWidget (`id (`mpent), `Value);
 		if (size (dir) == 0)
