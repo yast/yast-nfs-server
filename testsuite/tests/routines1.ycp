@@ -3,7 +3,7 @@
  *   NFS server configuration
  *
  * Summary:
- *   Routines testuite
+ *   Routines testsuite
  *
  * Authors:
  *   Martin Vidner <mvidner@suse.cz>
@@ -11,6 +11,8 @@
  * $Id$
  */
 {
+    // testedfiles: routines.ycp Testsuite.ycp
+
     include "testsuite.ycp";
     include "nfs_server/routines.ycp";
 
