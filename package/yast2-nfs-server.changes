@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar  3 14:32:12 CET 2003 - mvidner@suse.de
+
+- Don't set Mode::config to true in _auto clients (nashif).
+- 2.7.3
+
+-------------------------------------------------------------------
 Mon Feb 17 16:47:12 CET 2003 - mvidner@suse.de
 
 - Changed _auto::Result to Export (nashif).
