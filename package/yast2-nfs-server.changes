@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Fri Aug  9 15:46:35 CEST 2002 - mvidner@suse.cz
+
+- Explicitly set sync, the new default of nfs-utils-1.0.1,
+  so that exportfs does not produce a warning.
+- Let the table keep the keyboard focus (#16116 workaround).
+- Report Runlevel::error_msg if enabling a service fails.
+- Make "yast2 nfs-server" invoke "yast2 nfs_server".
+- 2.6.10
+
+-------------------------------------------------------------------
 Mon Aug  5 16:18:24 CEST 2002 - mvidner@suse.cz
 
 - Added autoyast interface (nashif).
