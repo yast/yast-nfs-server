@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
-Mon Jul  1 18:50:50 CEST 2002 - msvec@suse.cz
+Thu Jul 04 21:31:21 CEST 2002 - arvin@suse.de
 
-- 2.6.3
+- moved non binary files to /usr/share/YaST2
 
 -------------------------------------------------------------------
 Fri Jun 28 14:29:07 CEST 2002 - mvidner@suse.cz
@@ -68,7 +68,7 @@ Tue Nov 13 10:57:20 CET 2001 - mvidner@suse.cz
 Thu Oct 11 10:34:54 CEST 2001 - mvidner@suse.cz
 
 - Better export options checking; default options are nonempty ("*()")
-  to avoid warnings. (#11615) 
+  to avoid warnings. (#11615)
 - 2.5.1
 
 -------------------------------------------------------------------
