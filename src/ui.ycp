@@ -134,6 +134,11 @@ contains this directory."));
 	    ret = UI::UserInput();
 
 	    hosts = UI::QueryWidget(`id(`hostsent), `Value);
+	    if (size (hosts) == 0)
+	    {
+		hosts = "*";
+		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
+	    }
 	    opts = UI::QueryWidget(`id(`optsent), `Value);
 	    if (ret == `ok &&
 		(!CheckNoSpaces(hosts) || !CheckNoSpaces(opts)))

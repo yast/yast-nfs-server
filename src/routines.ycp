@@ -118,14 +118,13 @@ with a / and it must not contain spaces.")));
 
     /**
      * Check for the validity of options or hosts wildcard
-     * nonempty, fewer than 70 chars, no blanks.
+     * fewer than 70 chars, no blanks.
      * If invalid, a message is displayed.
      * @param name	options
      * @return boolean	whether valid
      */
     global define CheckNoSpaces(string name) ``{
-	if (size(name) > 0 &&
-	    size(name) < 70 &&
+	if (size(name) < 70 &&
 	    findfirstof(name, " \t") == nil)
 	    return true;
 	else
