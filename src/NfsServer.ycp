@@ -34,7 +34,7 @@
 
     /**
      * Should the server be started?
-     * If false, the exports file will not be touched.
+     * New since 9.0: Exports are independent of this setting.
      */
     global boolean start = false;
 
@@ -53,7 +53,7 @@
     global list(map) exports = [];
 
     /**
-     * Do we have nfslock? (nis-utils: yes, nis-server: no
+     * Do we have nfslock? (nfs-utils: yes, nfs-server: no)
      */
     boolean have_nfslock = true;
 
@@ -114,37 +114,10 @@
 
 
     /**
-     * Saves NFS server configuration. (exports(5))
-     * Creates any missing directories.
+     * Saves /etc/exports and creates missing directories.
      * @return true on success
      */
-    global define boolean Write () ``{
-	// if there is still work to do, don't return false immediately
-	// but remember the error
-	boolean ok = true;
-
-	if (!start)
-	{
-		if (!write_only)
-			Runlevel::RunInitScript ("nfsserver", "stop");
-	    if (! Runlevel::ServiceAdjust ("nfsserver", "disable"))
-	    {
-		Report::Error (Runlevel::error_msg);
-		ok = false;
-	    }
-	    if (have_nfslock)
-	    {
-		if (!write_only)
-			Runlevel::RunInitScript ("nfslock", "stop");
-		if (! Runlevel::ServiceAdjust ("nfslock", "disable"))
-		{
-		    Report::Error (Runlevel::error_msg);
-		    ok = false;
-		}
-	    }
-	}
-	else
-	{
+    global define boolean WriteExports () ``{
 	    // create missing directories.
 	    foreach (map entry, exports, ``{
 		string directory = entry["mountpoint"]:nil;
@@ -168,6 +141,47 @@ exported directories.\n"));
 		return false;
 	    }
 
+	    return true;
+    }
+
+    /**
+     * Saves NFS server configuration. (exports(5))
+     * Creates any missing directories.
+     * @return true on success
+     */
+    global define boolean Write () ``{
+	// if there is still work to do, don't return false immediately
+	// but remember the error
+	boolean ok = true;
+
+	// Independent of @ref start because of Heartbeat (#27001).
+	if (! WriteExports ())
+	{
+	    return false;
+	}
+
+	if (!start)
+	{
+		if (!write_only)
+			Runlevel::RunInitScript ("nfsserver", "stop");
+	    if (! Runlevel::ServiceAdjust ("nfsserver", "disable"))
+	    {
+		Report::Error (Runlevel::error_msg);
+		ok = false;
+	    }
+	    if (have_nfslock)
+	    {
+		if (!write_only)
+			Runlevel::RunInitScript ("nfslock", "stop");
+		if (! Runlevel::ServiceAdjust ("nfslock", "disable"))
+		{
+		    Report::Error (Runlevel::error_msg);
+		    ok = false;
+		}
+	    }
+	}
+	else
+	{
 	    if (! Runlevel::ServiceAdjust ("portmap", "enable"))
 	    {
 		Report::Error (Runlevel::error_msg);
