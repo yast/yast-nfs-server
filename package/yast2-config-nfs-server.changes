@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug 23 17:06:20 CEST 2001 - mvidner@suse.cz
+
+- Added documentation in a devel subpackage (2.4.7)
+
+-------------------------------------------------------------------
 Tue Aug 21 17:08:59 CEST 2001 - mvidner@suse.cz
 
 - Only one <p> per string.
