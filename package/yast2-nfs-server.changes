@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 15 15:47:53 CEST 2004 - mvidner@suse.cz
+
+- Use Package instead of Require.
+- 2.10.5
+
+-------------------------------------------------------------------
 Tue Sep 14 09:24:16 CEST 2004 - jsrain@suse.cz
 
 - adapted testsuite to more changes in yast2-firewall
