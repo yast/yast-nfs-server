@@ -64,9 +64,9 @@
         boolean start_nfs_server = lookup (nfs_config, "start_server", false);
         list exports = lookup (nfs_config, "exports");
 
-	//FIXME
-	CallFunction(`nfs_server_write($[...]));
-        if (nfs_server_save (start_nfs_server, exports))
+	//FIXME: write exports 
+        //if (nfs_server_save (start_nfs_server, exports))
+	if(CallFunction(`nfs_server_write($[])))
         {
             UI (`MessagePopup (_("All the settings were written and are ready to use.")));
         }

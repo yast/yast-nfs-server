@@ -22,7 +22,8 @@
 
     textdomain "nfs_server";
     
-    include "lan/lan_nfs_routines.ycp";
+    include "nfs_server/routines.ycp";
+    include "ui/common_popups.ycp";
     include "ui/file_popups.ycp";
 
     /* Ask user for an entry. */
