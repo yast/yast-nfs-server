@@ -302,6 +302,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	UI::ChangeWidget(`id(`next), `Label, FinishButtonLabel());
 
 	EnableExportsButtons (false);
+	UI::ChangeWidget (`id (`alwnewbut), `Enabled, false);
 
 
 	any ret = nil;
@@ -313,6 +314,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    {
 		UI::ChangeWidget (`id (`mpeditbut), `Enabled, true);
 		UI::ChangeWidget (`id (`mpdelbut), `Enabled, true);
+		UI::ChangeWidget (`id (`alwnewbut), `Enabled, true);
 
 		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		UI::ChangeWidget(`id(`allowedlab), `Value, mountpoint);
