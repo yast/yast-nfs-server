@@ -23,7 +23,7 @@
 
 {
 
-    textdomain "lan";
+    textdomain "nfs_server";
 
     include "ui/wizard_dialog.ycp";
     include "wizard/sequencer.ycp";

@@ -17,7 +17,7 @@
  */
 
 {
-    textdomain "lan";
+    textdomain "nfs_server";
 
     return( [ "nfs_server", $[
 	`menuentry    : UI(_("NFS server")),
