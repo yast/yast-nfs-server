@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 16 17:49:41 CEST 2003 - nashif@suse.de
+
+- Dont show help messages during autoinstallation
+- 2.8.7
+
+-------------------------------------------------------------------
 Fri Sep 12 06:59:38 CEST 2003 - nashif@suse.de
 
 - #30291: return list of required packages for autoinstallation
