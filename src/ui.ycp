@@ -279,7 +279,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		      // push button label
 		      `PushButton(`id(`mpdelbut), _("De&lete"))),
 		// push button label
-		`VBox(`Left(`Label(`id(`allowedlab), "                                          ")),
+		`VBox(`Left(`Label(`id(`allowedlab), `opt(`hstretch), "")),
 		      `Table(`id(`allowedtab), `opt(`notify, `immediate),
 			     // table headers "Host wildcards", "Options"
 			     `header(_("Hosts wildcard")+"  ", _("Options")+"  "),
