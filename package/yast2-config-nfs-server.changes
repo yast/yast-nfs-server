@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug 21 17:08:59 CEST 2001 - mvidner@suse.cz
+
+- Only one <p> per string.
+- Switched from START_* to runlevel_adjust.
+- 2.4.6
+
+-------------------------------------------------------------------
 Tue Aug  7 17:17:42 CEST 2001 - mvidner@suse.cz
 
 - Changed from RPM Requires to require.ycp.
