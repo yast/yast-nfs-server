@@ -16,10 +16,10 @@
  *
  * This is a write-only client. It takes its arguments and just
  * write the settings.
- */ 
+ */
 
 {
-  
+
     textdomain "nfs_server";
 
     include "ui/common_popups.ycp";
@@ -32,59 +32,59 @@
      */
     global define nfs_server_save (boolean start_nfs_server, list exports) ``{
 
-        SCR (`Execute(.target.bash, "/etc/init.d/nfsserver stop", $[]));
-        
-        if (start_nfs_server) 
-        {
-            if (exports != nil) 
-            {
-                SCR (`Execute (.target.bash, "/bin/cp $ORIG $BACKUP", $["ORIG" : "/etc/exports", "BACKUP" : "/etc/exports.YaST2.save"]));
+	SCR::Execute(.target.bash, "/etc/init.d/nfsserver stop", $[]);
 
-                if (SCR(`Write(.etc.exports, exports)) == nil) 
-                {
-                    // error popup message
-                    UI(`MessagePopup(_("I was unable to write to /etc/exports.
+	if (start_nfs_server)
+	{
+	    if (exports != nil)
+	    {
+		SCR::Execute (.target.bash, "/bin/cp $ORIG $BACKUP", $["ORIG" : "/etc/exports", "BACKUP" : "/etc/exports.YaST2.save"]);
+
+		if (SCR::Write(.etc.exports, exports) == nil)
+		{
+		    // error popup message
+		    UI::MessagePopup(_("I was unable to write to /etc/exports.
 There will be no changes in the exported
-directories.")));
-                    return false;
-                }
-                
-		SCR(`Write(.rc.system.START_PORTMAP, "yes"));
-                SCR(`Write(.rc.system.NFS_SERVER, "yes"));
-                
-                SCR (`Execute(.target.bash, "/etc/init.d/portmap start", $[]));                // but this is necessary
-                SCR (`Execute(.target.bash, "/etc/init.d/nfsserver start", $[]));
-                
-                if (SCR (`Execute(.target.bash, "/etc/init.d/nfsserver status | /bin/grep up", $[])) != 0) 
-                {
-                    // error popup message
-                    UI(`MessagePopup(_("I was unable to restart the NFS server.
-Your changes will be active after reboot.")));
-                    return false;
-                }
-            }
-        } 
-        else
-        {
-            SCR(`Write(.rc.system.NFS_SERVER, "no"));
-        }
-        
-        if (! SCR(`Write(.rc.system, nil))) 
-        {                  // Perform the write
-            // error popup message
-            UI(`MessagePopup(_("I was unable to write to /etc/rc.config.
+directories."));
+		    return false;
+		}
+
+		SCR::Write(.rc.system.START_PORTMAP, "yes");
+		SCR::Write(.rc.system.NFS_SERVER, "yes");
+
+		SCR::Execute(.target.bash, "/etc/init.d/portmap start", $[]);                // but this is necessary
+		SCR::Execute(.target.bash, "/etc/init.d/nfsserver start", $[]);
+
+		if (SCR::Execute(.target.bash, "/etc/init.d/nfsserver status | /bin/grep up", $[]) != 0)
+		{
+		    // error popup message
+		    UI::MessagePopup(_("I was unable to restart the NFS server.
+Your changes will be active after reboot."));
+		    return false;
+		}
+	    }
+	}
+	else
+	{
+	    SCR::Write(.rc.system.NFS_SERVER, "no");
+	}
+
+	if (! SCR::Write(.rc.system, nil))
+	{                  // Perform the write
+	    // error popup message
+	    UI::MessagePopup(_("I was unable to write to /etc/rc.config.
 After reboot the NFS server may have
-unexpected behavior.")));
-            return false;
-        } 
-        else
-        {
-            SCR (`Execute(.target.bash, "/sbin/SuSEconfig -quick --nonewpackage", $[]));
-        }
-        
-        return true;
+unexpected behavior."));
+	    return false;
+	}
+	else
+	{
+	    SCR::Execute(.target.bash, "/sbin/SuSEconfig -quick --nonewpackage", $[]);
+	}
+
+	return true;
     }
 
   /* The end of the definitions */
-  
+
 }

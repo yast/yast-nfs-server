@@ -23,22 +23,22 @@
     textdomain "nfs_server";
 
     /**
-     * Split the allowed host specification 
-     * @param hosts "hosts(opts)" 
-     * @return term `couple("hosts", "opts") 
+     * Split the allowed host specification
+     * @param hosts "hosts(opts)"
+     * @return term `couple("hosts", "opts")
      */
     global define AllowedToHostsOpts(string hosts) ``{
-        integer  brpos = findfirstof(hosts, "(");
-        string opts = "";
-        if (brpos != nil) {
-            opts = substring(hosts, brpos+1);
-            hosts = substring(hosts, 0, brpos);
+	integer  brpos = findfirstof(hosts, "(");
+	string opts = "";
+	if (brpos != nil) {
+	    opts = substring(hosts, brpos+1);
+	    hosts = substring(hosts, 0, brpos);
 
-            brpos = findfirstof(opts, ")");
-            if (brpos != nil)
-                opts = substring(opts, 0, brpos);
-        }
-        return [ hosts, opts ];
+	    brpos = findfirstof(opts, ")");
+	    if (brpos != nil)
+		opts = substring(opts, 0, brpos);
+	}
+	return [ hosts, opts ];
     };
 
     /**
@@ -47,30 +47,30 @@
      * @example AllowedTableItems (["*.local.domain(ro)", "@trusted(rw)"])
      */
     global define AllowedTableItems(list allowed) ``{
-        integer count = 0;
-        return maplist(`str, allowed, ``{
-            list sp = AllowedToHostsOpts(str);
-            term it = `item(`id(count), select(sp, 0)+" ", select(sp, 1)+" ");
-	
-            count = count+1;
-            return it;
-        });
+	integer count = 0;
+	return maplist(`str, allowed, ``{
+	    list sp = AllowedToHostsOpts(str);
+	    term it = `item(`id(count), select(sp, 0)+" ", select(sp, 1)+" ");
+
+	    count = count+1;
+	    return it;
+	});
     };
 
     /**
-     * Find entry in exports according to the mountpoint 
+     * Find entry in exports according to the mountpoint
      * @param exports list of exports
      * @param mp mount point
      * @return list a list of allowed host specifications or nil if not found
      */
     global define FindAllowed(list exports, string mp) ``{
-        list flt = filter(`ent, exports, ``{
-            return (lookup(ent, "mountpoint") == mp);
-        });
-        if (flt == nil || size(flt) == 0)
-            return nil;
-    
-        return lookup(select(flt, 0), "allowed");
+	list flt = filter(`ent, exports, ``{
+	    return (lookup(ent, "mountpoint") == mp);
+	});
+	if (flt == nil || size(flt) == 0)
+	    return nil;
+
+	return lookup(select(flt, 0), "allowed");
     };
 
     /**
@@ -78,20 +78,20 @@
      * @return list	a ui table list of mountpoints, id'ed by themselves
      */
     global define ExportsItems(list exports) ``{
-        return maplist(`entry, exports, ``{
-            string str = lookup(entry, "mountpoint");
-            return `item(`id(str), str+" ");
-        });
+	return maplist(`entry, exports, ``{
+	    string str = lookup(entry, "mountpoint");
+	    return `item(`id(str), str+" ");
+	});
     };
-  
+
     /**
      * @param exports	list of exports
      * @return term	a SelectionBox for the mountpoints, `id(`exportsbox)
      */
     global define ExportsSelBox(list exports) ``{
-        // selection box label
-        return `SelectionBox(`id(`exportsbox), `opt(`notify),
-                             _("Di&rectories"), ExportsItems(exports));
+	// selection box label
+	return `SelectionBox(`id(`exportsbox), `opt(`notify),
+			     _("Di&rectories"), ExportsItems(exports));
     };
 
     // duplicated in nfs/routines.ycp and nfs_server/routines.ycp
@@ -103,17 +103,17 @@
      * @return boolean	whether valid
      */
     global define CheckPath(string name) ``{
-        if (size(name) > 0 && 
-            size(name) < 70 &&
-            substring(name, 0, 1) == "/" &&
-            findfirstof(name, " \t") == nil)
-            return true;
-        else
+	if (size(name) > 0 &&
+	    size(name) < 70 &&
+	    substring(name, 0, 1) == "/" &&
+	    findfirstof(name, " \t") == nil)
+	    return true;
+	else
 	    // error popup message
-            UI(`MessagePopup(sformat(UI(_("You entered a wrong path. It must be
+	    UI::MessagePopup(sformat(_("You entered a wrong path. It must be
 shorter than 70 characters, it must begin
-with a / and it must not contain spaces.")))));
-        return false;
+with a / and it must not contain spaces.")));
+	return false;
     };
 
     /**
@@ -124,31 +124,31 @@ with a / and it must not contain spaces.")))));
      * @return boolean	whether valid
      */
     global define CheckNoSpaces(string name) ``{
-        if (size(name) > 0 && 
-            size(name) < 70 &&
-            findfirstof(name, " \t") == nil)
-            return true;
-        else
+	if (size(name) > 0 &&
+	    size(name) < 70 &&
+	    findfirstof(name, " \t") == nil)
+	    return true;
+	else
 	    // error popup message
-            UI(`MessagePopup(sformat(UI(_("You entered a wrong wildcard or options string.
+	    UI::MessagePopup(sformat(_("You entered a wrong wildcard or options string.
 It must be shorter than 70 characters and it
-must not contain spaces.")))));
-        return false;
+must not contain spaces.")));
+	return false;
     };
 
     /**
-     * Replaces 'allowed' list in exports (for specified mountpoint) 
+     * Replaces 'allowed' list in exports (for specified mountpoint)
      * @param exports		exports list
      * @param mountpoint	mount point
      * @param allowed		new allowed host list for that mout point
      * @return list		modified exports list
      */
     global define ReplaceInExports(list exports, string mountpoint, list allowed) ``{
-        return maplist(`entry, exports, ``{
-            if (lookup(entry, "mountpoint") == mountpoint)
-                entry = add(entry, "allowed", allowed);
-            return entry;
-        });
+	return maplist(`entry, exports, ``{
+	    if (lookup(entry, "mountpoint") == mountpoint)
+		entry = add(entry, "allowed", allowed);
+	    return entry;
+	});
     };
- 
+
 }

@@ -20,22 +20,22 @@
     textdomain "nfs_server";
 
     return( [ "nfs_server", $[
-	`menuentry    : UI(_("NFS server")),
+	`menuentry    : _("NFS server"),
 
 	`arguments    : [ ],
 
-	`group        : "Net_advanced", 
+	`group        : "Net_advanced",
 
 	`icon         : "nfs.png",
 
 	`widget       :  `RichText(
 
-	    UI(_("Launch this module to configure NFS server.")) +
-	    UI(_("<p>You need to be logged in as <i>root</i> in order to do this.</p>"))),
+	    _("Launch this module to configure NFS server.") +
+	    _("<p>You need to be logged in as <i>root</i> in order to do this.</p>")),
 
-	`helptext     : UI(_("Configure NFS server.")),
+	`helptext     : _("Configure NFS server."),
 
-	`codefragment : nil 
+	`codefragment : nil
 
 	]
     ]);

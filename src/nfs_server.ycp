@@ -32,53 +32,53 @@
     include "nfs_server/nfs_server_write.ycp";
 
     map Aliases = $[
-        "begin"   : ``(BeginDialog ()),
-        "exports"   : ``(ExportsDialog ()),
-        "end"     : ``(SaveDialog ())
-        ];
+	"begin"   : ``(BeginDialog ()),
+	"exports"   : ``(ExportsDialog ()),
+	"end"     : ``(SaveDialog ())
+	];
 
     map Sequence = $[
-        "ws_start"  : "begin",
-        "begin"     : $[
-            `next   : "exports",
-            `finish : "end",
+	"ws_start"  : "begin",
+	"begin"     : $[
+	    `next   : "exports",
+	    `finish : "end",
 	    `abort  : `abort
-            ],
-        "exports"       : $[
-            `next   : "end",
+	    ],
+	"exports"       : $[
+	    `next   : "end",
 	    `abort  : `abort
-            ],
-        "end"       : $[
-            `finish    : `ws_finish
-            ]
-        ];
+	    ],
+	"end"       : $[
+	    `finish    : `ws_finish
+	    ]
+	];
 
     map nfs_config = $[
-        "start_server" : (SCR(`Read(.rc.system.NFS_SERVER)) == "yes"),
-        "exports"      : SCR(`Read(.etc.exports))
-        ];
+	"start_server" : (SCR::Read(.rc.system.NFS_SERVER) == "yes"),
+	"exports"      : SCR::Read(.etc.exports)
+	];
 
-    if (!RequireAndConflict (["nfs-utils"], [], 
+    if (!RequireAndConflict (["nfs-utils"], [],
 _("<p>To configure the Network Filesystem, the <b>%1</b> package must be installed.</p>
 <p>Do you wish to install it now?</p>")))
     {
 	return;
     }
 
-    UI (`CreateWizardDialog ());
-    
+    UI::CreateWizardDialog ();
+
     any result = WizardSequencer (Aliases, Sequence);
 
     if (result == `ws_finish)
     {
-        boolean start_nfs_server = lookup (nfs_config, "start_server", false);
-        list exports = lookup (nfs_config, "exports");
+	boolean start_nfs_server = lookup (nfs_config, "start_server", false);
+	list exports = lookup (nfs_config, "exports");
 
-        if (nfs_server_save (start_nfs_server, exports))
-        {
-            UI (`MessagePopup (_("All the settings were written and are ready to use.")));
-        }
+	if (nfs_server_save (start_nfs_server, exports))
+	{
+	    UI::MessagePopup (_("All the settings were written and are ready to use."));
+	}
     }
-    
-    return UI(`CloseDialog());
+
+    return UI::CloseDialog();
 }
