@@ -99,7 +99,7 @@ with spaces in their names.
 Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
 		    ret = nil;
 		}
-		else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config) {
+		else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config ()) {
 		    // the dir does not exist
 		    ret = Popup::YesNo(_("The directory does not exist.
 Create it?")) ? `ok : nil;
