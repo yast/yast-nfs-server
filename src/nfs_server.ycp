@@ -28,6 +28,7 @@
     include "ui/wizard_dialog.ycp";
     include "wizard/sequencer.ycp";
     include "nfs_server/ui.ycp";
+    include "nfs_server/nfs_server_write.ycp";
 
     map Aliases = $[
         "begin"   : ``(BeginDialog ()),
@@ -64,9 +65,7 @@
         boolean start_nfs_server = lookup (nfs_config, "start_server", false);
         list exports = lookup (nfs_config, "exports");
 
-	//FIXME: write exports 
-        //if (nfs_server_save (start_nfs_server, exports))
-	if(CallFunction(`nfs_server_write($[])))
+        if (nfs_server_save (start_nfs_server, exports))
         {
             UI (`MessagePopup (_("All the settings were written and are ready to use.")));
         }

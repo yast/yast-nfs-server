@@ -53,7 +53,7 @@ directories.")));
                 SCR(`Write(.rc.system.NFS_SERVER, "yes"));
                 
                 SCR (`Execute(.target.bash, "/etc/init.d/portmap start", $[]));                // but this is necessary
-                Shell ("/etc/init.d/nfsserver start");
+                SCR (`Execute(.target.bash, "/etc/init.d/nfsserver start", $[]));
                 
                 if (SCR (`Execute(.target.bash, "/etc/init.d/nfsserver status | /bin/grep up", $[])) != 0) 
                 {
