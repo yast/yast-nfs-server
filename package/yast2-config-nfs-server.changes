@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Wed Apr 24 13:55:14 CEST 2002 - mvidner@suse.cz
+
+- Check that the exported directory exists and ask if it should be created.
+- Better /etc/exports handling:
+  Don't insert \\\n (#15937)
+  Handle spaces in paths (allowed only for the kernel based server) (#15524)
+- Use * to mean all clients only if using the kernel based server.
+  The user mode server still needs an empty string to mean that.
+- Fix for automake 1.6
+- 2.6.1
+
+-------------------------------------------------------------------
 Thu Feb  7 17:29:16 CET 2002 - mvidner@suse.cz
 
 - Allow also the user mode nfs-server.
