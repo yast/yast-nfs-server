@@ -32,7 +32,6 @@ Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver start" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_final start" $["TERM":"raw"] 0
 Return	true
 Dump	Write KO
 Read	.target.dir "/projects" nil
