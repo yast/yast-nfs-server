@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  7 17:17:42 CEST 2001 - mvidner@suse.cz
+
+- Changed from RPM Requires to require.ycp.
+- 2.4.5
+
+-------------------------------------------------------------------
 Mon Jul 30 12:02:08 CEST 2001 - mvidner@suse.cz
 
 - Turned off autoheader.
