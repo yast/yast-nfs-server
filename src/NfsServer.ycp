@@ -21,6 +21,7 @@
 
     import "Runlevel";
     import "Report";
+	import "Summary";
 
     /**
      * Should the server be started?
@@ -52,29 +53,26 @@
      */
     global define boolean Import (map settings) ``{
 	if (size (settings) == 0)
-	{
-	    //Provide defaults for autoinstallation editing:
-	    //Leave empty.
+	{	    
 	    return true;
 	}
 
-	boolean missing = false;
-	foreach (`k, ["start", "exports"], ``{
-	    if (! haskey (settings, k))
-	    {
-		y2error ("Missing at Import: '%1'.", k);
-		missing = true;
-	    }
-	});
-	if (missing)
-	{
-	    return false;
-	}
-
-	start = lookup (settings, "start", false);
-	exports = lookup (settings, "exports", []);
+	Set(settings);
 	return true;
     }
+
+    /**
+     * Set the variables just as is and without complaining
+     * @param  settings
+     * @return void
+     */
+    global define void Set (map settings)
+	``{
+	start = lookup (settings, "start_nfsserver", false);
+	exports = lookup (settings, "nfs_exports", []);
+	return;	
+    }
+    
 
     /**
      * Dump the NFS settings to a map, for autoinstallation use.
@@ -83,8 +81,8 @@
      */
     global define map Export () ``{
 	return $[
-	    "start": start,
-	    "exports": exports,
+	    "start_nfsserver": start,
+	    "nfs_exports": exports,
 	    ];
     }
 
@@ -159,6 +157,23 @@ Your changes will be active after reboot.
 	// FIXME: return errors from runlevel_adjust, when it produces any
 	return true;
     }
+
+
+	global define string Summary()``{
+		string summary = "";
+		summary = Summary::AddHeader(summary, _("NFS Exports"));
+		if (size(exports)>0)
+		{
+			foreach(`e, exports, ``{
+					summary = Summary::OpenList(summary);
+					summary = Summary::AddListItem(summary,e["mountpoint"]:"");
+					summary = Summary::CloseList(summary);
+					});
+		}
+		else
+			summary = Summary::AddLine(summary, Summary::NotConfigured());
+		return summary;
+	}
 
   /* The end of the definitions */
 

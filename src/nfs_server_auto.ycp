@@ -1,0 +1,134 @@
+/**
+ * File:
+ *   nfs_auto.ycp
+ *
+ * Package:
+ *   Configuration of NFS client
+ *
+ * Summary:
+ *   Client for autoinstallation
+ *
+ * Authors:
+ *   Martin Vidner <mvidner@suse.cz>
+ *
+ * $Id$
+ *
+ * This is a client for autoinstallation. It takes its arguments,
+ * goes through the configuration and return the setting.
+ * Does not do any changes to the configuration.
+ */
+
+/**
+ * @param first a map of mail settings
+ * @return map edited settings or empty map if canceled
+ * @example map mm = $[ "FAIL_DELAY" : "77" ];
+ * @example map ret = WFM::CallModule ("mail_auto", [ mm ]);
+ */
+
+{
+    textdomain "nfs";
+	import "Mode";
+	Mode::config = true;
+
+    import "NfsServer";
+    import "Wizard";
+	include "wizard/sequencer.ycp";
+    include "nfs_server/ui.ycp";
+
+    list args = WFM::Args ();
+    if ( size (args) <= 0 )
+    {
+	y2error ("Did not get the settings, probably some mistake...");
+	return false;
+    }
+    if ( !is ( WFM::Args (0), map ) )
+    {
+	y2error ("Bad argument for nfs_auto: %1", WFM::Args (0));
+	return false;
+    }
+    map settings = $[];
+    {
+	integer i = 0;
+	while (i < size (WFM::Args()))
+	{
+	    if (is (WFM::Args (i), map) && nil != WFM::Args (i))	settings = WFM::Args (i);
+	    i = i + 1;
+	}
+    }
+
+    // The settings are in the first argument
+
+    y2milestone("Imported: (%1)", settings);
+    NfsServer::Import ( settings );
+
+    define set_contents() ``{
+	term contents =
+	    `VBox(
+		  `VSpacing(1),
+		  `RichText( `id(`summary), NfsServer::Summary()),
+		  `VSpacing(),
+		  `HBox(
+		      // button label
+			`PushButton(`id(`configure), _("&Configure NFS Server")),
+			`HStretch(),
+		      // button label
+			`PushButton(`id(`reset), _("&Reset Configuration"))
+			),
+		  `VSpacing()
+		  );
+
+	// dialog heading
+	Wizard::SetContents(_("NFS Server Configuration"),
+			    contents, "", true, true);
+    }
+
+
+    map Aliases = $[
+    "begin"   : ``(BeginDialog ()),
+    "exports"   : ``(ExportsDialog ())
+    ];
+
+    map Sequence = $[
+    "ws_start"  : "begin",
+    "begin"     : $[
+        `next   : "exports",
+        `finish : `next,
+        `abort  : `abort
+        ],
+    "exports"       : $[
+        `next   : `next,
+        `abort  : `abort
+        ]
+    ];
+
+    // Create Summary and buttons for launching
+    // in auto mode
+
+    set_contents();
+    any result = nil;
+    any ret = nil;
+    repeat {
+	ret = UI::UserInput();
+	if (ret == `configure)
+	{
+	    Wizard::CreateDialog ();
+	    result = WizardSequencer (Aliases, Sequence);
+	    UI::CloseDialog ();
+
+	    if (result == `next || result == `finish)
+	    {
+		settings = NfsServer::Export ();
+	    }
+	    set_contents();
+	}
+	else if ( ret == `reset)
+	{
+	    settings= $[];
+	    Nfs::Import($[]);
+	    set_contents();
+	}
+    } until (ret == `back || ret == `next || ret ==`key || ret ==`abort);
+
+    return [ret, settings];
+}
+

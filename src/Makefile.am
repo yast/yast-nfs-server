@@ -8,7 +8,8 @@ myincludedir = @yncludedir@/nfs_server
 
 client_DATA =		\
 	nfs_server.ycp	\
-	nfs_server_write.ycp
+	nfs_server_write.ycp \
+	nfs_server_auto.ycp
 
 myinclude_DATA =	\
 	routines.ycp	\

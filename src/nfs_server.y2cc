@@ -35,4 +35,6 @@ SortKey =
 ; which textdomain to use for translations (important!)
 Textdomain = nfs_server
 
+Autoinst = all
+
 ; vim:syntax=dosini
