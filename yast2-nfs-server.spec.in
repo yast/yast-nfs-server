@@ -30,6 +30,7 @@ Summary:	Configuration of nfs server
 %defattr(-,root,root)
 %dir @yncludedir@/nfs_server
 @yncludedir@/nfs_server/*
+@clientdir@/nfs-server.ycp
 @clientdir@/nfs_server.ycp
 @clientdir@/nfs_server_write.ycp
 @clientdir@/nfs_server_auto.ycp
