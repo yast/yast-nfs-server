@@ -23,13 +23,14 @@
 
     textdomain "nfs_server";
 
-    import "NfsServer";
-    import "Wizard";
-    import "Mode";
-    include "nfs_server/routines.ycp";
+    import "CWMFirewallInterfaces";
     import "Label";
+    import "Mode";
+    import "NfsServer";
     import "Popup";
     import "Sequencer";
+    import "Wizard";
+    include "nfs_server/routines.ycp";
 
     /**
      * The kernel-based server can handle spaces in paths,
@@ -220,6 +221,15 @@ are already set."));
 
 	boolean start_nfs_server = NfsServer::start;
 
+	boolean changed = false;
+
+	// firewall widget using CWM
+	map<string, any> fw_settings = $[
+	    "services": [ "nfs-server" ],
+	    "display_details": true,
+	    ];
+	map<string,any> fw_cwm_widget = CWMFirewallInterfaces::CreateOpenFirewallWidget (fw_settings);
+
 	string help_text =
 	// Help, part 1 of 2
 _("<P>Here you can choose whether you want to start NFS server on your computer
@@ -230,10 +240,11 @@ and export some of your directories to the others.</P>");
 _("<P>If you choose <B>Start NFS server</B>, the <B>Next</B> button will open
 a configuration dialog where you can specify the directories to export.</P>");
 
+	help_text = help_text + fw_cwm_widget["help"]:"";
+
 	/* The end of the definitions */
 
-	term contents =
-	    `HVSquash(
+	term nfs_contents =
 		// frame label
 		`Frame(_("NFS server"),
 		       `VBox(`VSpacing(0.2),
@@ -242,14 +253,30 @@ a configuration dialog where you can specify the directories to export.</P>");
 					       `VBox(`Left(`RadioButton(`id(`servyes), `opt (`notify), _("&Start NFS server"), start_nfs_server)),
 				//radio button label
 						     `Left(`RadioButton(`id(`servno), `opt (`notify), _("&Don't start NFS server"), !start_nfs_server)))),
-			     `VSpacing(0.2))));
+			     `VSpacing(0.2)));
+	term fw_contents =
+	    // frame label
+	    `Frame (_("Firewall"),
+		    `VBox(`VSpacing(0.2),
+			  fw_cwm_widget["custom_widget"]:`Empty (),
+			  `VSpacing(0.2)));
+
+	term contents = `HVSquash (`VBox (
+				       nfs_contents,
+				       `VSpacing (1),
+				       fw_contents));
 
 	// dialog title
 	Wizard::SetContents(_("Configuration of the NFS server"),
 			      contents, help_text, true, true);
 
+	// initialize the widget (set the current value)
+	CWMFirewallInterfaces::OpenFirewallInit (fw_cwm_widget, "");
+
+	map event = nil;
 	any ret = nil;
 	do {
+	    start_nfs_server = (UI::QueryWidget(`id(`rbgroup), `CurrentButton) == `servyes);
 	    if (!start_nfs_server)
 	    {
 		Wizard::SetNextButton(`next, Label::FinishButton() );
@@ -261,21 +288,29 @@ a configuration dialog where you can specify the directories to export.</P>");
 		Wizard::SetFocusToNextButton();
 	    }
 
-	    ret = UI::UserInput ();
+	    event = UI::WaitForEvent ();	   
+	    ret = event["ID"]:nil;
 	    if (ret == `cancel)
 	    {
 		ret = `abort;
 	    }
-	    if (ret == `abort && !Popup::ReallyAbort (true))
+
+	    // handle the events, enable/disable the button, show the popup if button clicked
+	    CWMFirewallInterfaces::OpenFirewallHandle (fw_cwm_widget, "", event);
+	    changed =
+		true ||		// TODO: fw changed, #44106
+		start_nfs_server != NfsServer::start;
+
+	    if (ret == `abort && changed && !Popup::ReallyAbort (changed))
 	    {
 		ret = `again;
 	    }
-
-	    start_nfs_server = (UI::QueryWidget(`id(`rbgroup), `CurrentButton) == `servyes);
 	} while (ret != `back && ret != `next && ret != `abort);
 
 	if (ret == `next)
 	{
+	    // grab current settings, store them to SuSEFirewall::
+	    CWMFirewallInterfaces::OpenFirewallStore (fw_cwm_widget, "", event);
 	    NfsServer::start = start_nfs_server;
 
 	    if (!start_nfs_server)

@@ -19,10 +19,11 @@
     module "NfsServer";
     textdomain "nfs_server";
 
-    import "Service";
-    import "Report";
-    import "Summary";
     import "Progress";
+    import "Report";
+    import "Service";
+    import "Summary";
+    import "SuSEFirewall";
     import "Wizard";
 
     global define void Set (map settings);
@@ -120,6 +121,8 @@
 	start = Service::Enabled("nfsserver");
 	exports = (list<map<string,any> >) SCR::Read (.etc.exports);
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
+
+	SuSEFirewall::Read ();
 
 	return exports != nil;
     }
@@ -263,6 +266,13 @@ Your changes will be active after reboot.
 			}
 		}
 	}
+
+	SuSEFirewall::WriteOnly ();
+	if (!write_only)
+	{
+	    SuSEFirewall::ActivateConfiguration ();
+	}
+	
 	Progress::NextStage ();
 
 	return ok;

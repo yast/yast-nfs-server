@@ -1,9 +1,14 @@
 @HEADER-COMMENT@
-
-# neededforbuild  yast2-devel-packages yast2
+# What needs what:
+# yast2-firewall: yast2-network
+# yast2-network: yast2-country
+# yast2-country: yast2-installation
+# Alphabetically:
+# neededforbuild  yast2-country yast2-devel-packages yast2-firewall yast2-installation yast2-network
 
 @HEADER@
 Requires:	yast2 yast2-packager
+Requires:       yast2-firewall > 2.10.4
 
 Provides:	yast2-config-nfs-server yast2-config-nfs-server-devel
 Obsoletes:	yast2-config-nfs-server yast2-config-nfs-server-devel

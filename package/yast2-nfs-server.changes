@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug 27 14:22:47 CEST 2004 - mvidner@suse.cz
+
+- Added Open Firewall button.
+- autoinst: check if nfslock is available during import (nashif)
+- 2.10.1
+
+-------------------------------------------------------------------
 Thu Jun 17 09:45:24 CEST 2004 - mvidner@suse.cz
 
 - Added "testedfiles" to test cases to make it work with the new testsuite.
