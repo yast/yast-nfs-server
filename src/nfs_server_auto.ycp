@@ -73,6 +73,12 @@ else if (func == "Packages") {
 else if (func == "Change") {
     ret = NfsServerAutoSequence();
 }
+else if (func == "GetModified") {
+    ret =  NfsServer::GetModified();
+}
+else if (func == "SetModified") {
+    NfsServer::SetModified();
+}
 /* Return actual state */
 else if (func == "Export") {
     ret = NfsServer::Export();
