@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
-Fri Aug 31 14:29:12 CEST 2001 - mvidner@suse.cz
+Fri Aug 31 00:49:12 CEST 2001 - ro@suse.de
 
-- Added libycp-devel to neeededforbuild (parseycp). (2.4.9)
+- added <libycp-devel> to neededforbuild (for testsuite)
 
 -------------------------------------------------------------------
 Tue Aug 28 12:53:54 CEST 2001 - mvidner@suse.cz
