@@ -14,6 +14,20 @@
     // testedfiles: NfsServer.ycp Service.ycp Report.ycp Testsuite.ycp
 
     include "testsuite.ycp";
+
+    map I_READ = $[
+	"target" : $[
+	    "size" : 0,
+	],
+    ];
+    map I_WRITE = $[];
+    map I_EXEC = $[
+	"target" : $[
+	    "bash_output" : $[],
+	],
+    ];
+    TESTSUITE_INIT ([I_READ, I_WRITE, I_EXEC], nil);
+
     import "NfsServer";
     import "Report";
 
