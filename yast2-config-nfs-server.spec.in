@@ -16,6 +16,7 @@ Copyright:	(c) 2000 SuSE GmbH
 Group:		System Environment/YaST
 Requires:	yast2 yast2-trans-nfs-server yast2-lib-wizard yast2-lib-sequencer
 Requires:	yast2-config-package-manager
+Requires:	yast2-config-runlevel
 Provides:	yast2-config-network:/usr/lib/YaST2/clients/lan_nfs_server.ycp
 BuildArchitectures:	noarch
 

@@ -25,10 +25,10 @@
     include "ui/common_popups.ycp";
 
     /**
-     * Saves NFS server part
-     * @param start_nfs_server start NFS server
-     * @param exports list of export entries
-     * @return boolean success
+     * Saves NFS server part. Reports errors to the user.
+     * @param start_nfs_server	start NFS server
+     * @param exports		list of export entries
+     * @return boolean		success
      */
     global define nfs_server_save (boolean start_nfs_server, list exports) ``{
 
@@ -49,13 +49,13 @@ directories."));
 		    return false;
 		}
 
-		SCR::Write(.rc.system.START_PORTMAP, "yes");
-		SCR::Write(.rc.system.NFS_SERVER, "yes");
+		CallFunction (`runlevel_adjust ("portmap", "enable"));
+		CallFunction (`runlevel_adjust ("nfsserver", "enable"));
 
 		SCR::Execute(.target.bash, "/etc/init.d/portmap start", $[]);                // but this is necessary
 		SCR::Execute(.target.bash, "/etc/init.d/nfsserver start", $[]);
 
-		if (SCR::Execute(.target.bash, "/etc/init.d/nfsserver status | /bin/grep up", $[]) != 0)
+		if (SCR::Execute(.target.bash, "/etc/init.d/nfsserver status", $[]) != 0)
 		{
 		    // error popup message
 		    UI::MessagePopup(_("I was unable to restart the NFS server.
@@ -66,22 +66,10 @@ Your changes will be active after reboot."));
 	}
 	else
 	{
-	    SCR::Write(.rc.system.NFS_SERVER, "no");
+	    CallFunction (`runlevel_adjust ("nfsserver", "disable"));
 	}
 
-	if (! SCR::Write(.rc.system, nil))
-	{                  // Perform the write
-	    // error popup message
-	    UI::MessagePopup(_("I was unable to write to /etc/rc.config.
-After reboot the NFS server may have
-unexpected behavior."));
-	    return false;
-	}
-	else
-	{
-	    SCR::Execute(.target.bash, "/sbin/SuSEconfig -quick --nonewpackage", $[]);
-	}
-
+	// FIXME: return errors from runlevel_adjust, when it produces any
 	return true;
     }
 
