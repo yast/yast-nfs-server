@@ -1,4 +1,5 @@
 Dump	Read
+Log	Runlevel module is deprecated, use Service instead
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
@@ -12,23 +13,31 @@ Execute	.target.mkdir "/usr" true
 Read	.target.dir "/pub" nil
 Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
+Log	Runlevel module is deprecated, use Service instead
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.runlevel "portmap" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "portmap" $["nfslock":$[], "nfsserver":$[], "portmap":$[]]
+Log	Runlevel module is deprecated, use Service instead
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.runlevel "nfslock" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfslock" $["nfslock":$[], "nfsserver":$[], "portmap":$[]]
+Log	Runlevel module is deprecated, use Service instead
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfsserver" $["nfslock":$[], "nfsserver":$[], "portmap":$[]]
+Log	Runlevel module is deprecated, use Service instead
 Read	.init.scripts.exists "portmap" true
 Execute	.target.bash "/etc/init.d/portmap status" $["TERM":"raw"] 0
+Log	Runlevel module is deprecated, use Service instead
 Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
+Log	Runlevel module is deprecated, use Service instead
 Execute	.target.bash "/etc/init.d/nfslock restart" $["TERM":"raw"] 0
+Log	Runlevel module is deprecated, use Service instead
 Execute	.target.bash "/etc/init.d/nfsserver start" $["TERM":"raw"] 0
+Log	Runlevel module is deprecated, use Service instead
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
 Return	true
