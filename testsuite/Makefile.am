@@ -16,6 +16,7 @@ testsuite_prepare = @ydatadir@/testsuite/Makefile.testsuite
 # don't mess with: Makefile.am .cvsignore
 all-local: $(testsuite_prepare)
 	make -f $(testsuite_prepare) RPMNAME=$(RPMNAME) srcdir=$(srcdir) \
+	        dirs \
 		config/default.exp config/unix.exp config/unknown.exp \
 		run/runtest.sh $(RPMNAME).test/testsuite.exp
 	mkdir -p tmp
