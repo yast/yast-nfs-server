@@ -64,23 +64,30 @@
 	if (mountpoint == nil)
 	    mountpoint = "";
 
-	UI::OpenDialog(`opt(`decorated),
-		       `HBox(`HSpacing(1),
-			     `VBox(`VSpacing(0.2),
-				   `HBox (
-					   // text entry label
-					   `TextEntry(`id(`mpent),
-						      _("&Directory to export:"), mountpoint),
-					   `VBox (`VStretch(),
-						  `Bottom(`PushButton (`id (`browse), _("&Browse")))
-					       )),
-				   `VSpacing(0.2),
-				   // ok pushbutton: confirm the dialog
-				   `HBox(`PushButton(`id(`ok), `opt(`default), OKButtonLabel()),
-					 `PushButton(`id(`cancel), CancelButtonLabel())),
-				   `VSpacing(0.2)),
-			     `HSpacing(1)
-			   ));
+	UI::OpenDialog(
+	    `opt(`decorated),
+	    `HBox(
+		`HSpacing(1),
+		`VBox(
+		    `VSpacing(0.2),
+		    `HBox (
+			`TextEntry(`id(`mpent),
+				   // text entry label
+				   _("&Directory to export:"), mountpoint),
+			`VBox (
+			    `VStretch(),
+			    // button label
+			    `Bottom(`PushButton (`id (`browse), _("&Browse")))
+			    )
+			),
+		    `VSpacing(0.2),
+		    `HBox(
+			`PushButton(`id(`ok), `opt(`default), OKButtonLabel()),
+			`PushButton(`id(`cancel), CancelButtonLabel())
+			),
+		    `VSpacing(0.2)),
+		`HSpacing(1)
+		));
 	UI::SetFocus (`id (`mpent));
 
 	any ret = nil;
@@ -100,6 +107,7 @@ contains this directory."));
 		else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
 		{
 		    UI::MessagePopup(sformat (
+// message popup; %1, %2 are package names
 _("The user-mode NFS server (%1) cannot export directories
 with spaces in their names.
 Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
@@ -224,13 +232,13 @@ are already set."));
 
 	boolean start_nfs_server = NfsServer::start;
 
-	// Help, part 1 of 2
 	string help_text =
+	// Help, part 1 of 2
 _("<P>Here you can choose whether you want to start NFS server on your computer
 and export some of your directories to the others.</P>");
 
-	// Help, part 2 of 2
 	help_text = help_text +
+	// Help, part 2 of 2
 _("<P>If you choose <B>Start NFS server</B>, the <B>Next</B> button will open
 a configuration dialog where you can specify the directories to export.</P>");
 
@@ -264,6 +272,10 @@ a configuration dialog where you can specify the directories to export.</P>");
 	    }
 
 	    ret = UI::UserInput ();
+	    if (ret == `cancel)
+	    {
+		ret = `abort;
+	    }
 	    if (ret == `abort && !UI::ReallyAbortPopup (true))
 	    {
 		continue;
@@ -323,9 +335,12 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		// push button label
 		`VBox(`Left(`Label(`id(`allowedlab), `opt(`hstretch), "")),
 		      `Table(`id(`allowedtab), `opt(`notify, `immediate),
-			     // table headers "Host wildcards", "Options"
-			     `header(_("Hosts wildcard")+"  ", _("Options")+"  "),
+			     // table header
+			     `header(_("Hosts wildcard")+"  ",
+			     // table header
+				     _("Options")+"  "),
 			     [])),
+		      // push button label
 		`HBox(`PushButton(`id(`alwnewbut), _("Add &host")),
 		      // push button label
 		      `PushButton(`id(`alweditbut), _("Ed&it")),
@@ -339,6 +354,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	UI::ChangeWidget(`id(`next), `Label, FinishButtonLabel());
 
 	any ret = nil;
+	any simulated = nil; // simulated user input
 	string oldmp = nil;
 	// preselect an item - convenience, button enabling
 	if (size (exports) > 0)
@@ -368,7 +384,21 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    UI::ChangeWidget (`id (`alweditbut), `Enabled, anyalw);
 	    UI::ChangeWidget (`id (`alwdelbut), `Enabled, anyalw);
 
-	    ret = UI::UserInput();
+	    // simulated input,
+	    // used for `alweditbut afted `mpnewbut
+	    if (simulated == nil)
+	    {
+		ret = UI::UserInput();
+		if (ret == `cancel)
+		{
+		    ret = `abort;
+		}
+	    }
+	    else
+	    {
+		ret = simulated;
+		simulated = nil;
+	    }
 
 	    if (ret == `mpnewbut)
 	    {
@@ -376,11 +406,17 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
 		if (mountpoint != nil)
 		{
-		    list default_allowed = [use_star_for_anonymous? "*()":"()"];
+		    list default_allowed = [
+			sformat ("%1(%2)",
+				 use_star_for_anonymous? "*":"",
+				 // these are the default anyway
+				 "ro,root_squash")
+			];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
 					    "allowed"    : default_allowed ]);
 		    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 		    UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
+		    simulated = `alweditbut;
 		}
 	    }
 	    else if (ret == `mpeditbut)
@@ -502,6 +538,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
     global define symbol SaveDialog () ``{
 	SetScreenShotName ("nfs-server-3-save");
 
+	// yes-no popup
 	string message = _("The entered values will be written now.
 Do you really want to use the new settings?");
 	symbol ret = `back;
