@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar  5 15:56:43 CET 2004 - mvidner@suse.cz
+
+- added typing information (lslezak)
+- 2.9.3
+
+-------------------------------------------------------------------
 Mon Feb  9 17:25:31 CET 2004 - lslezak@suse.cz
 
 - NfsServer.ycp - fixed data type
