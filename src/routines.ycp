@@ -179,8 +179,8 @@ Only letters, digits and the characters =/.,_- are allowed."));
      * @param allowed		new allowed host list for that mout point
      * @return			modified exports list
      */
-    define list<map> ReplaceInExports(list<map> exports, string mountpoint, list<string> allowed) ``{
-	return maplist(map entry, exports, ``{
+    define list<map<string,any> > ReplaceInExports(list<map<string,any> > exports, string mountpoint, list<string> allowed) ``{
+	return maplist(map<string,any> entry, exports, ``{
 	    if (entry["mountpoint"]:"" == mountpoint)
 		entry = add(entry, "allowed", allowed);
 	    return entry;
