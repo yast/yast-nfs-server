@@ -20,6 +20,6 @@ include_DATA =		\
 modules_DATA =		\
 	NfsServer.ycp
 
-menu_DATA = menuentry_nfs_server.ycp
+menu_DATA = menuentry_nfs_server.y2cc
 
 EXTRA_DIST = $(clients_DATA) $(include_DATA) $(modules_DATA) $(menu_DATA)
