@@ -122,7 +122,7 @@ must not contain spaces.
      * @return		whether valid
      */
     global define boolean CheckExportOptions (string options) ``{
-	if (!regexpmatch (options, "[A-Za-z0-9=/.,_-]*"))
+	if (regexpmatch (options, "[^A-Za-z0-9=/.,_-]"))
 	{
 	    // error popup message
 	    UI::ErrorPopup (_("Incorrect option format:
