@@ -44,6 +44,11 @@
     global list(map) exports = [];
 
     /**
+     * Do we have nfslock? (nis-utils: yes, nis-server: no
+     */
+    boolean have_nfslock = true;
+
+    /**
      * Get all NFS server configuration from a map.
      * When called by nfs_server_auto (preparing autoinstallation data)
      * the map may be empty.
@@ -93,6 +98,7 @@
     global define boolean Read () ``{
 	start = Runlevel::ServiceEnabled ("nfsserver");
 	exports = SCR::Read (.etc.exports);
+	have_nfslock = SCR::Read (.init.scripts.exists, "nfslock");
 
 	return exports != nillist;
     }
@@ -115,6 +121,15 @@
 	    {
 		Report::Error (Runlevel::error_msg);
 		ok = false;
+	    }
+	    if (have_nfslock)
+	    {
+		Runlevel::RunInitScript ("nfslock", "stop");
+		if (! Runlevel::ServiceAdjust ("nfslock", "disable"))
+		{
+		    Report::Error (Runlevel::error_msg);
+		    ok = false;
+		}
 	    }
 	}
 	else
@@ -147,6 +162,14 @@ exported directories.\n"));
 		Report::Error (Runlevel::error_msg);
 		ok = false;
 	    }
+	    if (have_nfslock)
+	    {
+		if (! Runlevel::ServiceAdjust ("nfslock", "enable"))
+		{
+		    Report::Error (Runlevel::error_msg);
+		    ok = false;
+		}
+	    }
 	    if (! Runlevel::ServiceAdjust ("nfsserver", "enable"))
 	    {
 		Report::Error (Runlevel::error_msg);
@@ -158,7 +181,13 @@ exported directories.\n"));
 		// portmap must not be started if it is running already (see bug # 9999)
 		Runlevel::RunInitScript ("portmap", "start");
 	    }
-	    Runlevel::RunInitScript ("nfsserver", "restart");
+
+	    Runlevel::RunInitScript ("nfsserver", "stop");
+	    if (have_nfslock)
+	    {
+		Runlevel::RunInitScript ("nfslock", "restart");
+	    }
+	    Runlevel::RunInitScript ("nfsserver", "start");
 
 	    if (Runlevel::ServiceStatus ("nfsserver") != 0)
 	    {

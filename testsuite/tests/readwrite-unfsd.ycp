@@ -39,13 +39,11 @@
 		"runlevel": $[
 		    "portmap": service_on,
 		    "nfsserver": service_on,
-		    "nfslock": service_on,
 		    ],
 		// their contents is not important for ServiceAdjust
 		"comment": $[
 		    "portmap": $[],
 		    "nfsserver": $[],
-		    "nfslock": $[],
 		    ],
 		],
 	    ],
@@ -66,6 +64,10 @@
 	    "dir": nil,		// pretend none exist
 	    ]
 	];
+
+    // pretend nfslock does not exist
+    map READ2 = eval (READ);
+    READ2["init","scripts","exists"] = false;
 
     map WRITE = $[
 	];
@@ -88,7 +90,7 @@
 	];
 
     DUMP ("Read");
-    TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
+    TEST (``(NfsServer::Read ()), [[READ, READ2], WRITE, EXECUTE], nil);
     DUMP ("Write OK");
     TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
     DUMP ("Write KO");
