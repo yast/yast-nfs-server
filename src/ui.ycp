@@ -331,10 +331,11 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		string mountpoint = GetDirectory(nil, exports);
 
 		if (mountpoint != nil) {
+		    list default_allowed = ["*()"];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
-					    "allowed"    : [] ]);
+					    "allowed"    : default_allowed ]);
 		    UI::ChangeWidget(`id(`allowedlab), `Value, mountpoint);
-		    UI::ChangeWidget(`id(`allowedtab), `Items, []);
+		    UI::ChangeWidget(`id(`allowedtab), `Items, AllowedTableItems (default_allowed));
 		    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 		    UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
 		}
