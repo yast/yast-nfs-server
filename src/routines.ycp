@@ -89,8 +89,8 @@
      * @return		a SelectionBox for the mountpoints, `id(`exportsbox)
      */
     global define term ExportsSelBox(list(map) exports) ``{
-	// selection box label
 	return `SelectionBox(`id(`exportsbox), `opt(`notify),
+			     // selection box label
 			     _("Dire&ctories"), ExportsItems(exports));
     }
 

@@ -83,6 +83,7 @@
     {
 	if (NfsServer::Write())
 	{
+	    // message popup
 	    UI::MessagePopup (_("All the settings were written and are ready to use."));
 	}
     }
