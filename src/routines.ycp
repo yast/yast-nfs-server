@@ -117,7 +117,7 @@ with a / and it must not contain spaces.")));
     };
 
     /**
-     * Check for the validity of options or hosts wildcard
+     * Check for the validity of client specification:
      * fewer than 70 chars, no blanks.
      * If invalid, a message is displayed.
      * @param name	options
@@ -134,6 +134,42 @@ It must be shorter than 70 characters and it
 must not contain spaces.")));
 	return false;
     };
+
+    /**
+     * Check for the validity of export options: only those listed in
+     * exports(5) are accepted.
+     * If invalid, a message is displayed.
+     * @param	options	spaces and parentheses already removed
+     * @return	boolean	whether valid
+     */
+    global define CheckExportOptions (string options) ``{
+	list o1 = ["secure", "insecure", "rw", "ro", "sync", "async",
+		   "no_wdelay", "wdelay", "nohide", "hide",
+		   "no_subtree_check", "subtree_check",
+		   "insecure_locks", "secure_locks", "no_auth_nlm", "auth_nlm",
+		   "root_squash", "no_root_squash",
+		   "all_squash", "no_all_squash"];
+	list o_value = ["anonuid", "anongid"];
+	list opts = splitstring (options, ",");
+
+	boolean ret = true;
+	opts = filter (`e, opts, ``(!contains (o1, e)));
+	foreach (`e, opts, ``{
+	    list opt = splitstring (e, "=");
+	    if (!contains (o_value, select (opt, 0, "")))
+	    {
+		UI::ErrorPopup (sformat (_("Unknown option: '%1'"), e));
+		ret = false;
+	    }
+	    else if (size (opt) != 2 ||
+		     !regexpmatch (select (opt, 1, ""), "[0-9]+"))
+	    {
+		UI::ErrorPopup (sformat (_("Wrong option format: '%1'"), e));
+		ret = false;
+	    }
+	});
+	return ret;
+    }
 
     /**
      * Replaces 'allowed' list in exports (for specified mountpoint)

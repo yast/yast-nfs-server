@@ -140,8 +140,10 @@ contains this directory."));
 		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
 	    }
 	    opts = UI::QueryWidget(`id(`optsent), `Value);
+	    opts = deletechars (opts, " ()");
+	    UI::ChangeWidget (`id(`optsent), `Value, opts);
 	    if (ret == `ok &&
-		(!CheckNoSpaces(hosts) || !CheckNoSpaces(opts)))
+		(!CheckNoSpaces(hosts) || !CheckExportOptions(opts)))
 		ret = nil;
 	    if (ret == `ok && contains(allowed_names, hosts)) {
 		// error popup message
@@ -149,14 +151,12 @@ contains this directory."));
 are already set."));
 		ret = nil;
 	    }
-
-
 	} while (ret != `ok && ret != `cancel);
 
 	UI::CloseDialog();
 
 	if (ret == `ok)
-	    return [ hosts, deletechars (opts, "()") ];
+	    return [ hosts, opts ];
 	return nil;
     };
 
