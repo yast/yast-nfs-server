@@ -1,0 +1,4 @@
+cat << END
+Exports ("$OUT_TMP")
+Write (., `cat $IN`)
+END
