@@ -20,4 +20,6 @@ module_DATA =		\
 
 config_DATA = nfs_server.y2cc
 
-EXTRA_DIST = $(client_DATA) $(myinclude_DATA) $(module_DATA) $(config_DATA)
+desktop_DATA = nfs_server.desktop
+
+EXTRA_DIST = $(client_DATA) $(myinclude_DATA) $(module_DATA) $(config_DATA) $(desktop_DATA)
