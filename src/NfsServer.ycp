@@ -23,6 +23,7 @@
     import "Report";
     import "Summary";
     import "Progress";
+    import "Wizard";
 
 
     /**
