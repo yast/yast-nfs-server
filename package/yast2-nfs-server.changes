@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Sep  6 13:15:33 CEST 2002 - mvidner@suse.cz
+
+- If nfslock is present, enable/start it along with nfsserver (#18952).
+- Options popup widened so that in ncurses "ro,root_squash,sync" fits in.
+- Fixed truncated buttons in ncurses.
+- 2.6.12
+
+-------------------------------------------------------------------
 Mon Aug 26 15:57:54 CEST 2002 - mvidner@suse.cz
 
 - Adapted for the new packagemanager.
