@@ -1,7 +1,14 @@
 -------------------------------------------------------------------
+Fri Jul 19 18:34:12 CEST 2002 - mvidner@suse.cz
+
+- Errors when creating directories are non fatal, so don't abort writing.
+- Merged proofread texts.
+- 2.6.7
+
+-------------------------------------------------------------------
 Fri Jul 12 16:07:02 CEST 2002 - arvin@suse.de
 
-- use proper namespace for Args and CallFunction (#16776
+- use proper namespace for Args and CallFunction (#16776)
 
 -------------------------------------------------------------------
 Fri Jul 12 14:51:55 CEST 2002 - mvidner@suse.cz
