@@ -68,7 +68,7 @@
     global define boolean Import (map settings) ``{
 	if (size (settings) == 0)
 	{
-	    return true;
+	    // Reset - just continue with Set (#24544).
 	}
 
 	Set (settings);
