@@ -360,6 +360,11 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 				     ``(lookup(entry, "mountpoint", "") != mountpoint));
 
 		UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
+		if (size (exports) > 0)
+		{
+		    UI::ChangeWidget (`id (`exportsbox), `CurrentItem,
+				      exports[0,"mountpoint"]:"");
+		}
 	    }
 	    else if (ret == `alwnewbut)
 	    {
