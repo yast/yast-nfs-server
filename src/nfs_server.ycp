@@ -27,7 +27,7 @@
 
     import "NfsServer";
     include "require.ycp";
-    include "ui/wizard_dialog.ycp";
+    import "Wizard";
     include "wizard/sequencer.ycp";
     include "nfs_server/ui.ycp";
 
@@ -68,7 +68,7 @@
 	return;
     }
 
-    UI::CreateWizardDialog ();
+    Wizard::CreateDialog ();
 
     any result = WizardSequencer (Aliases, Sequence);
 

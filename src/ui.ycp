@@ -24,6 +24,7 @@
     textdomain "nfs_server";
 
     import "NfsServer";
+    import "Wizard";
     include "nfs_server/routines.ycp";
     include "ui/common_popups.ycp";
     include "ui/file_popups.ycp";
@@ -196,7 +197,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 			     `VSpacing(0.2))));
 
 	// dialog title
-	UI::SetWizardContents(_("Configuration of the NFS server"),
+	Wizard::SetContents(_("Configuration of the NFS server"),
 			      contents, help_text, true, true);
 
 	any ret = nil;
@@ -291,7 +292,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		);
 
 	// dialog title
-	UI::SetWizardContents(_("Directories to export to the others"),
+	Wizard::SetContents(_("Directories to export to the others"),
 			      contents, help_text, true, true);
 	UI::ChangeWidget(`id(`next), `Label, FinishButtonLabel());
 
