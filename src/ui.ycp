@@ -74,8 +74,8 @@
 			`TextEntry(`id(`mpent),
 				   // text entry label
 				   _("&Directory to export:"), mountpoint),
+			`HSpacing (1),
 			`VBox (
-			    `VStretch(),
 			    // button label
 			    `Bottom(`PushButton (`id (`browse), _("&Browse")))
 			    )
@@ -384,6 +384,9 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    UI::ChangeWidget (`id (`alweditbut), `Enabled, anyalw);
 	    UI::ChangeWidget (`id (`alwdelbut), `Enabled, anyalw);
 
+	    // Kludge, because a `Table still does not have a shortcut.
+	    UI::SetFocus (`id (`allowedtab));
+
 	    // simulated input,
 	    // used for `alweditbut afted `mpnewbut
 	    if (simulated == nil)
@@ -410,7 +413,9 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 			sformat ("%1(%2)",
 				 use_star_for_anonymous? "*":"",
 				 // these are the default anyway
-				 "ro,root_squash")
+				 // Exportfs of nfs-utils-1.0.1 gives a warning
+				 // if neither of sync, async is specified.
+				 "ro,root_squash,sync")
 			];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
 					    "allowed"    : default_allowed ]);
