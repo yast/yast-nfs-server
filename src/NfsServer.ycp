@@ -23,6 +23,15 @@
     import "Report";
     import "Summary";
 
+
+
+	/**
+	 * Write only, used during autoinstallation.
+	 * Don't run services and SuSEconfig, it's all done at one place.
+	 */
+	global boolean write_only = false;
+
+
     /**
      * Should the server be started?
      * If false, the exports file will not be touched.
@@ -103,31 +112,20 @@
 	return exports != nillist;
     }
 
-    /**
-     * Saves NFS server configuration without actually restarting any
-	 * services
-     * Creates any missing directories.
-     * @return true on success
-     */
-    global define boolean WriteOnly () ``{
-		boolean ret = Write(true);
-		return (ret);
-	}
-
 
     /**
      * Saves NFS server configuration. (exports(5))
      * Creates any missing directories.
      * @return true on success
      */
-    global define boolean Write (boolean writeonly) ``{
+    global define boolean Write () ``{
 	// if there is still work to do, don't return false immediately
 	// but remember the error
 	boolean ok = true;
 
 	if (!start)
 	{
-		if (!writeonly)
+		if (!write_only)
 			Runlevel::RunInitScript ("nfsserver", "stop");
 	    if (! Runlevel::ServiceAdjust ("nfsserver", "disable"))
 	    {
@@ -136,7 +134,7 @@
 	    }
 	    if (have_nfslock)
 	    {
-		if (!writeonly)
+		if (!write_only)
 			Runlevel::RunInitScript ("nfslock", "stop");
 		if (! Runlevel::ServiceAdjust ("nfslock", "disable"))
 		{
@@ -189,7 +187,7 @@ exported directories.\n"));
 		ok = false;
 	    }
 
-		if (!writeonly)
+		if (!write_only)
 		{
 			if (Runlevel::ServiceStatus ("portmap") != 0 )
 			{
