@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov 10 13:09:29 CET 2004 - mvidner@suse.cz
+
+- Updated to new Mode.
+- Replaced lookups and selects by brackets.
+- 2.11.0
+
+-------------------------------------------------------------------
 Wed Sep 15 15:47:53 CEST 2004 - mvidner@suse.cz
 
 - Use Package instead of Require.

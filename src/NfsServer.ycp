@@ -117,8 +117,8 @@
      */
     global define void Set (map settings)
 	``{
-	start = lookup (settings, "start_nfsserver", false);
-	exports = lookup (settings, "nfs_exports", []);
+	start = settings["start_nfsserver"]:false;
+	exports = settings["nfs_exports"]:[];
 	return;
     }
 
