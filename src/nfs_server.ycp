@@ -26,15 +26,20 @@
 
     textdomain "nfs_server";
 
-    import "NfsServer";
+    import "CommandLine";
     // FIXME also apply to autoyast part,
     // must be able to query packages in selections
+    import "NfsServer";
     import "Package";
-    import "Wizard";
-    import "Popup";
+    import "Report";
+    import "RichText";
     import "Sequencer";
+    import "Wizard";
 
     include "nfs_server/ui.ycp";
+
+
+define any NfsServerSequence () {
 
     map Aliases = $[
 	"begin"   : ``(BeginDialog ()),
@@ -82,5 +87,191 @@
 	NfsServer::Write();
     }
 
-    return UI::CloseDialog();
+    UI::CloseDialog();
+    return result;
+}
+
+// print summary in command line
+define boolean NfsServerSummaryHandler (map options) {
+
+    if (NfsServer::start)
+	// summary text
+	CommandLine::Print (_("NFS server is enabled"));
+    else
+	// summary text
+	CommandLine::Print (_("NFS server is not enabled"));
+
+    CommandLine::Print (RichText::Rich2Plain (NfsServer::Summary ()));
+    return false;
+}
+
+// check if neccessary packages are installed
+define boolean check_packages () {
+
+    list<string> packages = add (NfsServer::required_packages, "nfs-server");
+    if (!Package::InstalledAny (packages))
+    {
+	// error message
+	Report::Error (sformat (_("Required packages (%1) are not installed."),
+	    mergestring (NfsServer::required_packages, ",")));
+	return false;
+    }
+    return true;
+}
+
+// command line handler for starting server
+define boolean NfsServerStartHandler (map options) {
+
+    if (NfsServer::start)
+	return false;
+    if (!check_packages ())
+	return false;
+    NfsServer::start	= true;
+    return true;
+}
+
+// command line handler for stopping server
+define boolean NfsServerStopHandler (map options) {
+
+    if (!NfsServer::start)
+	return false;
+    NfsServer::start	= false;
+    return true;
+}
+
+// cmdline handler for add directories to be exported
+define boolean NfsServerAddHandler (map options) {
+
+
+    if (!check_packages ())
+	return false;
+
+    string mountpoint	= options["mountpoint"]:"";
+    if (mountpoint == "")
+    {
+	// error
+	CommandLine::Print (_("No mountpont was specified."));
+	return false;
+    }
+    list<map<string,any> > exports = NfsServer::exports;
+    if (FindAllowed (exports, mountpoint) != nil)
+    {
+	Report::Message(_("The exports table already
+contains this directory."));
+	return false;
+    }
+    string host	= options["hosts"]:"";
+    if (host == "")
+	host	= use_star_for_anonymous? "*":"";
+    string opts	= options["options"]:"";
+    if (opts == "")
+	opts	= "ro,root_squash,sync";
+    list default_allowed = [ sformat ("%1(%2)", host, opts) ];
+    exports = add (exports, $[
+	"mountpoint" : mountpoint,
+	"allowed"    : default_allowed
+    ]);
+    if (!CheckNoSpaces (host) || !CheckExportOptions (opts))
+	return false;
+    NfsServer::exports = exports;
+    return true;
+}
+
+// cmdline handler for deleting directories from export
+define boolean NfsServerDeleteHandler (map options) {
+
+    string mountpoint	= options["mountpoint"]:"";
+    if (mountpoint == "")
+    {
+	// error
+	CommandLine::Print (_("No mountpont was specified."));
+	return false;
+    }
+    boolean deleted	= false;
+    NfsServer::exports = filter (map<string,any> entry, NfsServer::exports, {
+        if (entry["mountpoint"]:"" != mountpoint)
+	    return true;
+	else
+	{
+	    deleted	= true;
+	    return false;
+	}
+    });
+
+    return deleted;
+}
+
+map cmdline_description = $[
+    "id"	: "nfs",
+    /* Command line help text for the nfs module */
+    "help"	: _("Configuration of NFS client"),
+    "guihandler"        : NfsServerSequence,
+    "initialize"        : NfsServer::Read,
+    "finish"            : NfsServer::Write,
+    "actions"           : $[
+	"summary"	: $[
+	    "handler"	: NfsServerSummaryHandler,
+	    // command line action help
+	    "help"	: _("NFS Server configuration summary"),
+	],
+	"start"		: $[
+	    "handler"	: NfsServerStartHandler,
+	    // command line action help
+	    "help"	: _("Start NFS Server"),
+	],
+	"stop"		: $[
+	    "handler"	: NfsServerStopHandler,
+	    // command line action help
+	    "help"	: _("Stop NFS Server"),
+	],
+	"add"		: $[
+	    "handler"	: NfsServerAddHandler,
+	    // command line action help
+	    "help"      : _("Add a directory to export"),
+	],
+	"delete"	: $[
+	    "handler"	: NfsServerDeleteHandler,
+	    // command line action help
+	    "help"      : _("Delete a directory from export"),
+	]
+    ],
+    "options"		: $[
+	"mountpoint"	: $[
+	    "type"	: "string",
+	    // command line option help
+	    "help"	: _("Directory which should be exported"),
+	],
+	"hosts"		: $[
+	    "type"	: "string",
+	    // command line option help
+	    "help"	: _("Host wildcard for setting the access to directory"),
+	],
+	"options"	: $[
+	    "type"	: "string",
+	    // command line option help (do not transl. 'man exports')
+	    "help"	: _("Export options (see 'man exports')"),
+
+	],
+    ],
+    "mappings"		: $[
+	"summary"	: [],
+	"start"		: [],
+	"stop"		: [],
+	"add"		: [ "mountpoint", "hosts", "options" ],
+	"delete"	: [ "mountpoint" ]
+    ]
+];
+
+/* main ui function */
+any ret = nil;
+
+ret = CommandLine::Run (cmdline_description);
+y2debug("ret=%1", ret);
+
+/* Finish */
+y2milestone("NFS module finished");
+y2milestone("----------------------------------------");
+
+return ret;
+
 }
