@@ -1,0 +1,94 @@
+/**
+ * Module:
+ *   NFS client configuration
+ *
+ * Summary:
+ *   Testsuite
+ *
+ * Authors:
+ *   Martin Vidner <mvidner@suse.cz>
+ *
+ * $Id$
+ */
+{
+    include "testsuite.ycp";
+    import "NfsServer";
+    import "Report";
+
+    Report::DisplayErrors (false, 0);
+
+    map service_on = $[
+	"start": [ "3", "5"],
+	"stop":	 [ "3", "5"],
+	];
+    map service_off = $[
+	"start": [],
+	"stop":	 [],
+	];
+    list exports = [$["allowed":["proj*.local.domain(rw)"], 
+		      "mountpoint":"/projects"], 
+		    $["allowed":["*.local.domain(ro)", "@trusted(rw)"], 
+		      "mountpoint":"/usr"], 
+		    $["allowed":["(ro,insecure,all_squash)"], 
+		      "mountpoint":"/pub"]];
+    map READ = $[
+	// Runlevel:
+	"init": $[
+	    "scripts": $[
+		"exists": true,
+		"runlevel": $[
+		    "portmap": service_on,
+		    "nfsserver": service_on,
+		    ],
+		// their contents is not important for ServiceAdjust
+		"comment": $[
+		    "portmap": $[],
+		    "nfsserver": $[],
+		    ],
+		],
+	    ],
+    /*
+	// targetpkg:
+	"targetpkg": $[
+	    // autofs
+	    "installed": true,
+	    ],
+    */
+	// NfsServer itself:
+	"etc": $[
+	    "exports": exports,
+	    "sysconfig": $[
+		],
+	    ],
+	"target": $[
+	    "dir": nil,		// pretend none exist
+	    ]
+	];
+
+    map WRITE = $[
+	];
+
+    map WRITE_KO = $[
+	"etc": $[
+	    "exports": false,
+	    ],
+	];
+
+    map EXECUTE = $[
+	"target": $[
+	    "bash_output": $[
+		"exit": 0,
+		"stdout": "",
+		"stderr": "",
+		],
+	    "mkdir": true,
+	    ],
+	];
+
+    DUMP ("Read");
+    TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
+    DUMP ("Write OK");
+    TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
+    DUMP ("Write KO");
+    TEST (``(NfsServer::Write ()), [READ, WRITE_KO, EXECUTE], nil);
+}
