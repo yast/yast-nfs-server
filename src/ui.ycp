@@ -531,28 +531,6 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
     }
 
 
-    /**
-     * Last confirmation dialog to use with sequencer
-     * @return `back or `finish
-     */
-    global define symbol SaveDialog () ``{
-	Wizard::SetScreenShotName ("nfs-server-3-save");
-
-	// yes-no popup
-	string message = _("The entered values will be written now.
-Do you really want to use the new settings?");
-	symbol ret = `back;
-
-	if (Popup::YesNo (message))
-	{
-	    ret = `finish;
-	}
-
-	Wizard::RestoreScreenShotName ();
-	return ret;
-    }
-
-
 	/**
 	 * Whole configuration of NfsServer but without reading and writing.
 	 * For use with autoinstallation.
