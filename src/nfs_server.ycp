@@ -202,9 +202,9 @@ define boolean NfsServerDeleteHandler (map options) {
 }
 
 map cmdline_description = $[
-    "id"	: "nfs",
-    /* Command line help text for the nfs module */
-    "help"	: _("Configuration of NFS client"),
+    "id"		: "nfs-server",
+    /* Command line help text for the nfs-server module */
+    "help"		: _("Configuration of NFS server"),
     "guihandler"        : NfsServerSequence,
     "initialize"        : NfsServer::Read,
     "finish"            : NfsServer::Write,
