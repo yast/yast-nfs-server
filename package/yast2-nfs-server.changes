@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug  4 17:21:31 CEST 2003 - mvidner@suse.cz
+
+- Added desktop file (supersedes y2cc file).
+- 2.8.2
+
+-------------------------------------------------------------------
 Wed Jul 23 14:24:05 CEST 2003 - mvidner@suse.cz
 
 - Autoinst: if start_nfsserver is false, write /etc/exports anyway
