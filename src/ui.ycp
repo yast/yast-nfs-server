@@ -315,10 +315,6 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    UI::ChangeWidget (`id (`alwdelbut), `Enabled, anyalw);
 
 	    ret = UI::UserInput();
-	    y2internal ("ret: %1, upper: %2, lower: %3",
-			ret,
-			UI::QueryWidget (`id (`exportsbox), `CurrentItem),
-			UI::QueryWidget (`id (`allowedtab), `CurrentItem));
 
 	    if (ret == `mpnewbut)
 	    {
