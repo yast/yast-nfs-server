@@ -42,7 +42,7 @@
      * @param exports		exports list to check for duplicates
      * @return			a path to export or nil if cancelled
      */
-    global define string GetDirectory(string mountpoint, list(map) exports) ``{
+    global define string GetDirectory(string mountpoint, list<map> exports) ``{
 	Wizard::SetScreenShotName ("nfs-server-2a-dir");
 
 	if (mountpoint == nil)
@@ -78,7 +78,7 @@
 	do {
 	    ret = UI::UserInput();
 
-	    mountpoint = UI::QueryWidget(`id(`mpent), `Value);
+	    mountpoint = (string) UI::QueryWidget(`id(`mpent), `Value);
 	    if (ret == `ok)
 	    {
 		list allowed = FindAllowed(exports, mountpoint);
@@ -105,7 +105,7 @@ Create it?")) ? `ok : nil;
 	    }
 	    else if (ret == `browse)
 	    {
-		string dir = UI::QueryWidget (`id (`mpent), `Value);
+		string dir = (string) UI::QueryWidget (`id (`mpent), `Value);
 		if (size (dir) == 0)
 		{
 		    dir = "/";
@@ -146,13 +146,13 @@ Create it?")) ? `ok : nil;
      * @param allowed	current list, to check for duplicates
      * @return		[newhosts, newopts] or nil if cancelled. Options without parentheses.
      */
-    global define list(string) GetAllowedHosts(string hosts, string opts, list(string) allowed) ``{
+    global define list<string> GetAllowedHosts(string hosts, string opts, list<string> allowed) ``{
 	Wizard::SetScreenShotName ("nfs-server-2b-hosts");
 
 	if (hosts == nil)   hosts = "";
 	if (opts == nil)    opts = "";
 	if (allowed == nil) allowed = [];
-	list allowed_names = maplist(`str, allowed, ``{
+	list<string> allowed_names = maplist(string str, allowed, ``{
 	    integer brpos = findfirstof(str, "(");
 	    if (str != nil)
 	    str = substring(str, 0, brpos);
@@ -181,13 +181,13 @@ Create it?")) ? `ok : nil;
 	do {
 	    ret = UI::UserInput();
 
-	    hosts = UI::QueryWidget(`id(`hostsent), `Value);
+	    hosts = (string) UI::QueryWidget(`id(`hostsent), `Value);
 	    if (use_star_for_anonymous && size (hosts) == 0)
 	    {
 		hosts = "*";
 		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
 	    }
-	    opts = UI::QueryWidget(`id(`optsent), `Value);
+	    opts = (string) UI::QueryWidget(`id(`optsent), `Value);
 	    opts = deletechars (opts, " ()");
 	    UI::ChangeWidget (`id(`optsent), `Value, opts);
 	    if (ret == `ok &&
@@ -289,7 +289,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 	}
 
 	Wizard::RestoreScreenShotName ();
-	return ret;
+	return (symbol) ret;
     }
 
     /**
@@ -357,7 +357,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    UI::ChangeWidget (`id (`exportsbox), `CurrentItem, exports[0,"mountpoint"]:"");
 	}
 	do {
-	    string mountpoint = UI::QueryWidget (`id (`exportsbox), `CurrentItem);
+	    string mountpoint = (string) UI::QueryWidget (`id (`exportsbox), `CurrentItem);
 	    boolean anymp = mountpoint != nil;
 
 	    UI::ChangeWidget (`id (`mpeditbut), `Enabled, anymp);
@@ -421,16 +421,16 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    }
 	    else if (ret == `mpeditbut)
 	    {
-		string mp = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mp = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mp != nil) {
 		    string mountpoint = GetDirectory(mp,
-						     filter(`ent, exports, ``{
-							 return lookup(ent, "mountpoint", "") != mp;
+						     (list<map>) filter(map ent, exports, ``{
+							 return ent["mountpoint"]:"" != mp;
 						     }));
 
 		    if (mountpoint != nil) {
-			exports = maplist(`ent, exports, ``{
-			    string tmp = lookup(ent, "mountpoint", "");
+			exports = maplist(map ent, exports, ``{
+			    string tmp = ent["mountpoint"]:"";
 			    if (tmp == mp)
 			    return add(ent, "mountpoint", mountpoint);
 			    return ent;
@@ -442,10 +442,10 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    }
 	    else if (ret == `mpdelbut)
 	    {
-		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil)
-		    exports = filter(`entry, exports,
-				     ``(lookup(entry, "mountpoint", "") != mountpoint));
+		    exports = (list<map>) filter(map entry, exports,
+				     ``(entry["mountpoint"]:"" != mountpoint));
 
 		UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 		if (size (exports) > 0)
@@ -456,13 +456,13 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    }
 	    else if (ret == `alwnewbut)
 	    {
-		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil) {
-		    list allowed = FindAllowed(exports, mountpoint);
+		    list<string> allowed = FindAllowed(exports, mountpoint);
 
-		    list hostopt = GetAllowedHosts(nil, nil, allowed);
+		    list<string> hostopt = GetAllowedHosts(nil, nil, allowed);
 		    if (hostopt != nil) {
-			allowed = add(allowed, select(hostopt, 0, "")+"("+select(hostopt, 1, "")+")");
+			allowed = add(allowed, hostopt[0]:"" + "(" + hostopt[1]:"" + ")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
@@ -472,23 +472,23 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    }
 	    else if (ret == `alweditbut)
 	    {
-		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil) {
-		    list allowed = FindAllowed(exports, mountpoint);
+		    list<string> allowed = FindAllowed(exports, mountpoint);
 		    string hosts = "";
 		    string opts = "";
 		    if (allowed != nil) {
-			integer alw_no = UI::QueryWidget(`id(`allowedtab), `CurrentItem);
+			integer alw_no = (integer) UI::QueryWidget(`id(`allowedtab), `CurrentItem);
 			if (alw_no != nil) {
-			    list(string) ho = AllowedToHostsOpts(select(allowed, alw_no, ""));
-			    hosts = select(ho, 0, "");
-			    opts = select(ho, 1, "");
+			    list<string> ho = AllowedToHostsOpts(allowed[alw_no]:"");
+			    hosts = ho[0]:"";
+			    opts = ho[1]:"";
 			}
 			allowed = remove (allowed, alw_no);
 		    }
-		    list hostopt = GetAllowedHosts(hosts, opts, allowed);
+		    list<string> hostopt = GetAllowedHosts(hosts, opts, allowed);
 		    if (hostopt != nil) {
-			allowed = add(allowed, select(hostopt, 0, "")+"("+select(hostopt, 1, "")+")");
+			allowed = add(allowed, hostopt[0]:"" + "(" + hostopt[1]:"" + ")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
@@ -498,14 +498,14 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    }
 	    else if (ret == `alwdelbut)
 	    {
-		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil) {
 		    list allowed = FindAllowed(exports, mountpoint);
-		    integer alwno = UI::QueryWidget(`id(`allowedtab), `CurrentItem);
+		    integer alwno = (integer) UI::QueryWidget(`id(`allowedtab), `CurrentItem);
 		    if (allowed != nil && alwno != nil) {
 			allowed = remove (allowed, alwno);
-			exports = maplist(`entry, exports, ``{
-			    if (lookup(entry, "mountpoint", "") == mountpoint)
+			exports = maplist(map entry, exports, ``{
+			    if (entry["mountpoint"]:"" == mountpoint)
 			    entry = add(entry, "allowed", allowed);
 			    return entry;
 			});
@@ -527,7 +527,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	}
 
 	Wizard::RestoreScreenShotName ();
-	return ret;
+	return (symbol) ret;
     }
 
 

@@ -65,14 +65,14 @@
 			     // notification 2/2
 			     _("<p>Do you want to install it now?</p>")))
 	{
-	    return;
+	    return nil;
 	}
     }
 
     if (! NfsServer::Read ())
     {
 	// TODO:log an error?
-	return;
+	return nil;
     }
 
     Wizard::CreateDialog ();
