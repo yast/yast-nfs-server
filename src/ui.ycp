@@ -123,7 +123,7 @@ contains this directory."));
 				   // text entry label
 				   `TextEntry(`id(`hostsent), _("&Hosts wildcard:"), hosts),
 				   // text entry label
-				   `TextEntry(`id(`optsent), _("&Options:"), opts),
+				   `TextEntry(`id(`optsent), _("O&ptions:"), opts),
 				   `VSpacing(0.2),
 				   // ok pushbutton: confirm the dialog
 				   `HBox(`PushButton(`id(`ok), `opt(`default), OKButtonLabel()),

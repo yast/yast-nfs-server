@@ -91,7 +91,7 @@
     global define term ExportsSelBox(list(map) exports) ``{
 	// selection box label
 	return `SelectionBox(`id(`exportsbox), `opt(`notify),
-			     _("Di&rectories"), ExportsItems(exports));
+			     _("Dire&ctories"), ExportsItems(exports));
     }
 
     // duplicated in nfs/routines.ycp and nfs_server/routines.ycp
