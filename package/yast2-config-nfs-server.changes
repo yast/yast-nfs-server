@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug 31 14:29:12 CEST 2001 - mvidner@suse.cz
+
+- Added libycp-devel to neeededforbuild (parseycp). (2.4.9)
+
+-------------------------------------------------------------------
 Tue Aug 28 12:53:54 CEST 2001 - mvidner@suse.cz
 
 - Fixed a truncated table label (#9907). (2.4.8)
