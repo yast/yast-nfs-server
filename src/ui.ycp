@@ -234,18 +234,6 @@ a configuration dialog where you can specify the directories to export.</P>");
     }
 
     /**
-     * Enable or disable the Edit and Delete buttons.
-     * @param enable	true/false
-     */
-    global define void EnableExportsButtons (boolean enable) ``{
-
-	UI::ChangeWidget (`id (`mpeditbut), `Enabled, enable);
-	UI::ChangeWidget (`id (`mpdelbut), `Enabled, enable);
-	UI::ChangeWidget (`id (`alweditbut), `Enabled, enable);
-	UI::ChangeWidget (`id (`alwdelbut), `Enabled, enable);
-    }
-
-    /**
      * Exports dialog itself
      * @return `back, `abort, `next
      */
@@ -296,41 +284,51 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 			      contents, help_text, true, true);
 	UI::ChangeWidget(`id(`next), `Label, FinishButtonLabel());
 
-	EnableExportsButtons (false);
-	UI::ChangeWidget (`id (`alwnewbut), `Enabled, false);
-
-
 	any ret = nil;
-	list hosts = nil;
+	string oldmp = nil;
+	// preselect an item - convenience, button enabling
+	if (size (exports) > 0)
+	{
+	    UI::ChangeWidget (`id (`exportsbox), `CurrentItem, exports[0,"mountpoint"]:"");
+	}
 	do {
-	    ret = UI::UserInput();
+	    string mountpoint = UI::QueryWidget (`id (`exportsbox), `CurrentItem);
+	    boolean anymp = mountpoint != nil;
 
-	    if (ret == `exportsbox)
+	    UI::ChangeWidget (`id (`mpeditbut), `Enabled, anymp);
+	    UI::ChangeWidget (`id (`mpdelbut), `Enabled, anymp);
+	    UI::ChangeWidget (`id (`alwnewbut), `Enabled, anymp);
+	    if (mountpoint != oldmp)
 	    {
-		UI::ChangeWidget (`id (`mpeditbut), `Enabled, true);
-		UI::ChangeWidget (`id (`mpdelbut), `Enabled, true);
-		UI::ChangeWidget (`id (`alwnewbut), `Enabled, true);
-
-		string mountpoint = UI::QueryWidget(`id(`exportsbox), `CurrentItem);
-		UI::ChangeWidget(`id(`allowedlab), `Value, mountpoint);
-
-		list allowed = FindAllowed(exports, mountpoint);
-		if (allowed != nil)
-		    UI::ChangeWidget(`id(`allowedtab), `Items,
-				     AllowedTableItems(allowed));
-
-		//UI::ChangeWidget(`id(`mountpointent), `Value, mountpoint);
+		if (mountpoint == nil)
+		{
+		    mountpoint = "";
+		}
+		UI::ChangeWidget (`id(`allowedlab), `Value, mountpoint);
+		oldmp = mountpoint;
+		list allowed = FindAllowed (exports, mountpoint);
+		UI::ChangeWidget(`id (`allowedtab), `Items,
+				 AllowedTableItems (allowed != nil? allowed: []));
 	    }
-	    else if (ret == `mpnewbut)
+	    boolean anyalw = UI::QueryWidget (`id (`allowedtab), `CurrentItem) != nil;
+	    UI::ChangeWidget (`id (`alweditbut), `Enabled, anyalw);
+	    UI::ChangeWidget (`id (`alwdelbut), `Enabled, anyalw);
+
+	    ret = UI::UserInput();
+	    y2internal ("ret: %1, upper: %2, lower: %3",
+			ret,
+			UI::QueryWidget (`id (`exportsbox), `CurrentItem),
+			UI::QueryWidget (`id (`allowedtab), `CurrentItem));
+
+	    if (ret == `mpnewbut)
 	    {
 		string mountpoint = GetDirectory(nil, exports);
 
-		if (mountpoint != nil) {
+		if (mountpoint != nil)
+		{
 		    list default_allowed = ["*()"];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
 					    "allowed"    : default_allowed ]);
-		    UI::ChangeWidget(`id(`allowedlab), `Value, mountpoint);
-		    UI::ChangeWidget(`id(`allowedtab), `Items, AllowedTableItems (default_allowed));
 		    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 		    UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
 		}
@@ -351,7 +349,6 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 			    return add(ent, "mountpoint", mountpoint);
 			    return ent;
 			});
-			UI::ChangeWidget(`id(`allowedlab), `Value, mountpoint);
 			UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 			UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
 		    }
@@ -364,15 +361,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		    exports = filter(`entry, exports,
 				     ``(lookup(entry, "mountpoint", "") != mountpoint));
 
-		UI::ChangeWidget(`id(`allowedlab), `Value, "                     ");
-		UI::ChangeWidget(`id(`allowedtab), `Items, []);
 		UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
-	    }
-	    else if (ret == `allowedtab)
-	    {
-		UI::ChangeWidget (`id (`alweditbut), `Enabled, true);
-		UI::ChangeWidget (`id (`alwdelbut), `Enabled, true);
-
 	    }
 	    else if (ret == `alwnewbut)
 	    {
