@@ -56,3 +56,4 @@ GenericName[ru]=Настройка NFS-сервера.
 Name[sl]=Strežnik NFS
 GenericName[sl]=Nastavi NFS strežnik
 GenericName[tr]=NFS sunucusunu yapılandır.
+X-KDE-SubstituteUID=true
