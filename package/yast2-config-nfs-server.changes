@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec 18 11:39:41 CET 2001 - mvidner@suse.cz
+
+- Using Report module for errors.
+- New style menu entry.
+- 2.5.4
+
+-------------------------------------------------------------------
 Thu Nov 29 15:59:16 CET 2001 - mvidner@suse.cz
 
 - Converted to a Module.
