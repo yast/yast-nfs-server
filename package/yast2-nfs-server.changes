@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 14 16:45:46 CEST 2003 - jsuchome@suse.cz
+
+- removed confirmation dialog, success dialog and added writing
+  progress dialog (#28729)
+- 2.8.3
+
+-------------------------------------------------------------------
 Mon Aug  4 17:21:31 CEST 2003 - mvidner@suse.cz
 
 - Added desktop file (supersedes y2cc file).

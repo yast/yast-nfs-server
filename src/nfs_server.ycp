@@ -38,23 +38,19 @@
     map Aliases = $[
 	"begin"   : ``(BeginDialog ()),
 	"exports"   : ``(ExportsDialog ()),
-	"end"     : ``(SaveDialog ())
 	];
 
     map Sequence = $[
 	"ws_start"  : "begin",
 	"begin"     : $[
 	    `next   : "exports",
-	    `finish : "end",
+	    `finish : `ws_finish,
 	    `abort  : `abort
 	    ],
 	"exports"       : $[
-	    `next   : "end",
+	    `next   : `ws_finish,
 	    `abort  : `abort
 	    ],
-	"end"       : $[
-	    `finish    : `ws_finish
-	    ]
 	];
 
     // If nfs-utils nor nfs-server is not installed, install nfs-utils.
@@ -85,11 +81,7 @@
 
     if (result == `ws_finish)
     {
-	if (NfsServer::Write())
-	{
-	    // message popup
-	    Popup::Message (_("All the settings were written and are ready to use."));
-	}
+	NfsServer::Write();
     }
 
     return UI::CloseDialog();

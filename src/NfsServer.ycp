@@ -22,6 +22,7 @@
     import "Runlevel";
     import "Report";
     import "Summary";
+    import "Progress";
 
 
 
@@ -154,11 +155,34 @@ exported directories.\n"));
 	// but remember the error
 	boolean ok = true;
 
+	// dialog label
+	Progress::New (_("Writing NFS server configuration..."), " ", 2, [
+	    // progress stage label
+	    _("Save /etc/exports"),
+	    // progress stage label
+	    _("Restart services"),
+           ], [
+	    // progress step label
+	    _("Saving /etc/exports..."),
+	    // progress step label
+	    _("Restarting services..."),
+	    // final progress step label
+	    _("Finished") ],
+	    "" );
+
+	// help text
+	Wizard::RestoreHelp(_("Writing NFS server settings"));
+
+	Progress::NextStage ();
+
 	// Independent of @ref start because of Heartbeat (#27001).
 	if (! WriteExports ())
 	{
+	    Progress::Finish ();
 	    return false;
 	}
+
+	Progress::NextStage ();
 
 	if (!start)
 	{
@@ -226,6 +250,7 @@ Your changes will be active after reboot.
 			}
 		}
 	}
+	Progress::NextStage ();
 
 	return ok;
     }
