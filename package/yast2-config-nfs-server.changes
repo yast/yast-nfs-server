@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Feb  7 17:29:16 CET 2002 - mvidner@suse.cz
+
+- Allow also the user mode nfs-server.
+- Sometimes buttons were not enabled.
+- Added SetFocus to input popups.
+- Had the English texts proofread.
+- 2.5.7
+
+-------------------------------------------------------------------
 Mon Jan 21 16:40:45 CET 2002 - mvidner@suse.cz
 
 - Using Wizard module.
