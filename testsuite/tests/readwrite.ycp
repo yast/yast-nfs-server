@@ -90,7 +90,7 @@
     DUMP ("Read");
     TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
     DUMP ("Write OK");
-    TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
+    TEST (``(NfsServer::Write (false)), [READ, WRITE, EXECUTE], nil);
     DUMP ("Write KO");
-    TEST (``(NfsServer::Write ()), [READ, WRITE_KO, EXECUTE], nil);
+    TEST (``(NfsServer::Write (false)), [READ, WRITE_KO, EXECUTE], nil);
 }
