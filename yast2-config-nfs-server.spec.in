@@ -44,7 +44,6 @@ make check
 %dir @YAST2DIR@/include/nfs_server
 @YAST2DIR@/include/nfs_server/*
 @YAST2DIR@/clients/nfs_server.ycp
-@YAST2DIR@/clients/nfs_server_write.ycp
 @YAST2DIR@/menuentries/menuentry_nfs_server.ycp
 %dir @DOCDIR@
 @DOCDIR@/*
