@@ -25,10 +25,7 @@
 
     textdomain "nfs_server";
 
-// TODO: leaving out the import triggers a strange bug
-// with (local) NfsServer::errorNoPopup.
-// Other functions work probably because ui.ycp does the import.
-//    import "NfsServer";
+    import "NfsServer";
     include "require.ycp";
     include "ui/wizard_dialog.ycp";
     include "wizard/sequencer.ycp";

@@ -20,6 +20,7 @@
     textdomain "nfs_server";
 
     import "Runlevel";
+    import "Report";
 
     /**
      * Should the server be started?
@@ -85,16 +86,6 @@
     }
 
     /**
-     * Log a message. TODO: let the user know?
-     * Before the conversion to a Module, these messages used to be
-     * UI::MessagePopup.
-     * @param message	a message to log
-     */
-    define void errorNoPopup (string message) ``{
-	y2error (message);
-    }
-
-    /**
      * Reads NFS settings from the SCR (.etc.fstab)
      */
     global define boolean Read () ``{
@@ -123,7 +114,7 @@
 	    if (SCR::Write(.etc.exports, exports) == nil)
 	    {
 		// error popup message
-		errorNoPopup(_("Unable to write to /etc/exports.
+		Report::Error (_("Unable to write to /etc/exports.
 There will be no changes in the exported
 directories.
 "));
@@ -143,7 +134,7 @@ directories.
 	    if (Runlevel::ServiceStatus ("nfsserver") != 0)
 	    {
 		// error popup message
-		errorNoPopup(_("Unable to restart the NFS server.
+		Report::Error (_("Unable to restart the NFS server.
 Your changes will be active after reboot.
 "));
 		return false;
