@@ -1,15 +1,19 @@
-## yast2-nfs.spec.in, processed by y2tool create-spec,
+## yast2-nfs-server.spec.in, processed by y2tool create-spec,
 ## invoked automatically from Makefile.am
 @HEADER-COMMENT@
 
-# neededforbuild yast2-devtools autoconf automake yast2-testsuite dejagnu expect tcl yast2-core yast2-core-devel
+# neededforbuild yast2-devel-packages yast2-runlevel
 
 @HEADER@
 
 Summary:	Configuration of nfs server
 Requires:	yast2
+Requires:	yast2-runlevel
+Requires:	yast2-packager
 Provides:	yast2-config-nfs-server
 Obsoletes:	yast2-config-nfs-server
+Provides:	yast2-config-nfs-server-devel
+Obsoletes:	yast2-config-nfs-server-devel
 Provides:	yast2-config-network:/usr/lib/YaST2/clients/lan_nfs_server.ycp
 BuildArchitectures:	noarch
 
@@ -32,6 +36,7 @@ BuildArchitectures:	noarch
 @clientdir@/nfs_server.ycp
 @clientdir@/nfs_server_write.ycp
 @moduledir@/NfsServer.ycp
-@configdir@/menuentry_nfs_server.y2cc
+@configdir@/nfs_server.y2cc
 @scrconfdir@/etc_exports.scr
-@execcompdir@/servers_non_y2/ag_exports
+@agentdir@/ag_exports
+%doc @docdir@
