@@ -7,6 +7,8 @@ Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projec
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.exists "SuSEfirewall2_init" true
+Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Write - services will be stopped
@@ -43,6 +45,8 @@ Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projec
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.exists "SuSEfirewall2_init" true
+Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Write - services are running
@@ -90,6 +94,8 @@ Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projec
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
+Read	.init.scripts.exists "SuSEfirewall2_init" true
+Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Write - services will be stopped
@@ -125,6 +131,8 @@ Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projec
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
+Read	.init.scripts.exists "SuSEfirewall2_init" true
+Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	
 Dump	Write - services will be started
