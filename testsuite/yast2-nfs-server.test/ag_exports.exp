@@ -1,0 +1,6 @@
+#
+# test driver for External Parser AGents
+#
+
+load_lib "yast2_epag.exp"
+run_epag_tests "ag_exports"
