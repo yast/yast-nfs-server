@@ -315,7 +315,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	help_text = help_text + _("<P>Please have a look at <B>man exports</B> for further information.</P>
 ");
 
-	list exports = NfsServer::exports;
+	list<map> exports = NfsServer::exports;
 
 	term contents =
 	    `VBox(
@@ -371,7 +371,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		}
 		UI::ChangeWidget (`id(`allowedlab), `Value, mountpoint);
 		oldmp = mountpoint;
-		list allowed = FindAllowed (exports, mountpoint);
+		list<string> allowed = FindAllowed (exports, mountpoint);
 		UI::ChangeWidget(`id (`allowedtab), `Items,
 				 AllowedTableItems (allowed != nil? allowed: []));
 	    }
@@ -500,7 +500,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    {
 		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 		if (mountpoint != nil) {
-		    list allowed = FindAllowed(exports, mountpoint);
+		    list<string> allowed = FindAllowed(exports, mountpoint);
 		    integer alwno = (integer) UI::QueryWidget(`id(`allowedtab), `CurrentItem);
 		    if (allowed != nil && alwno != nil) {
 			allowed = remove (allowed, alwno);
