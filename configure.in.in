@@ -1,5 +1,4 @@
-## configure.in.in for yast2-config-nfs-server.
-## Use y2tool y2autoconf to get configure.in
+## YCP module configure.in.in
 
 ## Initialize
 @YAST2-INIT-COMMON@
