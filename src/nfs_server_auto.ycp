@@ -66,6 +66,9 @@ else if (func == "Reset") {
     NfsServer::Import($[]);
     ret = $[];
 }
+else if (func == "Read") {
+    ret = NfsServer::Read();
+}
 /* Change configuration (run AutoSequence) */
 else if (func == "Change") {
     ret = NfsServerAutoSequence();
