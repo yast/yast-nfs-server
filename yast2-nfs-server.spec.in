@@ -1,5 +1,6 @@
 @HEADER-COMMENT@
-# neededforbuild yast2-devel-packages yast2-runlevel
+
+# neededforbuild  yast2-devel-packages yast2-runlevel
 
 @HEADER@
 Requires:	yast2 yast2-runlevel yast2-packager
@@ -17,9 +18,9 @@ Summary:	Configuration of nfs server
 
 @PREP@
 
-@BUILD-YCP@
+@BUILD@
 
-@INSTALL-YCP@
+@INSTALL@
 
 @CLEAN@
 
