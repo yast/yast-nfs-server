@@ -27,9 +27,9 @@
     textdomain "nfs_server";
 
     import "NfsServer";
-    // TODO also apply to autoyast part,
+    // FIXME also apply to autoyast part,
     // must be able to query packages in selections
-    import "Require";
+    import "Package";
     import "Wizard";
     import "Popup";
     import "Sequencer";
@@ -56,15 +56,11 @@
 
     // If nfs-utils nor nfs-server is not installed, install nfs-utils.
     // TODO: require installation of alternate packages
-    if (!Require::IsPackageInstalledTarget ("nfs-server"))
+    if (!Package::Installed ("nfs-server"))
     {
 	use_star_for_anonymous = true;
 	spaces_allowed = true;
-	if (!Require::RequireAndConflictTarget (NfsServer::required_packages, [],
-			     // notification 1/2
-			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
-			     // notification 2/2
-			     _("<p>Do you want to install it now?</p>")))
+	if (!Package::InstallAll (NfsServer::required_packages))
 	{
 	    return nil;
 	}
