@@ -48,6 +48,7 @@
      * the map may be empty.
      * @param settings	$["start": "exports":]
      * @return	success
+     * @see	exports
      */
     global define boolean Import (map settings) ``{
 	if (size (settings) == 0)
@@ -77,6 +78,8 @@
 
     /**
      * Dump the NFS settings to a map, for autoinstallation use.
+     * @return	$["start": "exports":]
+     * @see	exports
      */
     global define map Export () ``{
 	return $[
@@ -87,6 +90,7 @@
 
     /**
      * Reads NFS settings from the SCR (.etc.fstab)
+     * @return true on success
      */
     global define boolean Read () ``{
 	start = Runlevel::ServiceEnabled ("nfsserver");
@@ -115,7 +119,7 @@
 	    {
 		// error popup message
 		Report::Error (_("Unable to write to /etc/exports.
-No changes will be made to the 
+No changes will be made to the
 exported directories.\n"));
 		return false;
 	    }
