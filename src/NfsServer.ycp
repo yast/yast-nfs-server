@@ -104,10 +104,18 @@
      * @return true on success
      */
     global define boolean Write () ``{
+	// if there is still work to do, don't return false immediately
+	// but remember the error
+	boolean ok = true;
+
 	if (!start)
 	{
 	    Runlevel::RunInitScript ("nfsserver", "stop");
-	    Runlevel::ServiceAdjust ("nfsserver", "disable");
+	    if (! Runlevel::ServiceAdjust ("nfsserver", "disable"))
+	    {
+		Report::Error (Runlevel::error_msg);
+		ok = false;
+	    }
 	}
 	else
 	{
@@ -137,10 +145,12 @@ exported directories.\n"));
 	    if (! Runlevel::ServiceAdjust ("portmap", "enable"))
 	    {
 		Report::Error (Runlevel::error_msg);
+		ok = false;
 	    }
 	    if (! Runlevel::ServiceAdjust ("nfsserver", "enable"))
 	    {
 		Report::Error (Runlevel::error_msg);
+		ok = false;
 	    }
 
 	    if (Runlevel::ServiceStatus ("portmap") != 0)
@@ -156,12 +166,11 @@ exported directories.\n"));
 		Report::Error (_("Unable to restart the NFS server.
 Your changes will be active after reboot.
 "));
-		return false;
+		ok = false;
 	    }
 	}
 
-	// FIXME: return errors from runlevel_adjust, when it produces any
-	return true;
+	return ok;
     }
 
     /**
