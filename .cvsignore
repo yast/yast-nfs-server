@@ -9,3 +9,4 @@ stamp-h
 config.log
 config.h.in
 aclocal.m4
+Makefile.am
