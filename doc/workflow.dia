@@ -58,39 +58,13 @@
   <dia:layer name="Background" visible="true">
     <dia:object type="Standard - Image" version="0" id="O0">
       <dia:attribute name="obj_pos">
-        <dia:point val="0.45,0.55"/>
+        <dia:point val="17,12.35"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="0.4,0.5;15.0333,11.5"/>
+        <dia:rectangle val="16.95,12.3;31.3167,23.1"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="0.45,0.55"/>
-      </dia:attribute>
-      <dia:attribute name="elem_width">
-        <dia:real val="14.5333"/>
-      </dia:attribute>
-      <dia:attribute name="elem_height">
-        <dia:real val="10.9"/>
-      </dia:attribute>
-      <dia:attribute name="draw_border">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="keep_aspect">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="file">
-        <dia:string>#nfs-server1.png#</dia:string>
-      </dia:attribute>
-    </dia:object>
-    <dia:object type="Standard - Image" version="0" id="O1">
-      <dia:attribute name="obj_pos">
-        <dia:point val="17,12.45"/>
-      </dia:attribute>
-      <dia:attribute name="obj_bb">
-        <dia:rectangle val="16.95,12.4;31.3167,23.2"/>
-      </dia:attribute>
-      <dia:attribute name="elem_corner">
-        <dia:point val="17,12.45"/>
+        <dia:point val="17,12.35"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="14.2667"/>
@@ -98,6 +72,9 @@
       <dia:attribute name="elem_height">
         <dia:real val="10.7"/>
       </dia:attribute>
+      <dia:attribute name="border_width">
+        <dia:real val="0.1"/>
+      </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
       </dia:attribute>
@@ -105,7 +82,36 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#nfs-server2.png#</dia:string>
+        <dia:string>#/local/home2/yast2-new/source/nfs-server/doc/nfs-server-2-exports-000.png#</dia:string>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - Image" version="0" id="O1">
+      <dia:attribute name="obj_pos">
+        <dia:point val="0.45,0.55"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="0.4,0.5;15.05,11.5125"/>
+      </dia:attribute>
+      <dia:attribute name="elem_corner">
+        <dia:point val="0.45,0.55"/>
+      </dia:attribute>
+      <dia:attribute name="elem_width">
+        <dia:real val="14.55"/>
+      </dia:attribute>
+      <dia:attribute name="elem_height">
+        <dia:real val="10.9125"/>
+      </dia:attribute>
+      <dia:attribute name="border_width">
+        <dia:real val="0.1"/>
+      </dia:attribute>
+      <dia:attribute name="draw_border">
+        <dia:boolean val="false"/>
+      </dia:attribute>
+      <dia:attribute name="keep_aspect">
+        <dia:boolean val="true"/>
+      </dia:attribute>
+      <dia:attribute name="file">
+        <dia:string>#/local/home2/yast2-new/source/nfs-server/doc/nfs-server-1-start-000.png#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O2">
@@ -113,7 +119,7 @@
         <dia:point val="2.8778,27.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.8278,27.85;12.7812,30.85"/>
+        <dia:rectangle val="2.8278,27.85;12.7812,30.8117"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="2.8778,27.9"/>
@@ -122,7 +128,10 @@
         <dia:real val="9.85341"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2.9"/>
+        <dia:real val="2.86172"/>
+      </dia:attribute>
+      <dia:attribute name="border_width">
+        <dia:real val="0.1"/>
       </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
@@ -131,7 +140,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#save.png#</dia:string>
+        <dia:string>#/local/home2/yast2-new/source/nfs-server/doc/nfs-server-3-save-000.png#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Flowchart - Diamond" version="0" id="O3">
@@ -139,7 +148,7 @@
         <dia:point val="4.34744,14.3461"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.29744,14.2961;11.2052,21.2039"/>
+        <dia:rectangle val="4.29744,14.2961;11.2053,21.2039"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="4.34744,14.3461"/>
@@ -169,7 +178,7 @@ server?#</dia:string>
             <dia:real val="0.8"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="7.75134,17.5845"/>
+            <dia:point val="7.75134,17.5671"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -185,11 +194,11 @@ server?#</dia:string>
         <dia:point val="11.1552,17.75"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.1053,17;17.05,18.6"/>
+        <dia:rectangle val="11.1052,16.9;17.05,18.5"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="11.1552,17.75"/>
-        <dia:point val="17,17.8"/>
+        <dia:point val="17,17.7"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
@@ -205,18 +214,18 @@ server?#</dia:string>
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O3" connection="4"/>
-        <dia:connection handle="1" to="O1" connection="3"/>
+        <dia:connection handle="1" to="O0" connection="3"/>
       </dia:connections>
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O5">
       <dia:attribute name="obj_pos">
-        <dia:point val="13.0513,11.05"/>
+        <dia:point val="7.725,11.4625"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.32886,11.0075;13.0938,15.0254"/>
+        <dia:rectangle val="6.95137,11.4125;8.55131,14.3961"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="13.0513,11.05"/>
+        <dia:point val="7.725,11.4625"/>
         <dia:point val="7.75134,14.3461"/>
       </dia:attribute>
       <dia:attribute name="numcp">
@@ -232,6 +241,7 @@ server?#</dia:string>
         <dia:real val="0.8"/>
       </dia:attribute>
       <dia:connections>
+        <dia:connection handle="0" to="O1" connection="6"/>
         <dia:connection handle="1" to="O3" connection="0"/>
       </dia:connections>
     </dia:object>
@@ -244,7 +254,7 @@ server?#</dia:string>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="7.75134,21.1539"/>
-        <dia:point val="7.8045,27.9"/>
+        <dia:point val="7.80451,27.9"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
@@ -265,10 +275,10 @@ server?#</dia:string>
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O7">
       <dia:attribute name="obj_pos">
-        <dia:point val="7.77792,24.527"/>
+        <dia:point val="7.77792,24.5269"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.72792,23.8925;7.77792,24.6925"/>
+        <dia:rectangle val="7.72792,23.9098;7.77792,24.7098"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -282,7 +292,7 @@ server?#</dia:string>
             <dia:real val="0.8"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="7.77792,24.527"/>
+            <dia:point val="7.77792,24.5269"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -301,7 +311,7 @@ server?#</dia:string>
         <dia:point val="8.55134,22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.96654,21.3655;9.13614,22.1655"/>
+        <dia:rectangle val="7.91654,21.3829;9.13614,22.1829"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -331,7 +341,7 @@ server?#</dia:string>
         <dia:point val="11.5013,17.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.6741,16.6155;12.3285,17.4155"/>
+        <dia:rectangle val="10.6241,16.6329;12.3285,17.4329"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -358,15 +368,15 @@ server?#</dia:string>
     </dia:object>
     <dia:object type="Standard - PolyLine" version="0" id="O10">
       <dia:attribute name="obj_pos">
-        <dia:point val="29.3513,22.75"/>
+        <dia:point val="30.8,22.797"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.72792,22.7486;29.4528,25.327"/>
+        <dia:rectangle val="7.72792,22.7658;30.8391,25.3269"/>
       </dia:attribute>
       <dia:attribute name="poly_points">
-        <dia:point val="29.3513,22.75"/>
+        <dia:point val="30.8,22.797"/>
         <dia:point val="29.4013,24.55"/>
-        <dia:point val="7.77792,24.527"/>
+        <dia:point val="7.77792,24.5269"/>
       </dia:attribute>
       <dia:attribute name="end_arrow">
         <dia:enum val="1"/>
@@ -380,6 +390,138 @@ server?#</dia:string>
       <dia:connections>
         <dia:connection handle="2" to="O6" connection="0"/>
       </dia:connections>
+    </dia:object>
+    <dia:object type="Standard - Image" version="0" id="O11">
+      <dia:attribute name="obj_pos">
+        <dia:point val="32.0049,15.8943"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="31.9549,15.8443;39,18.2443"/>
+      </dia:attribute>
+      <dia:attribute name="elem_corner">
+        <dia:point val="32.0049,15.8943"/>
+      </dia:attribute>
+      <dia:attribute name="elem_width">
+        <dia:real val="6.9451"/>
+      </dia:attribute>
+      <dia:attribute name="elem_height">
+        <dia:real val="2.3"/>
+      </dia:attribute>
+      <dia:attribute name="border_width">
+        <dia:real val="0.1"/>
+      </dia:attribute>
+      <dia:attribute name="draw_border">
+        <dia:boolean val="false"/>
+      </dia:attribute>
+      <dia:attribute name="keep_aspect">
+        <dia:boolean val="true"/>
+      </dia:attribute>
+      <dia:attribute name="file">
+        <dia:string>#/local/home2/yast2-new/source/nfs-server/doc/nfs-server-2a-dir-000.png#</dia:string>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - Image" version="0" id="O12">
+      <dia:attribute name="obj_pos">
+        <dia:point val="33.7,19.6943"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="33.65,19.6443;38.35,23.0239"/>
+      </dia:attribute>
+      <dia:attribute name="elem_corner">
+        <dia:point val="33.7,19.6943"/>
+      </dia:attribute>
+      <dia:attribute name="elem_width">
+        <dia:real val="4.6"/>
+      </dia:attribute>
+      <dia:attribute name="elem_height">
+        <dia:real val="3.27963"/>
+      </dia:attribute>
+      <dia:attribute name="border_width">
+        <dia:real val="0.1"/>
+      </dia:attribute>
+      <dia:attribute name="draw_border">
+        <dia:boolean val="false"/>
+      </dia:attribute>
+      <dia:attribute name="keep_aspect">
+        <dia:boolean val="true"/>
+      </dia:attribute>
+      <dia:attribute name="file">
+        <dia:string>#/local/home2/yast2-new/source/nfs-server/doc/nfs-server-2b-hosts-000.png#</dia:string>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - PolyLine" version="0" id="O13">
+      <dia:attribute name="obj_pos">
+        <dia:point val="25.05,21.9443"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="25.0084,20.0943;33.55,21.9859"/>
+      </dia:attribute>
+      <dia:attribute name="poly_points">
+        <dia:point val="25.05,21.9443"/>
+        <dia:point val="26.55,20.9443"/>
+        <dia:point val="33.5,20.8943"/>
+      </dia:attribute>
+      <dia:attribute name="end_arrow">
+        <dia:enum val="1"/>
+      </dia:attribute>
+      <dia:attribute name="end_arrow_length">
+        <dia:real val="0.8"/>
+      </dia:attribute>
+      <dia:attribute name="end_arrow_width">
+        <dia:real val="0.8"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - Line" version="0" id="O14">
+      <dia:attribute name="obj_pos">
+        <dia:point val="26.65,21.8443"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="26.6,20.8943;26.7,21.8943"/>
+      </dia:attribute>
+      <dia:attribute name="conn_endpoints">
+        <dia:point val="26.65,21.8443"/>
+        <dia:point val="26.65,20.9443"/>
+      </dia:attribute>
+      <dia:attribute name="numcp">
+        <dia:int val="1"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - PolyLine" version="0" id="O15">
+      <dia:attribute name="obj_pos">
+        <dia:point val="25.0366,18.227"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="24.995,16.397;32.25,18.2686"/>
+      </dia:attribute>
+      <dia:attribute name="poly_points">
+        <dia:point val="25.0366,18.227"/>
+        <dia:point val="26.5366,17.227"/>
+        <dia:point val="32.2,17.197"/>
+      </dia:attribute>
+      <dia:attribute name="end_arrow">
+        <dia:enum val="1"/>
+      </dia:attribute>
+      <dia:attribute name="end_arrow_length">
+        <dia:real val="0.8"/>
+      </dia:attribute>
+      <dia:attribute name="end_arrow_width">
+        <dia:real val="0.8"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - Line" version="0" id="O16">
+      <dia:attribute name="obj_pos">
+        <dia:point val="26.6366,18.127"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="26.5866,17.177;26.6866,18.177"/>
+      </dia:attribute>
+      <dia:attribute name="conn_endpoints">
+        <dia:point val="26.6366,18.127"/>
+        <dia:point val="26.6366,17.227"/>
+      </dia:attribute>
+      <dia:attribute name="numcp">
+        <dia:int val="1"/>
+      </dia:attribute>
     </dia:object>
   </dia:layer>
 </dia:diagram>
