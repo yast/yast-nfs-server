@@ -182,7 +182,8 @@ while ( <STDIN> )
     {
 	if ($path eq ".")
 	{
-	    ycp::Return (\@exports);
+	    # the 1 prevents returning strings as integers/booleans
+	    ycp::Return (\@exports, 1);
 	}
 	else
 	{
