@@ -18,7 +18,6 @@
 # }
 # No caching/flushing is done.
 
-use lib "/usr/lib/YaST2/agents_non_y2";
 use ycp;
 use strict;
 use Errno qw(ENOENT);
