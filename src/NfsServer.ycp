@@ -178,7 +178,8 @@ exported directories.\n"));
 	    "" );
 
 	// help text
-	Wizard::RestoreHelp(_("Writing NFS server settings"));
+	if (!write_only)
+		Wizard::RestoreHelp(_("Writing NFS server settings"));
 
 	Progress::NextStage ();
 
