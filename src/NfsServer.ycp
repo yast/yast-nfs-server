@@ -34,11 +34,11 @@
     global list<string> required_packages = ["nfs-utils"];
 
 
-	/**
-	 * Write only, used during autoinstallation.
-	 * Don't run services and SuSEconfig, it's all done at one place.
-	 */
-	global boolean write_only = false;
+    /**
+     * Write only, used during autoinstallation.
+     * Don't run services and SuSEconfig, it's all done at one place.
+     */
+    global boolean write_only = false;
 
 
     /**
@@ -75,11 +75,14 @@
      * @see	exports
      */
     global define boolean Import (map settings) ``{
-/*	if (size (settings) == 0)
+        /*
+        if (size (settings) == 0)
 	{
 	    // Reset - just continue with Set (#24544).
 	}*/
 
+        // To avoid enabling nfslock if it does not exist during autoinstall
+	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
 	Set (settings);
 	return true;
     }
@@ -195,8 +198,9 @@ exported directories.\n"));
 
 	if (!start)
 	{
-		if (!write_only)
-			Service::Stop ("nfsserver");
+	    if (!write_only)
+		Service::Stop ("nfsserver");
+
 	    if (! Service::Disable("nfsserver"))
 	    {
 		Report::Error(Service::Error());
@@ -205,7 +209,7 @@ exported directories.\n"));
 	    if (have_nfslock)
 	    {
 		if (!write_only)
-			Service::Stop("nfslock");
+		    Service::Stop("nfslock");
 		if (! Service::Disable("nfslock"))
 		{
 		    Report::Error(Service::Error());
