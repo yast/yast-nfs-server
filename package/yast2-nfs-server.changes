@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
-Mon Mar  3 14:32:12 CET 2003 - mvidner@suse.de
+Mon Mar  3 16:32:39 CET 2003 - mvidner@suse.de
 
+- Import accepts empty list and can reset settings (#24544).
 - Don't set Mode::config to true in _auto clients (nashif).
-- 2.7.3
+- 2.7.4
 
 -------------------------------------------------------------------
 Mon Feb 17 16:47:12 CET 2003 - mvidner@suse.de
