@@ -25,8 +25,10 @@
 
     import "NfsServer";
     import "Wizard";
+    import "Mode";
     include "nfs_server/routines.ycp";
-    include "ui/common_popups.ycp";
+    import "Label";
+    import "Popup";
     include "ui/file_popups.ycp";
 
     /**
@@ -65,8 +67,8 @@
 			),
 		    `VSpacing(0.2),
 		    `HBox(
-			`PushButton(`id(`ok), `opt(`default, `key_F10), OKButtonLabel()),
-			`PushButton(`id(`cancel), `opt (`key_F9), CancelButtonLabel())
+			`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
+			`PushButton(`id(`cancel), `opt (`key_F9), Label::CancelButton())
 			),
 		    `VSpacing(0.2)),
 		`HSpacing(1)
@@ -83,13 +85,13 @@
 		list allowed = FindAllowed(exports, mountpoint);
 		if (allowed != nil) {
 		    // error popup message
-		    UI::MessagePopup(_("The exports table already
+		    Popup::Message(_("The exports table already
 contains this directory."));
 		    ret = nil;
 		}
 		else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
 		{
-		    UI::MessagePopup(sformat (
+		    Popup::Message(sformat (
 // message popup; %1, %2 are package names
 _("The user-mode NFS server (%1) cannot export directories
 with spaces in their names.
@@ -98,7 +100,7 @@ Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
 		}
 		else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config) {
 		    // the dir does not exist
-		    ret = UI::YesNoPopup(_("The directory does not exist.
+		    ret = Popup::YesNo(_("The directory does not exist.
 Create it?")) ? `ok : nil;
 		}
 	    }
@@ -168,8 +170,8 @@ Create it?")) ? `ok : nil;
 				   `TextEntry(`id(`optsent), _("O&ptions:"), opts),
 				   `VSpacing(0.2),
 				   // ok pushbutton: confirm the dialog
-				   `HBox(`PushButton(`id(`ok), `opt(`default, `key_F10), OKButtonLabel()),
-					 `PushButton(`id(`cancel), `opt (`key_F9), CancelButtonLabel())),
+				   `HBox(`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
+					 `PushButton(`id(`cancel), `opt (`key_F9), Label::CancelButton())),
 				   `VSpacing(0.2)),
 			     `HSpacing(1)
 			   ));
@@ -193,7 +195,7 @@ Create it?")) ? `ok : nil;
 		ret = nil;
 	    if (ret == `ok && contains(allowed_names, hosts)) {
 		// error popup message
-		UI::MessagePopup(_("Options for this wildcard
+		Popup::Message(_("Options for this wildcard
 are already set."));
 		ret = nil;
 	    }
@@ -231,7 +233,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 
 	term finish_button = `PushButton (`id (`next),
 					  `opt (`default, `key_F10),
-					  FinishButtonLabel());
+					  Label::FinishButton());
 
 	term contents =
 	    `HVSquash(
@@ -253,12 +255,12 @@ a configuration dialog where you can specify the directories to export.</P>");
 	do {
 	    if (!start_nfs_server)
 	    {
-		//UI::ChangeWidget (`id (`next), `Label, FinishButtonLabel());
+		//UI::ChangeWidget (`id (`next), `Label, Label::FinishButton());
 		Wizard::ReplaceNextButton (finish_button);
 	    }
 	    else
 	    {
-		//UI::ChangeWidget (`id (`next), `Label, NextButtonLabel());
+		//UI::ChangeWidget (`id (`next), `Label, Label::NextButton());
 		Wizard::RestoreNextButton ();
 		UI::SetFocus(`id(`next));
 	    }
@@ -268,7 +270,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 	    {
 		ret = `abort;
 	    }
-	    if (ret == `abort && !UI::ReallyAbortPopup (true))
+	    if (ret == `abort && !Popup::ReallyAbort (true))
 	    {
 		continue;
 	    }
@@ -344,7 +346,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    // dialog title
 	    _("Directories to export to the others"),
 	    contents, help_text,
-	    BackButtonLabel (), FinishButtonLabel());
+	    Label::BackButton (), Label::FinishButton());
 
 	any ret = nil;
 	any simulated = nil; // simulated user input
@@ -513,7 +515,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		    }
 		}
 	    }
-	    else if (ret == `abort && !UI::ReallyAbortPopup (true))
+	    else if (ret == `abort && !Popup::ReallyAbort (true))
 	    {
 		continue;
 	    }
@@ -541,7 +543,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 Do you really want to use the new settings?");
 	symbol ret = `back;
 
-	if (UI::YesNoPopup (message))
+	if (Popup::YesNo (message))
 	{
 	    ret = `finish;
 	}

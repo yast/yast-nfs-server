@@ -11,6 +11,7 @@
  * Authors:
  *   Jan Holesovsky <kendy@suse.cz>
  *   Dan Vesely <dan@suse.cz>
+ *   Martin Vidner <mvidner@suse.cz>
  *
  * $Id$
  *
@@ -28,6 +29,7 @@
     import "NfsServer";
     include "require.ycp";
     import "Wizard";
+    import "Popup";
     include "wizard/sequencer.ycp";
     include "nfs_server/ui.ycp";
 
@@ -84,7 +86,7 @@
 	if (NfsServer::Write())
 	{
 	    // message popup
-	    UI::MessagePopup (_("All the settings were written and are ready to use."));
+	    Popup::Message (_("All the settings were written and are ready to use."));
 	}
     }
 
