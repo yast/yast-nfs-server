@@ -29,6 +29,13 @@ Source0:	@RPMNAME@-@VERSION@.tar.bz2
 %description
 -
 
+%package devel
+Summary:	YaST2 - Configuration of NFS server, developer documentation
+Version:	@VERSION@
+Group:		System Environment/YaST
+%description devel
+-
+
 %prep
 %setup -n @RPMNAME@-@VERSION@
 
@@ -46,5 +53,6 @@ make check
 @YAST2DIR@/include/nfs_server/*
 @YAST2DIR@/clients/nfs_server.ycp
 @YAST2DIR@/menuentries/menuentry_nfs_server.ycp
-%dir @DOCDIR@
-@DOCDIR@/*
+
+%files devel
+%doc @DOCDIR@
