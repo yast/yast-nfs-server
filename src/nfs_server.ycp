@@ -27,7 +27,9 @@
     textdomain "nfs_server";
 
     import "NfsServer";
-    include "require.ycp";
+    // TODO also apply to autoyast part,
+    // must be able to query packages in selections
+    import "Require";
     import "Wizard";
     import "Popup";
     include "wizard/sequencer.ycp";
@@ -57,11 +59,11 @@
 
     // If nfs-utils nor nfs-server is not installed, install nfs-utils.
     // TODO: require installation of alternate packages
-    if (!IsPackageInstalled ("nfs-server"))
+    if (!Require::IsPackageInstalledTarget ("nfs-server"))
     {
 	use_star_for_anonymous = true;
 	spaces_allowed = true;
-	if (!RequireAndConflict (["nfs-utils"], [],
+	if (!Require::RequireAndConflictTarget (["nfs-utils"], [],
 			     // notification 1/2
 			     _("<p>To configure the Network File System, the <b>%1</b> package must be installed.</p>") +
 			     // notification 2/2
