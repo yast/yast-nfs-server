@@ -27,7 +27,7 @@
     /**
      * Saves NFS server part
      * @param start_nfs_server start NFS server
-     * @param export list of export entries
+     * @param exports list of export entries
      * @return boolean success
      */
     global define nfs_server_save (boolean start_nfs_server, list exports) ``{
