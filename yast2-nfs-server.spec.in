@@ -35,7 +35,6 @@ Summary:	Configuration of nfs server
 @clientdir@/nfs_server_auto.ycp
 @moduledir@/NfsServer.ycp
 @moduledir@/NfsServer.ybc
-@configdir@/nfs_server.y2cc
 @desktopdir@/nfs_server.desktop
 @scrconfdir@/etc_exports.scr
 @agentdir@/ag_exports

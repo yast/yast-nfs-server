@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  9 17:25:31 CET 2004 - lslezak@suse.cz
+
+- NfsServer.ycp - fixed data type
+- removed *.y2cc file
+- version 2.9.2
+
+-------------------------------------------------------------------
 Fri Jan 30 16:38:23 CET 2004 - mvidner@suse.cz
 
 - Adapted for the new interpreter (jhumpol)
