@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan 30 16:38:23 CET 2004 - mvidner@suse.cz
+
+- Adapted for the new interpreter (jhumpol)
+- 2.9.1
+
+-------------------------------------------------------------------
 Fri Nov 21 12:40:13 CET 2003 - lslezak@suse.cz
 
 - use UI:: file popup
