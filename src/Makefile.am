@@ -1,8 +1,4 @@
-#
-# Makefile.am for y2c_nfs_server/src
-#
-# $Id$
-#
+# Makefile.am for nfs-server/src
 
 myincludedir = @yncludedir@/nfs_server
 
@@ -23,3 +19,5 @@ config_DATA = nfs_server.y2cc
 desktop_DATA = nfs_server.desktop
 
 EXTRA_DIST = $(client_DATA) $(myinclude_DATA) $(module_DATA) $(config_DATA) $(desktop_DATA)
+
+include $(top_srcdir)/Makefile.am.common
