@@ -7,6 +7,8 @@ Requires:	yast2 yast2-runlevel yast2-packager
 
 Provides:	yast2-config-nfs-server yast2-config-nfs-server-devel
 Obsoletes:	yast2-config-nfs-server yast2-config-nfs-server-devel
+Provides:	yast2-trans-nfs-server
+Obsoletes:	yast2-trans-nfs-server
 Provides:	yast2-config-network:/usr/lib/YaST2/clients/lan_nfs_server.ycp
 
 BuildArchitectures:	noarch
