@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb  3 17:12:47 CET 2003 - mvidner@suse.de
+
+- Added Read to _auto (nashif).
+- 2.7.1
+
+-------------------------------------------------------------------
 Mon Jan 20 10:24:31 CET 2003 - mvidner@suse.de
 
 - Using the new *_auto dispatcher (nashif).
