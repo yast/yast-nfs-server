@@ -76,13 +76,13 @@
      * @see	exports
      */
     global define boolean Import (map settings) ``{
-        /*
-        if (size (settings) == 0)
+	/*
+	if (size (settings) == 0)
 	{
 	    // Reset - just continue with Set (#24544).
 	}*/
 
-        // To avoid enabling nfslock if it does not exist during autoinstall
+	// To avoid enabling nfslock if it does not exist during autoinstall
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
 	Set (settings);
 	return true;
@@ -175,7 +175,7 @@ exported directories.\n"));
 	    _("Save /etc/exports"),
 	    // progress stage label
 	    _("Restart services"),
-           ], [
+	   ], [
 	    // progress step label
 	    _("Saving /etc/exports..."),
 	    // progress step label
@@ -241,30 +241,30 @@ exported directories.\n"));
 		ok = false;
 	    }
 
-		if (!write_only)
+	    if (!write_only)
+	    {
+		if (Service::Status("portmap") != 0 )
 		{
-			if (Service::Status("portmap") != 0 )
-			{
-			// portmap must not be started if it is running already (see bug # 9999)
-				Service::Start("portmap");
-			}
+		    // portmap must not be started if it is running already (see bug # 9999)
+		    Service::Start("portmap");
+		}
 
-			Service::Stop("nfsserver");
-			if (have_nfslock)
-			{
-			    Service::Restart("nfslock");
-			}
-			Service::Start("nfsserver");
+		Service::Stop("nfsserver");
+		if (have_nfslock)
+		{
+		    Service::Restart("nfslock");
+		}
+		Service::Start("nfsserver");
 
-			if (Service::Status("nfsserver") != 0)
-			{
-				// error popup message
-				Report::Error (_("Unable to restart the NFS server.
+		if (Service::Status("nfsserver") != 0)
+		{
+		    // error popup message
+		    Report::Error (_("Unable to restart the NFS server.
 Your changes will be active after reboot.
 "));
-				ok = false;
-			}
+		    ok = false;
 		}
+	    }
 	}
 
 	SuSEFirewall::WriteOnly ();
@@ -272,7 +272,7 @@ Your changes will be active after reboot.
 	{
 	    SuSEFirewall::ActivateConfiguration ();
 	}
-	
+
 	Progress::NextStage ();
 
 	return ok;
