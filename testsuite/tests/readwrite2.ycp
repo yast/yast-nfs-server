@@ -66,12 +66,19 @@
 	];
 
     // pretend nfslock does not exist
+    //   not used
     map READ2 = eval (READ);
     READ2["init","scripts","exists"] = false;
+
+    // services portmap & nfsserver are stopped
+    map READ3 = eval (READ);
+    READ3["init","scripts","runlevel","portmap"]   = service_off;
+    READ3["init","scripts","runlevel","nfsserver"] = service_off;
 
     map WRITE = $[
 	];
 
+    // not used
     map WRITE_KO = $[
 	"etc": $[
 	    "exports": false,
@@ -89,10 +96,39 @@
 	    ],
 	];
 
-    DUMP ("Read");
-    TEST (``(NfsServer::Read ()), [[READ, READ2], WRITE, EXECUTE], nil);
-    DUMP ("Write OK");
+    // nfsserver and portmap are running
+    DUMP ("\nRead  - services are running\n");
+    TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
+    DUMP ("\nWrite - services will be stopped\n");
+    // Stop services!
+    NfsServer::start = false;
+    // And Write
     TEST (``(NfsServer::Write (false)), [READ, WRITE, EXECUTE], nil);
-    DUMP ("Write KO");
-    TEST (``(NfsServer::Write (false)), [READ, WRITE_KO, EXECUTE], nil);
+
+    // nfsserver and portmap are running
+    DUMP ("\nRead  - services are running\n");
+    TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
+    DUMP ("\nWrite - services are running\n");
+    // Start services (nfsserver)
+    NfsServer::start = true;
+    // And Write
+    TEST (``(NfsServer::Write (false)), [READ, WRITE, EXECUTE], nil);
+
+    // nfsserver and portmap are stopped
+    DUMP ("\nRead  - services are stopped\n");
+    TEST (``(NfsServer::Read ()), [READ3, WRITE, EXECUTE], nil);
+    DUMP ("\nWrite - services will be stopped\n");
+    // Leave services stopped
+    NfsServer::start = false;
+    // And Write
+    TEST (``(NfsServer::Write (false)), [READ3, WRITE, EXECUTE], nil);
+
+    // nfsserver and portmap are stopped
+    DUMP ("\nRead  - services are stopped\n");
+    TEST (``(NfsServer::Read ()), [READ3, WRITE, EXECUTE], nil);
+    DUMP ("\nWrite - services will be started\n");
+    // Start services
+    NfsServer::start = true;
+    // And Write
+    TEST (``(NfsServer::Write (false)), [READ3, WRITE, EXECUTE], nil);
 }
