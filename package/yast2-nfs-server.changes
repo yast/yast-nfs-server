@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Jan 20 10:24:31 CET 2003 - mvidner@suse.de
+
+- Using the new *_auto dispatcher (nashif).
+- Added function key shortcuts.
+- Fixed export options checking (phadraba).
+- Prevent agent from returning strings as integers/booleans (~#21804).
+- 2.7.0
+
+-------------------------------------------------------------------
 Mon Sep  9 16:57:52 EDT 2002 - nashif@suse.de
 
 - Implemented WriteOnly to 'only' write configuration without
