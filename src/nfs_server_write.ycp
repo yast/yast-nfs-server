@@ -52,7 +52,11 @@ directories."));
 		CallFunction (`runlevel_adjust ("portmap", "enable"));
 		CallFunction (`runlevel_adjust ("nfsserver", "enable"));
 
-		SCR::Execute(.target.bash, "/etc/init.d/portmap start", $[]);                // but this is necessary
+		if (SCR::Execute(.target.bash, "/etc/init.d/portmap status") != 0)
+		{
+		    // portmap must not be started if it is running already (see bug # 9999)
+		    SCR::Execute(.target.bash, "/etc/init.d/portmap start", $[]);
+		}
 		SCR::Execute(.target.bash, "/etc/init.d/nfsserver start", $[]);
 
 		if (SCR::Execute(.target.bash, "/etc/init.d/nfsserver status", $[]) != 0)
