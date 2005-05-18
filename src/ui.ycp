@@ -59,11 +59,11 @@
 		    `HBox (
 			`TextEntry(`id(`mpent),
 				   // text entry label
-				   _("&Directory to export:"), mountpoint),
+				   _("&Directory to Export"), mountpoint),
 			`HSpacing (1),
 			`VBox (
 			    // button label
-			    `Bottom(`PushButton (`id (`browse), `opt (`key_F6), _("&Browse")))
+			    `Bottom(`PushButton (`id (`browse), `opt (`key_F6), _("&Browse...")))
 			    )
 			),
 		    `VSpacing(0.2),
@@ -94,7 +94,7 @@ contains this directory."));
 		{
 		    Popup::Message(sformat (
 // message popup; %1, %2 are package names
-_("The user-mode NFS server (%1) cannot export directories
+_("The user mode NFS server (%1) cannot export directories
 with spaces in their names.
 Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
 		    ret = nil;
@@ -114,7 +114,7 @@ Create it?")) ? `ok : nil;
 		}
 
 		// title in the file selection dialog
-		dir = UI::AskForExistingDirectory(dir, _("Select Directory to Export"));
+		dir = UI::AskForExistingDirectory(dir, _("Select the Directory to Export"));
 
 		if (size (dir) > 0)
 		{
@@ -167,9 +167,9 @@ Create it?")) ? `ok : nil;
 				   // make at least the default options fit
 				   `HSpacing (30),
 				   // text entry label
-				   `TextEntry(`id(`hostsent), _("&Hosts wildcard:"), hosts),
+				   `TextEntry(`id(`hostsent), _("&Host Wild Card"), hosts),
 				   // text entry label
-				   `TextEntry(`id(`optsent), _("O&ptions:"), opts),
+				   `TextEntry(`id(`optsent), _("O&ptions"), opts),
 				   `VSpacing(0.2),
 				   // ok pushbutton: confirm the dialog
 				   `HBox(`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
@@ -197,7 +197,7 @@ Create it?")) ? `ok : nil;
 		ret = nil;
 	    if (ret == `ok && contains(allowed_names, hosts)) {
 		// error popup message
-		Popup::Message(_("Options for this wildcard
+		Popup::Message(_("Options for this wild card
 are already set."));
 		ret = nil;
 	    }
@@ -232,13 +232,13 @@ are already set."));
 
 	string help_text =
 	// Help, part 1 of 2
-_("<P>Here you can choose whether you want to start NFS server on your computer
-and export some of your directories to the others.</P>");
+_("<P>Here, choose whether to start an NFS server on your computer
+and export some of your directories to others.</P>");
 
 	help_text = help_text +
 	// Help, part 2 of 2
-_("<P>If you choose <B>Start NFS server</B>, the <B>Next</B> button will open
-a configuration dialog where you can specify the directories to export.</P>");
+_("<P>If you choose <B>Start NFS Server</B>, clicking <B>Next</B> opens
+a configuration dialog in which to specify the directories to export.</P>");
 
 	help_text = help_text + fw_cwm_widget["help"]:"";
 
@@ -246,13 +246,13 @@ a configuration dialog where you can specify the directories to export.</P>");
 
 	term nfs_contents =
 		// frame label
-		`Frame(_("NFS server"),
+		`Frame(_("NFS Server"),
 		       `VBox(`VSpacing(0.2),
 			     `RadioButtonGroup(`id(`rbgroup),
 				// radio button label
-					       `VBox(`Left(`RadioButton(`id(`servyes), `opt (`notify), _("&Start NFS server"), start_nfs_server)),
+					       `VBox(`Left(`RadioButton(`id(`servyes), `opt (`notify), _("&Start"), start_nfs_server)),
 				//radio button label
-						     `Left(`RadioButton(`id(`servno), `opt (`notify), _("&Don't start NFS server"), !start_nfs_server)))),
+						     `Left(`RadioButton(`id(`servno), `opt (`notify), _("&Do Not Start"), !start_nfs_server)))),
 			     `VSpacing(0.2)));
 	term fw_contents =
 	    // frame label
@@ -267,7 +267,7 @@ a configuration dialog where you can specify the directories to export.</P>");
 				       fw_contents));
 
 	// dialog title
-	Wizard::SetContents(_("Configuration of the NFS server"),
+	Wizard::SetContents(_("NFS Server Configuration"),
 			      contents, help_text, true, true);
 
 	// initialize the widget (set the current value)
@@ -331,19 +331,19 @@ a configuration dialog where you can specify the directories to export.</P>");
 	Wizard::SetScreenShotName ("nfs-server-2-exports");
 
 	// Help, part 1 of 3
-	string help_text = _("<P>The upper box contains all the directories which will be exported.
+	string help_text = _("<P>The upper box contains all the directories to export.
 If a directory is selected, the lower box shows the hosts allowed to
 mount this directory.</P>
 ");
 
 	// Help, part 2 of 3
-	help_text = help_text + _("<P>Hosts wildcard sets which hosts can access the selected directory.
-It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
-<I>IP networks</I>.</P>
+	help_text = help_text + _("<P><b>Host Wild Card</b> sets which hosts can access the selected directory.
+It can be a single host, groups, wild cards, or
+IP networks.</P>
 ");
 
 	// Help, part 3 of 3
-	help_text = help_text + _("<P>Please have a look at <B>man exports</B> for further information.</P>
+	help_text = help_text + _("<P>Refer to <tt>man exports</tt> for more information.</P>
 ");
 
 	list<map<string,any> > exports = NfsServer::exports;
@@ -352,7 +352,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 	    `VBox(
 		`ReplacePoint(`id(`exportsrep), ExportsSelBox(exports)),
 		// push button label
-		`HBox(`PushButton(`id(`mpnewbut), `opt (`key_F3), _("Add &directory")),
+		`HBox(`PushButton(`id(`mpnewbut), `opt (`key_F3), _("Add &Directory")),
 		      // push button label
 		      `PushButton(`id(`mpeditbut), `opt (`key_F4), _("&Edit")),
 		      // push button label
@@ -361,12 +361,12 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 		`VBox(`Left(`Label(`id(`allowedlab), `opt(`hstretch), "")),
 		      `Table(`id(`allowedtab), `opt(`notify, `immediate),
 			     // table header
-			     `header(_("Hosts wildcard")+"  ",
+			     `header(_("Host Wild Card")+"  ",
 			     // table header
 				     _("Options")+"  "),
 			     [])),
 		      // push button label
-		`HBox(`PushButton(`id(`alwnewbut), _("Add &host")),
+		`HBox(`PushButton(`id(`alwnewbut), _("Add &Host")),
 		      // push button label
 		      `PushButton(`id(`alweditbut), _("Ed&it")),
 		      // push button label
@@ -375,7 +375,7 @@ It can be <I>single host</I>, <I>netgroups</I>, <I>wildcards</I> or
 
 	Wizard::SetContentsButtons (
 	    // dialog title
-	    _("Directories to export to the others"),
+	    _("Directories to Export"),
 	    contents, help_text,
 	    Label::BackButton (), Label::FinishButton());
 

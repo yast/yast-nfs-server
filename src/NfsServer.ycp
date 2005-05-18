@@ -192,7 +192,7 @@ exported directories.\n"));
 	boolean ok = true;
 
 	// dialog label
-	Progress::New (_("Writing NFS Server Configuration..."), " ", 2, [
+	Progress::New (_("Writing NFS Server Configuration"), " ", 2, [
 	    // progress stage label
 	    _("Save /etc/exports"),
 	    // progress stage label
@@ -208,7 +208,7 @@ exported directories.\n"));
 
 	// help text
 	if (!write_only)
-		Wizard::RestoreHelp(_("Writing NFS server settings"));
+		Wizard::RestoreHelp(_("Writing NFS server settings. Please wait..."));
 
 	Progress::NextStage ();
 

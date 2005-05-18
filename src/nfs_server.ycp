@@ -99,7 +99,7 @@ define boolean NfsServerSummaryHandler (map options) {
 	CommandLine::Print (_("NFS server is enabled"));
     else
 	// summary text
-	CommandLine::Print (_("NFS server is not enabled"));
+	CommandLine::Print (_("NFS server is disabled"));
 
     CommandLine::Print (RichText::Rich2Plain (NfsServer::Summary ()));
     return false;

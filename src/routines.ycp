@@ -109,7 +109,7 @@
 	    return true;
 	else
 	    // error popup message
-	    Report::Message(sformat(_("You entered a wrong wild card or options string.
+	    Report::Message(sformat(_("The wild card or options string is invalid.
 It must be shorter than 70 characters and it
 must not contain spaces.
 ")));
@@ -127,8 +127,8 @@ must not contain spaces.
 	if (regexpmatch (options, "[^A-Za-z0-9=/.,_-]"))
 	{
 	    // error popup message
-	    Report::Error (_("Incorrect option format:
-Only letters, digits and the characters =/.,_- are allowed."));
+	    Report::Error (_("Invalid option.
+Only letters, digits, and the characters =/.,_- are allowed."));
 	    return false;
 	}
 	return true;
@@ -166,7 +166,7 @@ Only letters, digits and the characters =/.,_- are allowed."));
 		     !regexpmatch (opt[1]:"", "[0-9]+"))
 	    {
 		// error popup message
-		Popup::Error (sformat (_("Wrong option format: '%1'"), e));
+		Popup::Error (sformat (_("Invalid option: '%1'"), e));
 		ret = false;
 	    }
 	});
