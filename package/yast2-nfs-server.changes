@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 12 10:15:17 CEST 2005 - mvidner@suse.cz
+
+- Note the difference in anonymous wildcard betweek knfsd and unfsd in
+  the help text (#91175).
+
+-------------------------------------------------------------------
 Wed May 18 16:29:24 CEST 2005 - mvidner@suse.cz
 
 - Texts proofread by rwalter.

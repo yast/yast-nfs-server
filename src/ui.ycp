@@ -184,9 +184,14 @@ Create it?")) ? `ok : nil;
 	    ret = UI::UserInput();
 
 	    hosts = (string) UI::QueryWidget(`id(`hostsent), `Value);
-	    if (use_star_for_anonymous && size (hosts) == 0)
+	    if (use_star_for_anonymous && hosts == "")
 	    {
 		hosts = "*";
+		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
+	    }
+	    else if (!use_star_for_anonymous && hosts == "*") // #91175
+	    {
+		hosts = "";
 		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
 	    }
 	    opts = (string) UI::QueryWidget(`id(`optsent), `Value);
@@ -330,19 +335,31 @@ a configuration dialog in which to specify the directories to export.</P>");
     define symbol ExportsDialog () ``{
 	Wizard::SetScreenShotName ("nfs-server-2-exports");
 
-	// Help, part 1 of 3
+	// Help, part 1 of 4
 	string help_text = _("<P>The upper box contains all the directories to export.
 If a directory is selected, the lower box shows the hosts allowed to
 mount this directory.</P>
 ");
 
-	// Help, part 2 of 3
+	// Help, part 2 of 4
 	help_text = help_text + _("<P><b>Host Wild Card</b> sets which hosts can access the selected directory.
 It can be a single host, groups, wild cards, or
 IP networks.</P>
 ");
 
-	// Help, part 3 of 3
+	// #91175
+	if (use_star_for_anonymous)
+	{
+	    // Help, part 3 of 4, variant for kernel space server
+	    help_text = help_text + _("<p>Enter an asterisk (<tt>*</tt>) to specify all hosts.</p>");
+	}
+	else
+	{
+	    // Help, part 3 of 4, variant for user space server
+	    help_text = help_text + _("<p>Leave the field empty to specify all hosts.</p>");
+	}
+
+	// Help, part 4 of 4
 	help_text = help_text + _("<P>Refer to <tt>man exports</tt> for more information.</P>
 ");
 
