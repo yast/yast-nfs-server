@@ -38,7 +38,10 @@
 
     include "nfs_server/ui.ycp";
 
-
+/**
+ * GUI handler
+ * @return `ws_finish `back or `abort
+ */
 define any NfsServerSequence () {
 
     map Aliases = $[
@@ -91,7 +94,12 @@ define any NfsServerSequence () {
     return result;
 }
 
-// print summary in command line
+/**
+ * CLI action handler.
+ * Print summary in command line
+ * @param options command options
+ * @return false so that Write is not called in non-interactive mode
+ */
 define boolean NfsServerSummaryHandler (map options) {
 
     if (NfsServer::start)
@@ -105,7 +113,11 @@ define boolean NfsServerSummaryHandler (map options) {
     return false;
 }
 
-// check if neccessary packages are installed
+/**
+ * check if neccessary packages are installed
+ * Report error if not
+ * @return success?
+ */
 define boolean check_packages () {
 
     list<string> packages = add (NfsServer::required_packages, "nfs-server");
@@ -119,7 +131,11 @@ define boolean check_packages () {
     return true;
 }
 
-// command line handler for starting server
+/**
+ * CLI action handler.
+ * @param options command options
+ * @return whether successful
+ */
 define boolean NfsServerStartHandler (map options) {
 
     if (NfsServer::start)
@@ -130,7 +146,11 @@ define boolean NfsServerStartHandler (map options) {
     return true;
 }
 
-// command line handler for stopping server
+/**
+ * CLI action handler.
+ * @param options command options
+ * @return whether successful
+ */
 define boolean NfsServerStopHandler (map options) {
 
     if (!NfsServer::start)
@@ -139,7 +159,11 @@ define boolean NfsServerStopHandler (map options) {
     return true;
 }
 
-// cmdline handler for add directories to be exported
+/**
+ * CLI action handler.
+ * @param options command options
+ * @return whether successful
+ */
 define boolean NfsServerAddHandler (map options) {
 
 
@@ -177,7 +201,11 @@ contains this directory."));
     return true;
 }
 
-// cmdline handler for deleting directories from export
+/**
+ * CLI action handler.
+ * @param options command options
+ * @return whether successful
+ */
 define boolean NfsServerDeleteHandler (map options) {
 
     string mountpoint	= options["mountpoint"]:"";
