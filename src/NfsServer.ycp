@@ -93,7 +93,7 @@
      * Get all NFS server configuration from a map.
      * When called by nfs_server_auto (preparing autoinstallation data)
      * the map may be empty.
-     * @param settings	$["start": "exports":]
+     * @param settings	$["start_nfsserver": "nfs_exports":]
      * @return	success
      * @see	exports
      */
@@ -112,8 +112,7 @@
 
     /**
      * Set the variables just as is and without complaining
-     * @param  settings
-     * @return void
+     * @param  settings $[ start_nfsserver:, nfs_exports:, ]
      */
     global define void Set (map settings)
 	``{
@@ -125,7 +124,7 @@
 
     /**
      * Dump the NFS settings to a map, for autoinstallation use.
-     * @return	$["start": "exports":]
+     * @return	$["start_nfsserver": "nfs_exports":]
      * @see	exports
      */
     global define map Export () ``{
@@ -208,7 +207,10 @@ exported directories.\n"));
 
 	// help text
 	if (!write_only)
-		Wizard::RestoreHelp(_("Writing NFS server settings. Please wait..."));
+	{
+	    // help text
+	    Wizard::RestoreHelp(_("Writing NFS server settings. Please wait..."));
+	}
 
 	Progress::NextStage ();
 
