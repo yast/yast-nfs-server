@@ -16,11 +16,14 @@ module_DATA =		\
 
 desktop_DATA = nfs_server.desktop
 
+rncdir =  $(schemadir)/autoyast/rnc
+rnc_DATA = nfs_server.rnc
+
 nfs_server:
 	ln -sf . nfs_server
 
 ycpchook = nfs_server
 
-EXTRA_DIST = $(client_DATA) $(myinclude_DATA) $(module_DATA) $(desktop_DATA)
+EXTRA_DIST = $(client_DATA) $(myinclude_DATA) $(module_DATA) $(desktop_DATA) $(rnc_DATA)
 
 include $(top_srcdir)/Makefile.am.common

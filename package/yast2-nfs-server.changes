@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Fri Sep 23 16:15:46 CEST 2005 - mvidner@suse.cz
+
+- Moved RNC schema from autoyast2.rpm.
+- 2.13.0
+
+-------------------------------------------------------------------
 Fri Aug 12 15:30:10 CEST 2005 - mvidner@suse.cz
 
-- Note the difference in anonymous wildcard betweek knfsd and unfsd in
+- Note the difference in anonymous wildcard between knfsd and unfsd in
   the help text (#91175).
 - Added comments for translators and ycpdoc.
 - 2.12.1
