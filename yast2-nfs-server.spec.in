@@ -39,3 +39,4 @@ Summary:	Configuration of nfs server
 @scrconfdir@/etc_exports.scr
 @agentdir@/ag_exports
 %doc @docdir@
+@schemadir@/autoyast/rnc/nfs_server.rnc
