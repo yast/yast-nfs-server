@@ -9,6 +9,10 @@ Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
+Read	.init.scripts.exists "network" true
+Read	.init.scripts.runlevel "network" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.exists "networkmanager" true
+Read	.init.scripts.runlevel "networkmanager" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Return	true
 Dump	
 Dump	Write - services will be stopped

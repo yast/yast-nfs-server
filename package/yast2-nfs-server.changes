@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan  5 10:27:10 CET 2006 - mvidner@suse.cz
+
+- Adjusted testsuite for changes in firewall code.
+- 2.13.1
+
+-------------------------------------------------------------------
 Fri Sep 23 16:15:46 CEST 2005 - mvidner@suse.cz
 
 - Moved RNC schema from autoyast2.rpm.
