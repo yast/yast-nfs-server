@@ -1,12 +1,16 @@
 Dump	Read
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "nfsserver" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" false
 Read	.init.scripts.exists "SuSEfirewall2_init" true
-Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "SuSEfirewall2_init" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
+Read	.init.scripts.exists "network" false
+Log	Service network does not exist.
+Read	.init.scripts.exists "networkmanager" true
+Read	.init.scripts.runlevel "networkmanager" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Return	true
 Dump	Write OK
 Read	.target.dir "/projects" nil
@@ -19,12 +23,12 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.runlevel "portmap" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "portmap" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "portmap" $["nfsserver":$[], "portmap":$[]]
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "nfsserver" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "portmap":$[]]
 Read	.init.scripts.exists "portmap" true
 Execute	.target.bash "/etc/init.d/portmap status" $["TERM":"raw"] 0
