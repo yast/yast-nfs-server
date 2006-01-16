@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 16 15:30:29 CET 2006 - mvidner@suse.cz
+
+- Again adjusted test cases for NetworkManager related changes (~#135595).
+- 2.13.2
+
+-------------------------------------------------------------------
 Thu Jan  5 10:27:10 CET 2006 - mvidner@suse.cz
 
 - Adjusted testsuite for changes in firewall code.

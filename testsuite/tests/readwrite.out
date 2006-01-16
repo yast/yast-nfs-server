@@ -7,10 +7,6 @@ Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
-Read	.init.scripts.exists "network" true
-Read	.init.scripts.runlevel "network" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.exists "networkmanager" true
-Read	.init.scripts.runlevel "networkmanager" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Return	true
 Dump	Write OK
 Read	.target.dir "/projects" nil

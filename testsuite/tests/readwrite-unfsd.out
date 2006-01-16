@@ -7,10 +7,6 @@ Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
-Read	.init.scripts.exists "network" false
-Log	Service network does not exist.
-Read	.init.scripts.exists "networkmanager" true
-Read	.init.scripts.runlevel "networkmanager" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Return	true
 Dump	Write OK
 Read	.target.dir "/projects" nil
