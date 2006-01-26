@@ -1,7 +1,7 @@
 @HEADER-COMMENT@
-# neededforbuild  yast2-devel-packages
 
 @HEADER@
+BuildRequires:	yast2-devel-packages
 Requires:	yast2 >= 2.11.11
 Requires:       yast2-packager
 
