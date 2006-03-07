@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar  7 17:21:51 CET 2006 - mvidner@suse.cz
+
+- Converted neededforbuild to BuildRequires
+  and removed yast2-devel-packages.
+- 2.13.3
+
+-------------------------------------------------------------------
 Mon Jan 16 15:30:29 CET 2006 - mvidner@suse.cz
 
 - Again adjusted test cases for NetworkManager related changes (~#135595).
