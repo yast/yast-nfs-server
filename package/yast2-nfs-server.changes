@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul 10 13:30:06 CEST 2006 - mvidner@suse.cz
+
+- Join multiple entries for a single export path (#191218).
+
+-------------------------------------------------------------------
 Tue Mar  7 17:21:51 CET 2006 - mvidner@suse.cz
 
 - Converted neededforbuild to BuildRequires
