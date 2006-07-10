@@ -1,7 +1,9 @@
 -------------------------------------------------------------------
-Mon Jul 10 13:30:06 CEST 2006 - mvidner@suse.cz
+Mon Jul 10 13:38:56 CEST 2006 - mvidner@suse.cz
 
 - Join multiple entries for a single export path (#191218).
+- Filter out duplicated client specifications (#191218).
+- 2.13.4
 
 -------------------------------------------------------------------
 Tue Mar  7 17:21:51 CET 2006 - mvidner@suse.cz

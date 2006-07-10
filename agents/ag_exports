@@ -43,7 +43,14 @@ sub handle_entry ($@)
 	push @mountpoints, $mountpoint;
 	$exportmap{$mountpoint} = [];
     }
-    push @{$exportmap{$mountpoint}}, @clients;
+    # also filter out duplicate client specifications
+    foreach my $client (@clients)
+    {
+	if (! grep { $client eq $_ } @{$exportmap{$mountpoint}})
+	{
+	    push @{$exportmap{$mountpoint}}, $client;
+	}
+    }
 }
 
 sub parse_file ()
