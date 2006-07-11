@@ -174,6 +174,33 @@ Only letters, digits, and the characters =/.,_- are allowed."));
     }
 
     /**
+     * Check for suspicious allowed lists and warn the user.
+     * Like "host(rw, sync)" with the space.
+     */
+    define void CheckSyntaxErrors (list<map<string,any> > exports) {
+	map<string, boolean> bad_shares = $[];
+	foreach (map<string, any> entry, exports, {
+	    foreach (string client, entry["allowed"]:["()"], {
+		if (search (client, "(") == nil ||
+		    search (client, ")") == nil)
+		{
+		    bad_shares[entry["mountpoint"]:"?"] = true;
+		}
+	    });
+	});
+	list<string> bad_shares_l = maplist (string s, boolean d, bad_shares, ``(s));
+	string bad_shares_s = mergestring (bad_shares_l, ", ");
+	if (bad_shares_s != "")
+	{
+	    // %1 is a list of exported paths
+	    Report::Warning (sformat (_("There are unbalanced parentheses in export options
+for %1.
+Probably there is spurious whitespace in the configuration file."),
+				      bad_shares_s));
+	}
+    }
+
+    /**
      * Replaces 'allowed' list in exports (for specified mountpoint)
      * @param exports		exports list
      * @param mountpoint	mount point
