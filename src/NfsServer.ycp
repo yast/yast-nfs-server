@@ -140,8 +140,11 @@
      */
     global define boolean Read () ``{
 	start = Service::Enabled("nfsserver");
+	y2milestone ("enabled: %1", start);
 	exports = (list<map<string,any> >) SCR::Read (.etc.exports);
+	y2milestone ("exports: %1", exports);
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
+	y2milestone ("have_nfslock: %1", have_nfslock);
 
 	SuSEFirewall::Read ();
 
