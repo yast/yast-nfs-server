@@ -146,7 +146,9 @@
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
 	y2milestone ("have_nfslock: %1", have_nfslock);
 
+	boolean progress_orig = Progress::set (false);
 	SuSEFirewall::Read ();
+	Progress::set (progress_orig);
 
 	return exports != nil;
     }
@@ -294,11 +296,13 @@ Your changes will be active after reboot.
 	    }
 	}
 
+	boolean progress_orig = Progress::set (false);
 	SuSEFirewall::WriteOnly ();
 	if (!write_only)
 	{
 	    SuSEFirewall::ActivateConfiguration ();
 	}
+	Progress::set (progress_orig);
 
 	Progress::NextStage ();
 
