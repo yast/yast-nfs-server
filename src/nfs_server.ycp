@@ -76,9 +76,11 @@ define any NfsServerSequence () {
 
     if (! NfsServer::Read ())
     {
-	// TODO:log an error?
+	y2error ("read error, bye");
 	return nil;
     }
+
+    CheckSyntaxErrors (NfsServer::exports);
 
     Wizard::CreateDialog ();
     Wizard::SetDesktopIcon("nfs_server");

@@ -26,6 +26,33 @@ my @exports;
 
 my $filename;
 
+# A mountpoint can be specified multiple times in /etc/exports. #191218
+
+# in order of appearance
+my @mountpoints;
+# mount point => client list
+my %exportmap;
+
+# append the arguments to @mountpoints and %exportmap
+sub handle_entry ($@)
+{
+    my ($mountpoint, @clients) = @_;
+
+    if (! exists $exportmap{$mountpoint})
+    {
+	push @mountpoints, $mountpoint;
+	$exportmap{$mountpoint} = [];
+    }
+    # also filter out duplicate client specifications
+    foreach my $client (@clients)
+    {
+	if (! grep { $client eq $_ } @{$exportmap{$mountpoint}})
+	{
+	    push @{$exportmap{$mountpoint}}, $client;
+	}
+    }
+}
+
 sub parse_file ()
 {
     @exports = ();
@@ -67,12 +94,20 @@ sub parse_file ()
 	    push @allowed, $export;
 	}
 
-	push @exports, {mountpoint => $mountpoint, allowed => \@allowed};
+	handle_entry ($mountpoint, @allowed);
     }
     close (FILE);
+
+    foreach my $mountpoint (@mountpoints)
+    {
+	my $allowed_r = $exportmap{$mountpoint};
+	push @exports, {mountpoint => $mountpoint, allowed => $allowed_r};
+    }
+
     return 1;
 }
 
+# operates on $_
 sub parse_tok
 {
     my $output = "";

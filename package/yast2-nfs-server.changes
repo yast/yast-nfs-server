@@ -1,4 +1,25 @@
 -------------------------------------------------------------------
+Mon Sep 11 17:42:23 CEST 2006 - mvidner@suse.cz
+
+- Fixed Progress nesting (#202351).
+- Using autodocs-ycp.ami (with parentheses for automake-1.9.6).
+- 2.13.6
+
+-------------------------------------------------------------------
+Tue Jul 11 13:50:53 CEST 2006 - mvidner@suse.cz
+
+- Warn if there are unbalanced parentheses, probably because of
+  misplaced whitespace in /etc/exports.
+- 2.13.5
+
+-------------------------------------------------------------------
+Mon Jul 10 13:38:56 CEST 2006 - mvidner@suse.cz
+
+- Join multiple entries for a single export path (#191218).
+- Filter out duplicated client specifications (#191218).
+- 2.13.4
+
+-------------------------------------------------------------------
 Tue Mar  7 17:21:51 CET 2006 - mvidner@suse.cz
 
 - Converted neededforbuild to BuildRequires
