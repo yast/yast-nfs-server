@@ -1,3 +1,5 @@
+Read	.sysconfig.nfs.NFS4_SUPPORT nil
+Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Dump	Read
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
@@ -16,6 +18,9 @@ Execute	.target.mkdir "/usr" true
 Read	.target.dir "/pub" nil
 Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
+Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
+Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
+Write	.etc.idmapd_conf ["Domain", ""] true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
@@ -26,6 +31,12 @@ Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["network":$["start":["3", "5"], "stop":["3", "5"]], "networkmanager":$["start":[], "stop":[]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.exists "idmapd" true
+Execute	.target.bash "/etc/init.d/idmapd status" $["TERM":"raw"] 0
+Read	.init.scripts.exists "svcgssd" true
+Execute	.target.bash "/etc/init.d/svcgssd status" $["TERM":"raw"] 0
+Read	.init.scripts.exists "svcgssd" true
+Execute	.target.bash "/etc/init.d/svcgssd stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "portmap" true
 Execute	.target.bash "/etc/init.d/portmap status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true

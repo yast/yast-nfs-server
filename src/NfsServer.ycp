@@ -25,6 +25,7 @@
     import "Summary";
     import "SuSEFirewall";
     import "Wizard";
+    import "Popup";
 
 
     /* default value of settings modified */
@@ -62,6 +63,25 @@
      * Don't run services and SuSEconfig, it's all done at one place.
      */
     global boolean write_only = false;
+
+
+    /**
+     * Enable nfsv4
+     */
+    global boolean enable_nfsv4 = (SCR::Read(.sysconfig.nfs.NFS4_SUPPORT)=="yes");
+
+
+    /**
+     * GSS Security ?
+     */
+    global boolean nfs_security = (SCR::Read(.sysconfig.nfs.NFS_SECURITY_GSS)=="yes");
+
+
+    /**
+     * Domain name to be used for nfsv4 (idmapd.conf)
+     */
+    global string domain = "";
+
 
 
     /**
@@ -140,11 +160,8 @@
      */
     global define boolean Read () ``{
 	start = Service::Enabled("nfsserver");
-	y2milestone ("enabled: %1", start);
 	exports = (list<map<string,any> >) SCR::Read (.etc.exports);
-	y2milestone ("exports: %1", exports);
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
-	y2milestone ("have_nfslock: %1", have_nfslock);
 
 	boolean progress_orig = Progress::set (false);
 	SuSEFirewall::Read ();
@@ -225,6 +242,28 @@ exported directories.\n"));
 	    Progress::Finish ();
 	    return false;
 	}
+	if(enable_nfsv4)
+	{
+		SCR::Write(.sysconfig.nfs.NFS4_SUPPORT,"yes");
+	}
+	else
+	{
+		SCR::Write(.sysconfig.nfs.NFS4_SUPPORT,"no");
+	}
+
+	if(nfs_security)
+	{
+		SCR::Write(.sysconfig.nfs.NFS_SECURITY_GSS,"yes");
+	}
+	else
+	{
+		SCR::Write(.sysconfig.nfs.NFS_SECURITY_GSS,"no");
+	}
+
+	if( !( SCR::Write(.etc.idmapd_conf,["Domain",(string)domain]) ) )
+	{
+		Popup::Message(_("Unable to write to idmapd.conf."));
+	}
 
 	Progress::NextStage ();
 
@@ -268,6 +307,69 @@ exported directories.\n"));
 	    {
 		Report::Error(Service::Error());
 		ok = false;
+	    }
+
+	    if (enable_nfsv4)
+	    {
+		if (Service::Status("idmapd") == 3 )
+		{
+			if (! Service::Start("idmapd"))
+			{
+				Report::Error(_("Unable to start idmapd. Please check your domain setting."));
+				ok = false;
+			}
+		}
+		if (Service::Status("idmapd")== 0)
+		{
+			if (! Service::Restart("idmapd"))
+			{
+				Report::Error(_("Unable to restart idmapd"));
+				ok = false;
+			}
+		}
+	    }
+	    else
+	    {
+		if (Service::Status("idmapd") == 3)
+		{
+			if(!Service::Stop("idmapd"))
+			{
+				Report::Error(_("Unable to stop idmapd"));
+				ok = false;
+			}
+		}
+	    }
+
+	    if (nfs_security)
+            {
+		if (Service::Status("svcgssd") == 3 )
+		{
+			if (! Service::Start("svcgssd"))
+			{
+				Report::Error(_("Unable to start svcgssd. Please ensure your kerberos and gssapi (nfs-utils) set up is fine."));
+				ok = false;
+			}
+		}
+		if(Service::Status("svcgssd")== 0)
+		{
+			if (! Service::Restart("svcgssd"))
+			{
+				Report::Error(_("'svcgssd' is already running. Unable to restart it."));
+				ok = false;
+			}
+		}
+            }
+	    else
+	    {
+		if (Service::Status("svcgssd") == 0)
+		{
+			if(!Service::Stop("svcgssd"))
+			{
+				Report::Error(_("'svcgssd' is running. Unable to stop it."));
+				ok = false;
+			}
+		}
+
 	    }
 
 	    if (!write_only)
