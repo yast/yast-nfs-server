@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Wed Jan 10 18:20:04 IST 2006 - pchakravarthi@novell.com
+
+- Added a perl module ag_idmapd_conf for configuring entries in 
+  /etc/idmapd.conf
+- Added two scr agents - etc_idmapd_conf.scr and cfg_nfs.scr, the
+  former making use of ag_idmapd_conf and the later to configure
+  entries in /etc/sysconfig/nfs
+- Modified Makefile.am in agents directory to reflect above.
+- Modified NfsServer.ycp, ui.ycp and routines.ycp to make use of 
+  all above and adding ui pieces to make the module NFSv4 aware.
+- Modified the *.out files in testsuite/tests/ to reflect changes 
+  made above.
+
+Relevant FATE ID : #300609
+
+-------------------------------------------------------------------
 Mon Sep 11 17:42:23 CEST 2006 - mvidner@suse.cz
 
 - Fixed Progress nesting (#202351).
