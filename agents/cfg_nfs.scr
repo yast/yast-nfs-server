@@ -1,0 +1,11 @@
+/**
+ * File:	cfg_nfs.scr
+ * Summary:	Agent for reading/writing /etc/sysconfig/nfs
+ * Access:	read / write
+ *
+ */
+.sysconfig.nfs
+
+`ag_ini(
+    `SysConfigFile("/etc/sysconfig/nfs")
+)
