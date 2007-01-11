@@ -1,3 +1,9 @@
+------------------------------------------------------------------
+Thu Jan 10 18:55:17 IST 2006 - pchakravarthi@novell.com
+
+- modified .spec.in file to add 'Requires' for limal-nfs-server
+  package and to include names of additional agent files.
+
 -------------------------------------------------------------------
 Wed Jan 10 18:20:04 IST 2006 - pchakravarthi@novell.com
 
