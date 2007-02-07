@@ -261,7 +261,7 @@ for the same client '%1' (contained in '%2')"), clientexpr, client, expath, expo
     define list<term> ExportsItems(list<map> exports) ``{
 	return maplist(map entry, exports, ``{
 	    string str = entry["mountpoint"]:"";
-	    return `item(`id(str), `opt(`notify), str+" ");
+	    return `item(`id(str), str+" ");
 	});
     }
 
