@@ -143,14 +143,15 @@ Create it?")) ? `ok : nil;
 
     /**
      * Ask user for an entry for the allowed hosts list.
+     * @param exports   the current UI version of the exports list
      * @param expath	the exported filesystem for which this is done
      * @param hosts	hosts default value
      * @param opts	options default value
      * @param allowed	current list, to check for duplicates
      * @return		[newhosts, newopts] or nil if cancelled. Options without parentheses.
      */
-    define list<string> GetAllowedHosts(string expath ,string hosts, string opts, list<string> allowed,
-					boolean fromedit) ``{
+    define list<string> GetAllowedHosts(list<map> exports, string expath ,string hosts, string opts, 
+					list<string> allowed, boolean fromedit) ``{
 	Wizard::SetScreenShotName ("nfs-server-2b-hosts");
 	string error = nil;
 	map event = nil;
@@ -221,7 +222,7 @@ Create it?")) ? `ok : nil;
 		    if (!optchanged)
 		    {
 			hosts = (string) UI::QueryWidget (`id(`hostsent),`Value);
-			opts = GetDefaultOpts(NfsServer::enable_nfsv4, NfsServer::exports,hosts);
+			opts = GetDefaultOpts(NfsServer::enable_nfsv4, exports,hosts);
 			UI::ChangeWidget (`id(`optsent),`Value,opts);
 			optchanged = true;
 		    }
@@ -242,7 +243,7 @@ NFSv4 is enabled (previous page)"));
 
 	    if (ret == `ok && NfsServer::enable_nfsv4)
 	    {
-		error = CheckUniqueRootForClient (NfsServer::exports,expath,hosts,opts);
+		error = CheckUniqueRootForClient (exports,expath,hosts,opts);
 		if (error != nil)
 		{
 		    Popup::Message(error);
@@ -263,7 +264,7 @@ are already set."));
 
 	if (opts == "")
 	{
-	    opts = GetDefaultOpts(NfsServer::enable_nfsv4, NfsServer::exports,hosts);
+	    opts = GetDefaultOpts(NfsServer::enable_nfsv4, exports,hosts);
 	}
 
 	opts = deletechars (opts, " ()");
@@ -667,9 +668,10 @@ IP networks.</P>
 		else
 		    mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
 
-		if (mountpoint != nil)
+		if (mountpoint != nil) {
 		    exports = filter(map<string,any> entry, exports,
 				     ``(entry["mountpoint"]:"" != mountpoint));
+		}
 
 		UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 		if (size (exports) > 0)
@@ -694,7 +696,7 @@ IP networks.</P>
 		if (mountpoint != nil) {
 		    list<string> allowed = FindAllowed(exports, mountpoint);
 
-		    list<string> hostopt = GetAllowedHosts(mountpoint, nil, nil, allowed, false);
+		    list<string> hostopt = GetAllowedHosts(exports, mountpoint, nil, nil, allowed, false);
 		    if (hostopt != nil) {
 			allowed = add(allowed, hostopt[0]:"" + "(" + hostopt[1]:"" + ")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
@@ -731,7 +733,7 @@ IP networks.</P>
 			}
 			allowed = remove (allowed, alw_no);
 		    }
-		    list<string> hostopt = GetAllowedHosts(mountpoint, hosts, opts, allowed, true);
+		    list<string> hostopt = GetAllowedHosts(exports, mountpoint, hosts, opts, allowed, true);
 		    if (hostopt != nil) {
 			allowed = add(allowed, hostopt[0]:"" + "(" + hostopt[1]:"" + ")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
