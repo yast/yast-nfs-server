@@ -154,14 +154,14 @@
      * @param client	some string representation of the client (*, *.domain, ip address)
      * @return		a comma separated default options string, that is most appropriate
      */
-    define string GetDefaultOpts (boolean nfsv4, list<map<string,any> > exports, string client) ``{
+    define string GetDefaultOpts (boolean nfsv4, list<map> exports, string client) ``{
 
 	boolean withfsid = false;
 
 	if (!nfsv4)
 	    return "ro,sync,root_squash";
 
-	foreach (map<string, any> entry, exports, {
+	foreach (map<string, any> entry, (list<map<string,any> >) exports, {
 	    foreach (string hostops, entry["allowed"]:["()"], {
 		integer  pos = findfirstof(hostops, "(");
 		string opts = "";
@@ -202,7 +202,7 @@
      * @param eopts	comma separated string of export options
      * @return		the first error encountered or nil
      */
-     define string CheckUniqueRootForClient (list<map<string,any> > exports, string expath,
+     define string CheckUniqueRootForClient (list<map> exports, string expath,
 						string client, string eopts) ``{
 	string exportpath = "";
 	string errorstring = nil;
@@ -211,7 +211,7 @@
 	if (!issubstring(eopts,"fsid=0"))	// Then no need to check for conflict.
 	    return nil;
 
-	foreach (map<string, any> entry, exports, {
+	foreach (map<string, any> entry, (list<map<string,any> >)exports, {
 	    exportpath = entry["mountpoint"]:"";
 	    foreach (string hostops, entry["allowed"]:["()"], {
 		string opts = "";
