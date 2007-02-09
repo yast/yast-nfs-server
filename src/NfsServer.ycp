@@ -245,6 +245,7 @@ exported directories.\n"));
 	if(enable_nfsv4)
 	{
 		SCR::Write(.sysconfig.nfs.NFS4_SUPPORT,"yes");
+		SCR::Write(.sysconfig.nfs,nil);
 	}
 	else
 	{
