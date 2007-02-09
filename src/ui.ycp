@@ -79,30 +79,37 @@
 	any ret = nil;
 	do {
 	    ret = UI::UserInput();
-
 	    mountpoint = (string) UI::QueryWidget(`id(`mpent), `Value);
+
 	    if (ret == `ok)
 	    {
-		list allowed = FindAllowed(exports, mountpoint);
-		if (allowed != nil) {
-		    // error popup message
-		    Popup::Message(_("The exports table already
-contains this directory."));
+		if (mountpoint == nil || mountpoint == "")
+		{
+		    Popup::Message(_("Please enter a non-empty export path. Eg: /exports"));
 		    ret = nil;
 		}
-		else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
+		else
 		{
-		    Popup::Message(sformat (
-// message popup; %1, %2 are package names
+		    list allowed = FindAllowed(exports, mountpoint);
+		    if (allowed != nil)
+		    {
+			// error popup message
+			Popup::Message(_("The exports table already contains this directory."));
+			ret = nil;
+		    }
+		    else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
+		    {
+			Popup::Message(sformat (
+			// message popup; %1, %2 are package names
 _("The user mode NFS server (%1) cannot export directories
 with spaces in their names.
 Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
-		    ret = nil;
-		}
-		else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config ()) {
+			ret = nil;
+		    }
+		    else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config ()) {
 		    // the dir does not exist
-		    ret = Popup::YesNo(_("The directory does not exist.
-Create it?")) ? `ok : nil;
+			ret = Popup::YesNo(_("The directory does not exist. Create it?")) ? `ok : nil;
+		    }
 		}
 	    }
 	    else if (ret == `browse)
@@ -118,6 +125,10 @@ Create it?")) ? `ok : nil;
 
 		if (size (dir) > 0)
 		{
+		    integer len = size (dir);
+		    // remove the trailing "/"
+		    if (dir != "/" && (substring (dir,len-1,1) == "/"))
+			dir = substring (dir,0,len-1);
 		    UI::ChangeWidget (`id (`mpent), `Value, dir);
 		}
 
