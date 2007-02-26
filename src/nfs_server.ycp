@@ -191,7 +191,7 @@ contains this directory."));
 	host	= use_star_for_anonymous? "*":"";
     string opts	= options["options"]:"";
     if (opts == "")
-	opts	= "ro,root_squash,sync";
+	opts	= default_options;
     list default_allowed = [ sformat ("%1(%2)", host, opts) ];
     exports = add (exports, $[
 	"mountpoint" : mountpoint,

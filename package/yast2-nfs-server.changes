@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 26 09:49:16 CET 2007 - mvidner@suse.cz
+
+- Added no_subtree_check to the default options to reflect a change in
+  nfs-utils-1.1.0 (#233709).
+
+-------------------------------------------------------------------
 Mon Nov 20 14:51:58 CET 2006 - mvidner@suse.cz
 
 - Have all yast packages with 2.14.x in OS-10.2.
