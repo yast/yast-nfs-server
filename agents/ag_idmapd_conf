@@ -1,0 +1,164 @@
+#!/usr/bin/perl -w
+#
+# $Id: $
+#
+# Agent for modifying /etc/idmapd.conf parameters.
+# 
+# using limal-nfs-server swig interface, see:
+# http://svn.suse.de/svn/limal/limal-head/limal-nfs-server/
+#
+
+use strict;
+use ycp;
+use Errno qw(ENOENT);
+use LIMAL::NfsServer;
+use LIMAL;
+
+my $filename="";
+my $conf = new LIMAL::NfsServer::KNfsIdmapdConf();
+my @idmapdentry = ();
+my $entryName="";
+
+# read the conf file
+
+sub parse_file()
+{
+	eval {
+		$conf->load($filename);
+	};
+	if($@)
+	{
+		return $@;
+	}
+	return undef;
+}
+
+
+# verify and tell if there are errors in the conf file
+sub checked_write_file ()
+{
+	eval
+	{
+		my $res = $conf->verifyConf();
+		my @msg = "";
+
+		if ($res->size() > 0)
+		{
+			y2error("Check failed !!");
+			for(my $i = 0; $i < $res->size(); $i++)
+			{
+				push(@msg, $res->getitem($i));
+				y2error($res->getitem($i));
+			}
+			die "Error in Idmapd Entries ".join(": ",@msg. "\n");
+		}
+	};
+	return 0 if ($@);
+
+	eval
+	{
+		$conf->save($filename,"");
+	};
+	return 0 if ($@);
+
+	return 1;
+	
+}
+
+
+sub set_entry ()
+{
+	eval
+	{
+		$conf->setEntry($idmapdentry[0],$idmapdentry[1]);
+		if ($@)
+		{
+			y2error("Unable to set entry!");
+		}
+	};
+	return 0 if ($@);
+
+	return 1;
+}
+
+
+sub get_value ()
+{
+	my $value = "";
+	eval
+	{
+		$value = $conf->getValueFor($entryName);
+	};
+	return undef if ($@);
+
+	return $value;
+}
+
+
+#
+# MAIN program
+#
+
+$filename="/etc/idmapd.conf";
+
+while ( <STDIN> )
+{
+    my ($command, $path, $argument) = ycp::ParseCommand ($_);
+
+    if ($command eq "Write")
+    {
+	parse_file();
+	my $result = "true";
+	if ($path eq "." && ref ($argument) eq "ARRAY")
+	{
+	    @idmapdentry = @{$argument};
+	    $result =  set_entry() ? "true" : "false";
+	    if( $@)
+	    {
+		y2error ("$@");
+	    }
+
+	    $result = checked_write_file()? "true":"false";
+	}
+	else
+	{
+	    y2error ("Wrong path $path or argument: ", ref ($argument));
+	    $result = "false";
+	}
+
+	ycp::Return ($result);
+    }
+    elsif ($command eq "Read")
+    {
+	parse_file();
+	my $value = "";
+	if ($path eq ".")
+	{
+		$entryName = $argument;	
+		$value = get_value();
+	}
+	if ($@)
+	{
+		y2error ("$@");
+	}
+	else
+	{
+		y2error ("Wrong path $path");
+	}
+	ycp::Return ($value);
+
+    }
+
+    elsif ($command eq "result")
+    {
+	exit;
+    }
+
+    # Unknown command
+    else
+    {
+	y2error ("Unknown instruction $command or argument: ", ref ($argument));
+	ycp::Return (undef);
+    }
+
+}

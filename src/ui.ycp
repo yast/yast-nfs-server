@@ -79,30 +79,37 @@
 	any ret = nil;
 	do {
 	    ret = UI::UserInput();
-
 	    mountpoint = (string) UI::QueryWidget(`id(`mpent), `Value);
+
 	    if (ret == `ok)
 	    {
-		list allowed = FindAllowed(exports, mountpoint);
-		if (allowed != nil) {
-		    // error popup message
-		    Popup::Message(_("The exports table already
-contains this directory."));
+		if (mountpoint == nil || mountpoint == "")
+		{
+		    Popup::Message(_("Please enter a non-empty export path. Eg: /exports"));
 		    ret = nil;
 		}
-		else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
+		else
 		{
-		    Popup::Message(sformat (
-// message popup; %1, %2 are package names
+		    list allowed = FindAllowed(exports, mountpoint);
+		    if (allowed != nil)
+		    {
+			// error popup message
+			Popup::Message(_("The exports table already contains this directory."));
+			ret = nil;
+		    }
+		    else if (!spaces_allowed && findfirstof (mountpoint, " \t") != nil)
+		    {
+			Popup::Message(sformat (
+			// message popup; %1, %2 are package names
 _("The user mode NFS server (%1) cannot export directories
 with spaces in their names.
 Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
-		    ret = nil;
-		}
-		else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config ()) {
+			ret = nil;
+		    }
+		    else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config ()) {
 		    // the dir does not exist
-		    ret = Popup::YesNo(_("The directory does not exist.
-Create it?")) ? `ok : nil;
+			ret = Popup::YesNo(_("The directory does not exist. Create it?")) ? `ok : nil;
+		    }
 		}
 	    }
 	    else if (ret == `browse)
@@ -118,6 +125,10 @@ Create it?")) ? `ok : nil;
 
 		if (size (dir) > 0)
 		{
+		    integer len = size (dir);
+		    // remove the trailing "/"
+		    if (dir != "/" && (substring (dir,len-1,1) == "/"))
+			dir = substring (dir,0,len-1);
 		    UI::ChangeWidget (`id (`mpent), `Value, dir);
 		}
 
@@ -142,25 +153,21 @@ Create it?")) ? `ok : nil;
     boolean use_star_for_anonymous = false;
 
     /**
-     * nfs-utils-1.0.1 gives a warning
-     * if neither of sync, async is specified.
-     *
-     * no_subtree_check:
-     *  http://nfs.sourceforge.net/#faq_c7
-     *  nfs-utils-1.1.0, will switch the default from subtree_check
-     *  to no_subtree_check (#233709)
-     */
-    string default_options = "ro,root_squash,sync,no_subtree_check";
-
-    /**
      * Ask user for an entry for the allowed hosts list.
+     * @param exports   the current UI version of the exports list
+     * @param expath	the exported filesystem for which this is done
      * @param hosts	hosts default value
      * @param opts	options default value
      * @param allowed	current list, to check for duplicates
      * @return		[newhosts, newopts] or nil if cancelled. Options without parentheses.
      */
-    define list<string> GetAllowedHosts(string hosts, string opts, list<string> allowed) ``{
+    define list<string> GetAllowedHosts(list<map> exports, string expath ,string hosts, string opts, 
+					list<string> allowed, boolean fromedit) ``{
 	Wizard::SetScreenShotName ("nfs-server-2b-hosts");
+	string error = nil;
+	map event = nil;
+	boolean hostchanged = false;
+	boolean optchanged = false;
 
 	if (hosts == nil)   hosts = "";
 	if (opts == nil)    opts = "";
@@ -178,9 +185,9 @@ Create it?")) ? `ok : nil;
 				   // make at least the default options fit
 				   `HSpacing (30),
 				   // text entry label
-				   `TextEntry(`id(`hostsent), _("&Host Wild Card"), hosts),
+				   `TextEntry(`id(`hostsent),`opt(`notify), _("&Host Wild Card"), hosts),
 				   // text entry label
-				   `TextEntry(`id(`optsent), _("O&ptions"), opts),
+				   `TextEntry(`id(`optsent),`opt(`notify), _("O&ptions"),opts),
 				   `VSpacing(0.2),
 				   // ok pushbutton: confirm the dialog
 				   `HBox(`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
@@ -192,7 +199,17 @@ Create it?")) ? `ok : nil;
 	UI::SetFocus (`id (`hostsent));
 	any ret = nil;
 	do {
-	    ret = UI::UserInput();
+	    event = UI::WaitForEvent();
+	    ret = event["ID"]:nil;
+
+	    if (ret == `hostsent)
+	    {
+		hosts = (string) UI::QueryWidget(`id(`hostsent), `Value);
+		UI::ChangeWidget(`id(`hostsent), `Value, hosts);
+		if (!hostchanged)
+		    hostchanged = true;
+		continue;
+	    }
 
 	    hosts = (string) UI::QueryWidget(`id(`hostsent), `Value);
 	    if (use_star_for_anonymous && hosts == "")
@@ -205,12 +222,46 @@ Create it?")) ? `ok : nil;
 		hosts = "";
 		UI::ChangeWidget (`id(`hostsent), `Value, hosts);
 	    }
-	    opts = (string) UI::QueryWidget(`id(`optsent), `Value);
-	    opts = deletechars (opts, " ()");
-	    UI::ChangeWidget (`id(`optsent), `Value, opts);
+
+	    if (ret == `optsent)
+	    {
+		// check to see if user has changed options entry in the dialogue
+		// thrown due to a "Add Hosts" (as opposed to editing existing ones).
+		// If yes, suggest the user with a suitable default option set.
+		if (hostchanged && !fromedit)
+		{
+		    if (!optchanged)
+		    {
+			hosts = (string) UI::QueryWidget (`id(`hostsent),`Value);
+			opts = GetDefaultOpts(NfsServer::enable_nfsv4, exports,hosts);
+			UI::ChangeWidget (`id(`optsent),`Value,opts);
+			optchanged = true;
+		    }
+		}
+	    }
+
 	    if (ret == `ok &&
 		(!CheckNoSpaces(hosts) || !CheckExportOptions(opts)))
 		ret = nil;
+	    if (ret == `ok && !NfsServer::enable_nfsv4)
+	    {
+		if (issubstring (opts,"fsid=0")) {
+		    Popup::Message(_("'fsid=0'is not a valid option unless 
+NFSv4 is enabled (previous page)"));
+		    ret = nil;
+		}
+	    }
+
+	    if (ret == `ok && NfsServer::enable_nfsv4)
+	    {
+		error = CheckUniqueRootForClient (exports,expath,hosts,opts);
+		if (error != nil)
+		{
+		    Popup::Message(error);
+		    ret = nil;
+		}
+	    }
+
 	    if (ret == `ok && contains(allowed_names, hosts)) {
 		// error popup message
 		Popup::Message(_("Options for this wild card
@@ -219,11 +270,22 @@ are already set."));
 	    }
 	} while (ret != `ok && ret != `cancel);
 
+	opts = (string) UI::QueryWidget (`id(`optsent),`Value);
 	UI::CloseDialog();
+
+	if (opts == "")
+	{
+	    opts = GetDefaultOpts(NfsServer::enable_nfsv4, exports,hosts);
+	}
+
+	opts = deletechars (opts, " ()");
+
 	Wizard::RestoreScreenShotName ();
 
 	if (ret == `ok)
+	{
 	    return [ hosts, opts ];
+	}
 	return nil;
     }
 
@@ -236,6 +298,15 @@ are already set."));
 	Wizard::SetScreenShotName ("nfs-server-1-start");
 
 	boolean start_nfs_server = NfsServer::start;
+	string domain = (string) SCR::Read(.etc.idmapd_conf,"Domain");
+	if (domain == nil)
+	{
+		Popup::Message(_("Unable to read /etc/idmapd.conf file. Defaulting the domain to 'localdomain'"));
+		domain = "localdomain";
+	}
+
+	boolean enable_nfsv4 = NfsServer::enable_nfsv4;
+	boolean nfs_security = NfsServer::nfs_security;
 
 	boolean changed = false;
 
@@ -258,6 +329,15 @@ a configuration dialog in which to specify the directories to export.</P>");
 
 	help_text = help_text + fw_cwm_widget["help"]:"";
 
+	help_text = help_text +
+_("<P>If the server needs to handle NFSv4 clients, enable the option <B>Enable NFSv4</B>,
+and fillin the NFSv4 domain name in the text entry, for id mapping daemon to use. Please leave
+it as localdomain or refer to man page for idmapd and idmapd.conf if you are not sure.</P>");
+
+	help_text = help_text +
+_("<P>If the server and client must authenticate using GSS library, please enable the <B>Enable GSS Security</B> 
+checkbox. For being able to use GSS API, currently you need to have kerberos and gssapi (nfs-utils > 1.0.7) on your system</P>");
+
 	/* The end of the definitions */
 
 	term nfs_contents =
@@ -268,7 +348,7 @@ a configuration dialog in which to specify the directories to export.</P>");
 				// radio button label
 					       `VBox(`Left(`RadioButton(`id(`servyes), `opt (`notify), _("&Start"), start_nfs_server)),
 				//radio button label
-						     `Left(`RadioButton(`id(`servno), `opt (`notify), _("&Do Not Start"), !start_nfs_server)))),
+						     `Left(`RadioButton(`id(`servno), `opt (`notify), _("Do &Not Start"), !start_nfs_server)))),
 			     `VSpacing(0.2)));
 	term fw_contents =
 	    // frame label
@@ -277,10 +357,33 @@ a configuration dialog in which to specify the directories to export.</P>");
 			  fw_cwm_widget["custom_widget"]:`Empty (),
 			  `VSpacing(0.2)));
 
-	term contents = `HVSquash (`VBox (
+	term nfsv4_contents =
+	    `Frame (_("Enable NFSv4"),
+		    `VBox(
+			 `VSpacing(0.2),
+			 `Left(`CheckBox(`id(`enable_nfsv4),`opt(`notify),_("Enable NFS&v4"), enable_nfsv4)),
+			 `VSpacing(0.2),
+			  `TextEntry (`id(`domain),_("Enter NFSv4 do&main name:"), domain),
+			 `VSpacing(0.2)
+			)
+		);
+
+
+	term sec_contents =
+			 `Left(`CheckBox(`id(`nfs_security),`opt(`notify),_("Enable &GSS Security"),nfs_security));
+
+
+	term contents = `HVSquash (
+				`VBox (
 				       nfs_contents,
 				       `VSpacing (1),
-				       fw_contents));
+				        fw_contents,
+				       `VSpacing (1),
+					nfsv4_contents,
+				       `VSpacing (1),
+					sec_contents
+				)
+			);
 
 	// dialog title
 	Wizard::SetContents(_("NFS Server Configuration"),
@@ -288,6 +391,15 @@ a configuration dialog in which to specify the directories to export.</P>");
 
 	// initialize the widget (set the current value)
 	CWMFirewallInterfaces::OpenFirewallInit (fw_cwm_widget, "");
+
+	if (enable_nfsv4)
+	{
+		UI::ChangeWidget(`id(`domain),`Enabled, true);
+	}
+	else
+	{
+		UI::ChangeWidget(`id(`domain),`Enabled, false);
+	}
 
 	map event = nil;
 	any ret = nil;
@@ -304,8 +416,27 @@ a configuration dialog in which to specify the directories to export.</P>");
 		Wizard::SetFocusToNextButton();
 	    }
 
-	    event = UI::WaitForEvent ();	   
+	    event = UI::WaitForEvent ();
 	    ret = event["ID"]:nil;
+	    if (ret == `enable_nfsv4)
+	    {
+		enable_nfsv4 = (UI::QueryWidget(`id(`enable_nfsv4),`Value)==true);
+		NfsServer::enable_nfsv4 = enable_nfsv4;
+		if (enable_nfsv4)
+		{
+			UI::ChangeWidget(`id(`domain),`Enabled, true);
+		}
+		else
+		{
+			UI::ChangeWidget(`id(`domain),`Enabled, false);
+		}
+	    }
+
+	    if (ret == `nfs_security)
+	    {
+		nfs_security = (UI::QueryWidget(`id(`nfs_security),`Value)==true);
+		NfsServer::nfs_security = nfs_security;
+	    }
 	    if (ret == `cancel)
 	    {
 		ret = `abort;
@@ -328,7 +459,7 @@ a configuration dialog in which to specify the directories to export.</P>");
 	    // grab current settings, store them to SuSEFirewall::
 	    CWMFirewallInterfaces::OpenFirewallStore (fw_cwm_widget, "", event);
 	    NfsServer::start = start_nfs_server;
-
+	    NfsServer::domain = (string) UI::QueryWidget(`id(`domain),`Value);
 	    if (!start_nfs_server)
 	    {
 		return `finish;
@@ -346,13 +477,13 @@ a configuration dialog in which to specify the directories to export.</P>");
     define symbol ExportsDialog () ``{
 	Wizard::SetScreenShotName ("nfs-server-2-exports");
 
-	// Help, part 1 of 4
+	// Help, part 1 of 5
 	string help_text = _("<P>The upper box contains all the directories to export.
 If a directory is selected, the lower box shows the hosts allowed to
 mount this directory.</P>
 ");
 
-	// Help, part 2 of 4
+	// Help, part 2 of 5
 	help_text = help_text + _("<P><b>Host Wild Card</b> sets which hosts can access the selected directory.
 It can be a single host, groups, wild cards, or
 IP networks.</P>
@@ -361,45 +492,58 @@ IP networks.</P>
 	// #91175
 	if (use_star_for_anonymous)
 	{
-	    // Help, part 3 of 4, variant for kernel space server
+	    // Help, part 3 of 5, variant for kernel space server
 	    help_text = help_text + _("<p>Enter an asterisk (<tt>*</tt>) to specify all hosts.</p>");
 	}
 	else
 	{
-	    // Help, part 3 of 4, variant for user space server
+	    // Help, part 3 of 5, variant for user space server
 	    help_text = help_text + _("<p>Leave the field empty to specify all hosts.</p>");
 	}
 
-	// Help, part 4 of 4
+	if (NfsServer::enable_nfsv4)
+	{
+	    // Help, part 4 of 5, caution about fsid=0 in case NFSv4 is enabled.
+	    help_text = help_text + _("<p>The NFSv4 option is enabled in the previous page. Make sure that only one exported filesystem is marked with fsid=0 option for a particular client.</p>");
+
+	    help_text = help_text + _("<p>In case of multiple exports to a NFSv4 client, there is a need to bind the exported paths (not with fsid=0) to the one with fsid=0. To do this, simply add another export option, bind=/target/path where /target/path amounts to some directory existing below the fsid=0 - exported tree.</p>");
+	}
+
+	// Help, part 5 of 5
 	help_text = help_text + _("<P>Refer to <tt>man exports</tt> for more information.</P>
 ");
 
 	list<map<string,any> > exports = NfsServer::exports;
 
-	term contents =
-	    `VBox(
-		`ReplacePoint(`id(`exportsrep), ExportsSelBox(exports)),
-		// push button label
-		`HBox(`PushButton(`id(`mpnewbut), `opt (`key_F3), _("Add &Directory")),
+	term contents =  `VBox();
+
+	contents = add (contents,`ReplacePoint(`id(`exportsrep), ExportsSelBox(exports)));
+
+	// push button label
+	contents = add (contents, `HBox(`PushButton(`id(`mpnewbut), `opt (`key_F3), _("Add &Directory")),
 		      // push button label
 		      `PushButton(`id(`mpeditbut), `opt (`key_F4), _("&Edit")),
 		      // push button label
-		      `PushButton(`id(`mpdelbut), `opt (`key_F5), _("De&lete"))),
+		      `PushButton(`id(`mpdelbut), `opt (`key_F5), _("De&lete")))
+			);
 		// push button label
-		`VBox(`Left(`Label(`id(`allowedlab), `opt(`hstretch), "")),
+	contents = add (contents, `VBox(`Left(`Label(`id(`allowedlab), `opt(`hstretch), "")),
 		      `Table(`id(`allowedtab), `opt(`notify, `immediate),
 			     // table header
 			     `header(_("Host Wild Card")+"  ",
 			     // table header
 				     _("Options")+"  "),
-			     [])),
+			     []))
+			);
 		      // push button label
-		`HBox(`PushButton(`id(`alwnewbut), _("Add &Host")),
+
+	contents = add (contents, `HBox(`PushButton(`id(`alwnewbut), _("Add &Host")),
 		      // push button label
 		      `PushButton(`id(`alweditbut), _("Ed&it")),
 		      // push button label
 		      `PushButton(`id(`alwdelbut), _("Dele&te")))
-		);
+			);
+
 
 	Wizard::SetContentsButtons (
 	    // dialog title
@@ -407,16 +551,27 @@ IP networks.</P>
 	    contents, help_text,
 	    Label::BackButton (), Label::FinishButton());
 
+	map event = nil;
 	any ret = nil;
 	any simulated = nil; // simulated user input
 	string oldmp = nil;
 	// preselect an item - convenience, button enabling
 	if (size (exports) > 0)
 	{
-	    UI::ChangeWidget (`id (`exportsbox), `CurrentItem, exports[0,"mountpoint"]:"");
+	    if (NfsServer::enable_nfsv4){
+		UI::ChangeWidget (`id (`exptable), `CurrentItem, exports[0,"mountpoint"]:"");
+	    } else
+		UI::ChangeWidget (`id (`exportsbox), `CurrentItem, exports[0,"mountpoint"]:"");
 	}
 	do {
-	    string mountpoint = (string) UI::QueryWidget (`id (`exportsbox), `CurrentItem);
+
+	    string mountpoint = "";
+	    if (NfsServer::enable_nfsv4) {
+		mountpoint = (string) UI::QueryWidget (`id (`exptable), `CurrentItem);
+	    }
+	    else
+		mountpoint = (string) UI::QueryWidget (`id (`exportsbox), `CurrentItem);
+
 	    boolean anymp = mountpoint != nil;
 
 	    UI::ChangeWidget (`id (`mpeditbut), `Enabled, anymp);
@@ -445,7 +600,8 @@ IP networks.</P>
 	    // used for `alweditbut afted `mpnewbut
 	    if (simulated == nil)
 	    {
-		ret = UI::UserInput();
+		event = UI::WaitForEvent();
+		ret =  event["ID"]:nil;
 		if (ret == `cancel)
 		{
 		    ret = `abort;
@@ -466,18 +622,28 @@ IP networks.</P>
 		    list default_allowed = [
 			sformat ("%1(%2)",
 				 use_star_for_anonymous? "*":"",
-				 default_options)
+				 GetDefaultOpts(NfsServer::enable_nfsv4, exports,"*")
+				)
 			];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
 					    "allowed"    : default_allowed ]);
 		    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
-		    UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
+		    if (NfsServer::enable_nfsv4)
+			UI::ChangeWidget(`id(`exptable), `CurrentItem, mountpoint);
+		    else
+			UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
 		    simulated = `alweditbut;
 		}
 	    }
 	    else if (ret == `mpeditbut)
 	    {
-		string mp = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mp = nil;
+
+		if (NfsServer::enable_nfsv4)
+		    mp = (string) UI::QueryWidget(`id(`exptable), `CurrentItem);
+		else
+		    mp = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+
 		if (mp != nil) {
 		    string mountpoint = GetDirectory(mp,
 						     (list<map>) filter(map ent, exports, ``{
@@ -491,44 +657,77 @@ IP networks.</P>
 			    return add(ent, "mountpoint", mountpoint);
 			    return ent;
 			});
+
 			UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
-			UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
+
+			if (NfsServer::enable_nfsv4)
+			    UI::ChangeWidget(`id(`exptable), `CurrentItem, mountpoint);
+			else
+			    UI::ChangeWidget(`id(`exportsbox), `CurrentItem, mountpoint);
 		    }
 		}
 	    }
 	    else if (ret == `mpdelbut)
 	    {
-		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
-		if (mountpoint != nil)
+		string mountpoint = nil;
+
+		if (NfsServer::enable_nfsv4)
+		    mountpoint = (string) UI::QueryWidget(`id(`exptable), `CurrentItem);
+		else
+		    mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+
+		if (mountpoint != nil) {
 		    exports = filter(map<string,any> entry, exports,
 				     ``(entry["mountpoint"]:"" != mountpoint));
+		}
 
 		UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
 		if (size (exports) > 0)
 		{
-		    UI::ChangeWidget (`id (`exportsbox), `CurrentItem,
+			if (NfsServer::enable_nfsv4)
+			    UI::ChangeWidget(`id(`exptable), `CurrentItem,
+				      exports[0,"mountpoint"]:"");
+			else
+			    UI::ChangeWidget (`id (`exportsbox), `CurrentItem,
 				      exports[0,"mountpoint"]:"");
 		}
 	    }
 	    else if (ret == `alwnewbut)
 	    {
-		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = nil;
+
+		if (NfsServer::enable_nfsv4)
+		    mountpoint = (string) UI::QueryWidget(`id(`exptable), `CurrentItem);
+		else
+		    mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+
 		if (mountpoint != nil) {
 		    list<string> allowed = FindAllowed(exports, mountpoint);
 
-		    list<string> hostopt = GetAllowedHosts(nil, nil, allowed);
+		    list<string> hostopt = GetAllowedHosts(exports, mountpoint, nil, nil, allowed, false);
 		    if (hostopt != nil) {
 			allowed = add(allowed, hostopt[0]:"" + "(" + hostopt[1]:"" + ")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
 					 AllowedTableItems(allowed));
+			if (NfsServer::enable_nfsv4)
+			{
+			    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
+			    UI::ChangeWidget(`id(`exptable), `CurrentItem, mountpoint);
+			}
 		    }
 		}
 	    }
 	    else if (ret == `alweditbut)
 	    {
-		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = nil;
+
+		if (NfsServer::enable_nfsv4)
+		    mountpoint = (string) UI::QueryWidget(`id(`exptable), `CurrentItem);
+		else
+		    mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+
 		if (mountpoint != nil) {
 		    list<string> allowed = FindAllowed(exports, mountpoint);
 		    string hosts = "";
@@ -542,19 +741,30 @@ IP networks.</P>
 			}
 			allowed = remove (allowed, alw_no);
 		    }
-		    list<string> hostopt = GetAllowedHosts(hosts, opts, allowed);
+		    list<string> hostopt = GetAllowedHosts(exports, mountpoint, hosts, opts, allowed, true);
 		    if (hostopt != nil) {
 			allowed = add(allowed, hostopt[0]:"" + "(" + hostopt[1]:"" + ")");
 			exports = ReplaceInExports(exports, mountpoint, allowed);
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
 					 AllowedTableItems(allowed));
+			if (NfsServer::enable_nfsv4)
+			{
+			    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
+			    UI::ChangeWidget(`id(`exptable), `CurrentItem, mountpoint);
+			}
 		    }
 		}
 	    }
 	    else if (ret == `alwdelbut)
 	    {
-		string mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+		string mountpoint = nil;
+
+		if (NfsServer::enable_nfsv4)
+		    mountpoint = (string) UI::QueryWidget(`id(`exptable), `CurrentItem);
+		else
+		    mountpoint = (string) UI::QueryWidget(`id(`exportsbox), `CurrentItem);
+
 		if (mountpoint != nil) {
 		    list<string> allowed = FindAllowed(exports, mountpoint);
 		    integer alwno = (integer) UI::QueryWidget(`id(`allowedtab), `CurrentItem);
@@ -568,6 +778,11 @@ IP networks.</P>
 
 			UI::ChangeWidget(`id(`allowedtab), `Items,
 					 AllowedTableItems(allowed));
+			if (NfsServer::enable_nfsv4)
+			{
+			    UI::ReplaceWidget(`id(`exportsrep), ExportsSelBox(exports));
+			    UI::ChangeWidget(`id(`exptable), `CurrentItem, mountpoint);
+			}
 		    }
 		}
 	    }
