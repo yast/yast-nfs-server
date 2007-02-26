@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Feb 26 16:52:08 CET 2007 - pchakravarthi@novell.com
+
+- Fixed #242545: settings were not visible.
+- Do not ignore changes when an item is deleted and readded (#243466).
+- Do not continue with no directory entered (#243034).
+- Fixed "Unable to start idmapd please check the domain settings"
+  (/etc/sysconfig/nfs was not flushed, #242565).
+- 2.15.1
+
+-------------------------------------------------------------------
 Mon Feb 26 15:17:11 CET 2007 - pchakravarthi@novell.com
 
 - Added a perl module ag_idmapd_conf for configuring entries in 
