@@ -142,6 +142,17 @@ Create it?")) ? `ok : nil;
     boolean use_star_for_anonymous = false;
 
     /**
+     * nfs-utils-1.0.1 gives a warning
+     * if neither of sync, async is specified.
+     *
+     * no_subtree_check:
+     *  http://nfs.sourceforge.net/#faq_c7
+     *  nfs-utils-1.1.0, will switch the default from subtree_check
+     *  to no_subtree_check (#233709)
+     */
+    string default_options = "ro,root_squash,sync,no_subtree_check";
+
+    /**
      * Ask user for an entry for the allowed hosts list.
      * @param hosts	hosts default value
      * @param opts	options default value
@@ -455,10 +466,7 @@ IP networks.</P>
 		    list default_allowed = [
 			sformat ("%1(%2)",
 				 use_star_for_anonymous? "*":"",
-				 // these are the default anyway
-				 // Exportfs of nfs-utils-1.0.1 gives a warning
-				 // if neither of sync, async is specified.
-				 "ro,root_squash,sync")
+				 default_options)
 			];
 		    exports = add(exports, $[ "mountpoint" : mountpoint,
 					    "allowed"    : default_allowed ]);
