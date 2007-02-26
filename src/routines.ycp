@@ -21,6 +21,7 @@
 
 {
     textdomain "nfs_server";
+    import "NfsServer";
     import "Popup";
     import "Report";
 
@@ -75,6 +76,195 @@
 	return (list<string>) (flt[0, "allowed"]:nil);
     }
 
+
+    /**
+     * Find out whether client representations are related
+     * @param clntexpr1	first client representation to which check is being made
+     * @param clntexpr2	another client representatio against which the check is done
+     * @return		1, if clntexpr1 is contained in clntexpr2 and -1, if otherway round,
+     *                  and 0 if they are independent
+     * @example		1.2.3.4 (is contained in) 1.*.3.4,
+			*.abc.com (contains)xyz.abc.com and xyz.* and abc.com are independent
+     *
+     * FIXME This is not too intelligent. Ideally a while loop with matching '*' is required.
+     * 1) Doesn't look default name domain.
+     * 2) Doesn't know how to deal with *.abc.* ; only single '*' please :(
+     */
+    define integer ClientRelated (string clntexpr1, string clntexpr2) ``{
+
+	integer pos = findfirstof (clntexpr2,"*");
+	integer len = size (clntexpr2);
+
+	clntexpr2 = tolower (clntexpr2);
+	clntexpr1 = tolower (clntexpr1);
+
+	if (pos == nil)
+	{
+	    pos = findfirstof (clntexpr1,"*");
+	    if (pos == nil)
+		return 0;	// FIXME We must continue investigating with name/ip resolution
+				// Both expressions not having *, doesn't mean they are not
+				// related.
+	    return -1*ClientRelated (clntexpr2, clntexpr1);
+	}
+
+	if (clntexpr2 == "*")
+	    return 1;
+	if (clntexpr1 == clntexpr2)
+	    return 1;
+
+	if (pos == len - 1)		// expressions of type abc.xyz.*
+	{
+	    string check = substring (clntexpr2, 0, pos);
+	    integer matchpos = findfirstof (clntexpr1, check);
+	    if (matchpos == 0)
+		return 1;
+
+	} else if (pos == 0) {		// expressions of type *.abc.xyz
+
+	    string check = substring (clntexpr2, 1);
+	    integer matchpos = findfirstof (clntexpr1, check);
+	    string right = substring (clntexpr1,matchpos);
+	    if (check == right)
+		return 1;
+
+	} else {
+					// expressions of type abc.*.xyz
+	    string checkleft = substring (clntexpr2, 0, pos);
+	    integer matchpos = findfirstof (clntexpr1, checkleft);
+	    if (matchpos == 0)
+	    {
+		string checkright = substring (clntexpr2, pos+1);
+		integer matchpos = findfirstof (clntexpr1, checkright);
+		string right = substring (clntexpr1, matchpos);
+
+		if (checkright == right)
+		    return 1;
+	    }
+	}
+
+	return 0;
+    }
+
+
+    /**
+     * nfs-utils-1.0.1 gives a warning
+     * if neither of sync, async is specified.
+     *
+     * no_subtree_check:
+     *  http://nfs.sourceforge.net/#faq_c7
+     *  nfs-utils-1.1.0, will switch the default from subtree_check
+     *  to no_subtree_check (#233709)
+     */
+    const string default_options = "ro,root_squash,sync,no_subtree_check";
+
+    /**
+     * Give out appropriate default options
+     * @param nfsv4	Is nfsv4 enabled ?
+     * @param exports	list of exports
+     * @param client	some string representation of the client (*, *.domain, ip address)
+     * @return		a comma separated default options string, that is most appropriate
+     */
+    define string GetDefaultOpts (boolean nfsv4, list<map> exports, string client) ``{
+
+	boolean withfsid = false;
+
+	if (!nfsv4)
+	    return default_options;
+
+	foreach (map<string, any> entry, (list<map<string,any> >) exports, {
+	    foreach (string hostops, entry["allowed"]:["()"], {
+		integer  pos = findfirstof(hostops, "(");
+		string opts = "";
+		string clientexpr = "";
+		if (pos != nil) {
+		    opts = substring(hostops, pos+1);
+		    clientexpr = substring(hostops, 0, pos);
+
+		    pos = findfirstof(opts, ")");
+		    if (pos != nil)
+			opts = substring(opts, 0, pos);
+		}
+		if (ClientRelated (client, clientexpr)!=0)
+		{
+		    if (issubstring (opts, "fsid=0")) {
+			withfsid = true;
+			break;
+		    }
+		}
+	    });
+	    if (withfsid)
+		break;
+	});
+
+	if (withfsid)
+	    return default_options;
+	else
+	    return "fsid=0," + default_options;
+    }
+
+
+    /**
+     * Report the first error that is encountered while checking for Unique NFSv4
+     * psuedofilesystem root.
+     * @param exports	list of exports
+     * @param expath	the exported filesystem path
+     * @param client	string representing a client (*, *.domain, ip address etc)
+     * @param eopts	comma separated string of export options
+     * @return		the first error encountered or nil
+     */
+     define string CheckUniqueRootForClient (list<map> exports, string expath,
+						string client, string eopts) ``{
+	string exportpath = "";
+	string errorstring = nil;
+	integer clientrelation = 0;
+
+	if (!issubstring(eopts,"fsid=0"))	// Then no need to check for conflict.
+	    return nil;
+
+	foreach (map<string, any> entry, (list<map<string,any> >)exports, {
+	    exportpath = entry["mountpoint"]:"";
+	    foreach (string hostops, entry["allowed"]:["()"], {
+		string opts = "";
+		string clientexpr = "";
+		integer pos = findfirstof (hostops,"(");
+		if (pos != nil) {
+		    opts = substring(hostops, pos+1);
+		    clientexpr = substring(hostops, 0, pos);
+
+		    pos = findfirstof(opts, ")");
+		    if (pos != nil)
+			opts = substring(opts, 0, pos);
+		}
+		clientrelation = ClientRelated (client, clientexpr);
+		if (clientrelation != 0)
+		{
+		    if (issubstring (opts, "fsid=0")) {
+			if (exportpath != expath) {		// Aww ! Two different roots
+			    if (clientrelation == 1) {
+				    errorstring =
+					sformat(_("%3 and %4 are both exported with the option fsid=0
+for the same client '%1' (contained in '%2')"), client, clientexpr, expath, exportpath);
+			    } else {
+				    errorstring =
+					sformat(_("%3 and %4 are both exported with the option fsid=0
+for the same client '%1' (contained in '%2')"), clientexpr, client, expath, exportpath);
+			    }
+			    break;
+			}
+
+		    }
+		}
+	    });
+	    if (errorstring != nil)
+		break;
+	});
+
+	return errorstring;
+
+     }
+
+
     /**
      * @param exports	list of exports
      * @return		a ui table list of mountpoints, id'ed by themselves
@@ -86,14 +276,80 @@
 	});
     }
 
+
+    /**
+     * @param clients	list of "host(opts)" strings
+     * @return		a string that has comma-separated list of bind target paths.
+     */
+    define string getbindpaths (map entry) ``{
+
+	string exportpath = entry["mountpoint"]:"";
+	list<string> clients = entry["allowed"]:["()"];
+	string bindpaths = "";
+	list <string> paths = [];
+	foreach (string hostopts, clients, {
+	    integer pos = findfirstof(hostopts, "(");
+	    string opts = substring(hostopts, pos+1);
+	    string clientexpr = substring(hostopts, 0, pos);
+	    string bindpath = "";
+
+	    pos = findfirstof(opts, ")");
+	    if (pos != nil)
+		opts = substring(opts, 0, pos);
+	    if (opts == ""){
+		y2error ("Your /etc/exports file has errors. The export path %1 has no export options specified.", exportpath);
+	    }
+	    pos = search (opts,"bind=");
+	    if (pos != nil){
+		bindpath = substring (opts, pos+5);
+		pos = findfirstof (bindpath, ",");
+		if (pos != nil){
+		    bindpath = substring (bindpath, 0, pos);
+		}
+	    }
+	    if (bindpath != "")
+		paths = prepend (paths, bindpath);
+	});
+	if (size(paths) != 0)
+	    bindpaths = mergestring (paths, ",");
+
+
+	return bindpaths;
+    }
+
+
     /**
      * @param exports	list of exports
-     * @return		a SelectionBox for the mountpoints, `id(`exportsbox)
+     * @return		a ui table list of mountpoints and the corresponding
+     *			bindmount targets, if any.
+     */
+    define list<term> ExportsRows(list<map> exports) ``{
+	return maplist(map entry, exports, ``{
+	    string exportpath = entry["mountpoint"]:"";
+	    string bindpaths =  getbindpaths (entry);
+	    return `item(`id(exportpath), exportpath+" ", bindpaths);
+	});
+    }
+
+
+    /**
+     * @param exports	list of exports
+     * @return		a SelectionBox for the mountpoints, `id(`exportsbox) containing
+     *			list of exported directory paths.
+     *			If nfsv4 is enabled return a table of 2 colums, first being the
+     *			export path and the second one having bindmount targets as specified
+     *			by in the export entries in /etc/exports
      */
     define term ExportsSelBox(list<map> exports) ``{
-	return `SelectionBox(`id(`exportsbox), `opt(`notify),
-			     // selection box label
-			     _("Dire&ctories"), ExportsItems(exports));
+	if (NfsServer::enable_nfsv4) {
+	    return `Table(`id(`exptable), `opt(`notify,`immediate),
+			  `header("Directories","Bindmount Targets"),
+			  ExportsRows(exports));
+	} else {
+	    return `SelectionBox(`id(`exportsbox), `opt(`notify),
+				// selection box label
+				_("Dire&ctories"), ExportsItems(exports));
+	}
     }
 
     /**
@@ -116,6 +372,7 @@ must not contain spaces.
 	return false;
     }
 
+
     /**
      * Check for the validity of export options:
      * [A-Za-z0-9=/.,_-]*
@@ -133,6 +390,7 @@ Only letters, digits, and the characters =/.,_- are allowed."));
 	}
 	return true;
     }
+
 
     /**
      * Check for the validity of export options: only those listed in
