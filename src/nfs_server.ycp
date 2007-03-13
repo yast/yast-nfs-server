@@ -231,6 +231,44 @@ define boolean NfsServerDeleteHandler (map options) {
     return deleted;
 }
 
+/**
+ * CLI action handler.
+ * @param options command options
+ * @return whether successful
+ */
+define boolean NfsServerSetOptionHandler (map options) {
+
+    string nfs_sec = options["security"]:"";
+    string v4domain = options["domain"]:"";
+    string enablev4 = options["enablev4"]:"";
+
+    if (nfs_sec == "yes")
+	NfsServer::nfs_security = true;
+    if (nfs_sec == "no")
+	NfsServer::nfs_security = false;
+
+    if (enablev4 == "yes")
+	NfsServer::enable_nfsv4 = true;
+    if (enablev4 == "no")
+	NfsServer::enable_nfsv4 = false;
+
+    if (v4domain != "") {
+	if (!NfsServer::enable_nfsv4) {
+	    CommandLine::Print(_("Domain can not be set without enabling NFSv4. Please use 'set enablev4' command."));
+	    return false;
+	}
+	NfsServer::domain = v4domain;
+    }
+
+    if (nfs_sec == "" && enablev4 == "" && v4domain == "") {
+	CommandLine::Print(_("Command set must be used as in 'set option=value'. Please use 'set help' to know the options."));
+	return false;
+    }
+
+    return true;
+}
+
+
 map cmdline_description = $[
     "id"		: "nfs-server",
     /* Command line help text for the nfs-server module */
@@ -246,49 +284,59 @@ map cmdline_description = $[
 	],
 	"start"		: $[
 	    "handler"	: NfsServerStartHandler,
-	    // command line action help
 	    "help"	: _("Start NFS server"),
 	],
 	"stop"		: $[
 	    "handler"	: NfsServerStopHandler,
-	    // command line action help
 	    "help"	: _("Stop NFS server"),
 	],
 	"add"		: $[
 	    "handler"	: NfsServerAddHandler,
-	    // command line action help
 	    "help"      : _("Add a directory to export"),
 	],
 	"delete"	: $[
 	    "handler"	: NfsServerDeleteHandler,
-	    // command line action help
 	    "help"      : _("Delete a directory from export"),
+	],
+	"set"		: $[
+	    "handler"	: NfsServerSetOptionHandler,
+	    "help"	: _("Set parameters - domain, security and enablev4"),
 	]
     ],
     "options"		: $[
 	"mountpoint"	: $[
 	    "type"	: "string",
-	    // command line option help
 	    "help"	: _("Directory to export"),
 	],
 	"hosts"		: $[
 	    "type"	: "string",
-	    // command line option help
 	    "help"	: _("Host wild card for setting the access to directory"),
 	],
 	"options"	: $[
 	    "type"	: "string",
 	    // command line option help (do not transl. 'man exports')
 	    "help"	: _("Export options (see 'man exports')"),
-
 	],
+	"domain"	: $[
+	    "type"	: "string",
+	    "help"	: _("Domain specification for NFSv4 Idmapping, such as 'localdomain' or 'abc.com' etc."),
+	],
+	"enablev4"	: $[
+	    "type"	: "string",
+	    "help"	: _("Yes/No option for enabling/disabling support for NFSv4"),
+	],
+	"security"	: $[
+	    "type"	: "string",
+	    "help"	: _("Yes/No option for enabling/disabling secure NFS"),
+	]
     ],
     "mappings"		: $[
 	"summary"	: [],
 	"start"		: [],
 	"stop"		: [],
 	"add"		: [ "mountpoint", "hosts", "options" ],
-	"delete"	: [ "mountpoint" ]
+	"delete"	: [ "mountpoint" ],
+	"set"		: [ "enablev4", "domain", "security"]
     ]
 ];
 
