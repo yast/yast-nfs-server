@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 13 13:19:22 CET 2007 - mvidner@suse.cz
+
+- Removed obsolete dependency on yast2-packager (#252979).
+- 2.15.2
+
+-------------------------------------------------------------------
 Mon Feb 26 16:52:08 CET 2007 - pchakravarthi@novell.com
 
 - Fixed #242545: settings were not visible.
