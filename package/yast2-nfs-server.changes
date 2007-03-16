@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Mar 14 12:02:13 IST 2007 - pchakravarthi@novell.com
+
+- Added CLI for setting parameters related to NFSv4 server.
+  (nfs_server.ycp)
+- Modified the testsuite out files to reflect the changes made to
+  NfsServer.ycp
+- 2.15.3
+
+-------------------------------------------------------------------
 Tue Mar 13 13:19:22 CET 2007 - mvidner@suse.cz
 
 - Removed obsolete dependency on yast2-packager (#252979).

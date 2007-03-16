@@ -68,13 +68,13 @@
     /**
      * Enable nfsv4
      */
-    global boolean enable_nfsv4 = (SCR::Read(.sysconfig.nfs.NFS4_SUPPORT)=="yes");
+    global boolean enable_nfsv4 = true;
 
 
     /**
      * GSS Security ?
      */
-    global boolean nfs_security = (SCR::Read(.sysconfig.nfs.NFS_SECURITY_GSS)=="yes");
+    global boolean nfs_security = false;
 
 
     /**
@@ -155,13 +155,21 @@
     }
 
     /**
-     * Reads NFS settings from the SCR (.etc.exports)
+     * Reads NFS settings from the SCR (.etc.exports),
+     * from SCR (.sysnconfig.nfs) and SCR (.etc.idmapd_conf),if necessary.
      * @return true on success
      */
     global define boolean Read () ``{
 	start = Service::Enabled("nfsserver");
 	exports = (list<map<string,any> >) SCR::Read (.etc.exports);
 	have_nfslock = (boolean) SCR::Read (.init.scripts.exists, "nfslock");
+	enable_nfsv4 = (SCR::Read(.sysconfig.nfs.NFS4_SUPPORT)=="yes");
+	nfs_security = (SCR::Read(.sysconfig.nfs.NFS_SECURITY_GSS)=="yes");
+
+	if (enable_nfsv4)
+	{
+	    domain = (string) SCR::Read(.etc.idmapd_conf,"Domain");
+	}
 
 	boolean progress_orig = Progress::set (false);
 	SuSEFirewall::Read ();
@@ -245,7 +253,6 @@ exported directories.\n"));
 	if(enable_nfsv4)
 	{
 		SCR::Write(.sysconfig.nfs.NFS4_SUPPORT,"yes");
-		SCR::Write(.sysconfig.nfs,nil);
 	}
 	else
 	{
@@ -260,6 +267,8 @@ exported directories.\n"));
 	{
 		SCR::Write(.sysconfig.nfs.NFS_SECURITY_GSS,"no");
 	}
+
+	SCR::Write(.sysconfig.nfs,nil);
 
 	if( !( SCR::Write(.etc.idmapd_conf,["Domain",(string)domain]) ) )
 	{
@@ -431,6 +440,20 @@ Your changes will be active after reboot.
 	{
 	    summary = Summary::AddLine (summary, Summary::NotConfigured ());
 	}
+	// add information reg NFSv4 support, domain and security
+	if (enable_nfsv4) {
+	    summary = Summary::AddLine (summary, "NFSv4 support is enabled.");
+	    summary = Summary::AddLine (summary,
+			sformat(_("And the NFSv4 domain for idmapping is %1."),domain));
+	}
+	else
+	    summary = Summary::AddLine (summary, "NFSv4 support is disabled.");
+
+	if (nfs_security)
+	    summary = Summary::AddLine (summary, "NFS Security using GSS is enabled.");
+	else
+	    summary = Summary::AddLine (summary, "NFS Security using GSS is disabled.");
+
 	return summary;
     }
 

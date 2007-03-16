@@ -1,5 +1,3 @@
-Read	.sysconfig.nfs.NFS4_SUPPORT nil
-Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Dump	
 Dump	Read  - services are running
 Dump	
@@ -7,6 +5,8 @@ Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
+Read	.sysconfig.nfs.NFS4_SUPPORT nil
+Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
@@ -24,6 +24,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
+Write	.sysconfig.nfs nil true
 Write	.etc.idmapd_conf ["Domain", ""] true
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
@@ -50,6 +51,8 @@ Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
+Read	.sysconfig.nfs.NFS4_SUPPORT nil
+Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true
 Dump	
 Dump	Write - services are running
@@ -63,6 +66,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
+Write	.sysconfig.nfs nil true
 Write	.etc.idmapd_conf ["Domain", ""] true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
@@ -106,6 +110,8 @@ Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
+Read	.sysconfig.nfs.NFS4_SUPPORT nil
+Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true
 Dump	
 Dump	Write - services will be stopped
@@ -119,6 +125,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
+Write	.sysconfig.nfs nil true
 Write	.etc.idmapd_conf ["Domain", ""] true
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
@@ -144,6 +151,8 @@ Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
+Read	.sysconfig.nfs.NFS4_SUPPORT nil
+Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true
 Dump	
 Dump	Write - services will be started
@@ -157,6 +166,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
+Write	.sysconfig.nfs nil true
 Write	.etc.idmapd_conf ["Domain", ""] true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
