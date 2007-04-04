@@ -63,7 +63,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
-Write	.etc.idmapd_conf ["Domain", ""] true
+Write	.sysconfig.nfs nil true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
@@ -119,7 +119,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
-Write	.etc.idmapd_conf ["Domain", ""] true
+Write	.sysconfig.nfs nil true
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
@@ -157,7 +157,7 @@ Execute	.target.mkdir "/pub" true
 Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]] true
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
-Write	.etc.idmapd_conf ["Domain", ""] true
+Write	.sysconfig.nfs nil true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
