@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr  4 18:00:43 CEST 2007 - mvidner@suse.cz
+
+- Do not pop up an error about idmapd during autoinstallation
+  (#260723).
+- 2.13.8
+
+-------------------------------------------------------------------
 Mon Feb 26 16:52:08 CET 2007 - pchakravarthi@novell.com
 
 - Fixed #242545: settings were not visible.

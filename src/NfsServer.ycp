@@ -25,7 +25,6 @@
     import "Summary";
     import "SuSEFirewall";
     import "Wizard";
-    import "Popup";
 
 
     /* default value of settings modified */
@@ -245,7 +244,10 @@ exported directories.\n"));
 	if(enable_nfsv4)
 	{
 		SCR::Write(.sysconfig.nfs.NFS4_SUPPORT,"yes");
-		SCR::Write(.sysconfig.nfs,nil);
+		if( !( SCR::Write(.etc.idmapd_conf,["Domain",(string)domain]) ) )
+		{
+		    Report::Error(_("Unable to write to idmapd.conf."));
+		}
 	}
 	else
 	{
@@ -260,11 +262,7 @@ exported directories.\n"));
 	{
 		SCR::Write(.sysconfig.nfs.NFS_SECURITY_GSS,"no");
 	}
-
-	if( !( SCR::Write(.etc.idmapd_conf,["Domain",(string)domain]) ) )
-	{
-		Popup::Message(_("Unable to write to idmapd.conf."));
-	}
+	SCR::Write(.sysconfig.nfs,nil);
 
 	Progress::NextStage ();
 
