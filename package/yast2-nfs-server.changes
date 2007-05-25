@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri May 25 13:30:04 CEST 2007 - jsrain@suse.cz
+
+- removed outdated translations from .desktop-files (#271209)
+
+-------------------------------------------------------------------
 Wed Mar 14 12:02:13 IST 2007 - pchakravarthi@novell.com
 
 - Added CLI for setting parameters related to NFSv4 server.
