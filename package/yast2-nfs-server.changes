@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jul 16 13:04:55 CEST 2007 - mvidner@suse.cz
+
+- Do not touch NFS4 during autoinstallation; really fixing "Unable to
+  write idmapd.conf" (#287338).
+- 2.13.9
+
+-------------------------------------------------------------------
 Wed Apr  4 18:00:43 CEST 2007 - mvidner@suse.cz
 
 - Do not pop up an error about idmapd during autoinstallation
