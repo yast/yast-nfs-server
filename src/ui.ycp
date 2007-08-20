@@ -103,7 +103,7 @@
 			// message popup; %1, %2 are package names
 _("The user mode NFS server (%1) cannot export directories
 with spaces in their names.
-Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-utils"));
+Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-kernel-server"));
 			ret = nil;
 		    }
 		    else if (SCR::Read (.target.size, mountpoint) < 0 && !Mode::config ()) {
@@ -335,6 +335,7 @@ and fillin the NFSv4 domain name in the text entry, for id mapping daemon to use
 it as localdomain or refer to man page for idmapd and idmapd.conf if you are not sure.</P>");
 
 	help_text = help_text +
+	    // FIXME: use %1 as nfs-utils.src.rpm produces nfs-kernel-server.rpm
 _("<P>If the server and client must authenticate using GSS library, please enable the <B>Enable GSS Security</B> 
 checkbox. For being able to use GSS API, currently you need to have kerberos and gssapi (nfs-utils > 1.0.7) on your system</P>");
 
