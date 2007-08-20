@@ -55,7 +55,7 @@
      * Required packages for this module to operate
      *
      */
-    global list<string> required_packages = ["nfs-utils"];
+    global list<string> required_packages = ["nfs-kernel-server"];
 
 
     /**
@@ -106,6 +106,7 @@
 
     /**
      * Do we have nfslock? (nfs-utils: yes, nfs-server: no)
+     * FIXME: check nfs-kernel-server
      */
     boolean have_nfslock = true;
 
@@ -356,6 +357,7 @@ exported directories.\n"));
 		{
 			if (! Service::Start("svcgssd"))
 			{
+			    // FIXME svcgssd is gone! (only nfsserver is left)
 				Report::Error(_("Unable to start svcgssd. Please ensure your kerberos and gssapi (nfs-utils) set up is fine."));
 				ok = false;
 			}

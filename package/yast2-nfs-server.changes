@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 20 14:17:18 CEST 2007 - mvidner@suse.cz
+
+- Require nfs-kernel-server.rpm because nfs-utils.rpm got split (#286300).
+- 2.15.4
+
+-------------------------------------------------------------------
 Fri May 25 13:30:04 CEST 2007 - jsrain@suse.cz
 
 - removed outdated translations from .desktop-files (#271209)

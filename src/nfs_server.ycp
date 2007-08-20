@@ -62,7 +62,7 @@ define any NfsServerSequence () {
 	    ],
 	];
 
-    // If nfs-utils nor nfs-server is not installed, install nfs-utils.
+    // If nfs-kernel-server nor nfs-server is not installed, install nfs-kernel-server.
     // TODO: require installation of alternate packages
     if (!Package::Installed ("nfs-server"))
     {
