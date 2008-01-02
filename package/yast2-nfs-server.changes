@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Jan  2 13:34:33 CET 2008 - mvidner@suse.cz
+
+- Do not touch NFS4 during autoinstallation; really fixing "Unable to
+  write idmapd.conf" (#287338).
+- Do not pop up an error about idmapd during autoinstallation
+  (#260723).
+
+-------------------------------------------------------------------
 Mon Aug 20 14:17:18 CEST 2007 - mvidner@suse.cz
 
 - Require nfs-kernel-server.rpm because nfs-utils.rpm got split (#286300).
