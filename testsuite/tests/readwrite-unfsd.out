@@ -21,7 +21,6 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Write	.etc.idmapd_conf ["Domain", ""] true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
 Read	.init.scripts.exists "portmap" true
