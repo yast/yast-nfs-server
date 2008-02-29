@@ -30,13 +30,13 @@ Mon Feb 26 16:52:08 CET 2007 - pchakravarthi@novell.com
 - 2.13.7
 
 ------------------------------------------------------------------
-Thu Jan 10 18:55:17 IST 2006 - pchakravarthi@novell.com
+Thu Jan 10 18:55:17 IST 2007 - pchakravarthi@novell.com
 
 - modified .spec.in file to add 'Requires' for limal-nfs-server
   package and to include names of additional agent files.
 
 -------------------------------------------------------------------
-Wed Jan 10 18:20:04 IST 2006 - pchakravarthi@novell.com
+Wed Jan 10 18:20:04 IST 2007 - pchakravarthi@novell.com
 
 - Added a perl module ag_idmapd_conf for configuring entries in 
   /etc/idmapd.conf
