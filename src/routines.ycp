@@ -332,7 +332,7 @@ for the same client '%1' (contained in '%2')"), clientexpr, client, expath, expo
     define term ExportsSelBox(list<map> exports) ``{
 	if (NfsServer::enable_nfsv4) {
 	    return `Table(`id(`exptable), `opt(`notify,`immediate),
-			  `header("Directories","Bindmount Targets"),
+			  `header(_("Directories"),_("Bindmount Targets")),
 			  ExportsRows(exports));
 	} else {
 	    return `SelectionBox(`id(`exportsbox), `opt(`notify),
