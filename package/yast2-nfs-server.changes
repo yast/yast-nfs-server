@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb 29 13:32:22 CET 2008 - mvidner@suse.cz
+
+- Added forgotten translation markers: headings of export table
+  (bnc#251670#c11).
+- 2.13.10
+
+-------------------------------------------------------------------
 Mon Jul 16 13:04:55 CEST 2007 - mvidner@suse.cz
 
 - Do not touch NFS4 during autoinstallation; really fixing "Unable to
