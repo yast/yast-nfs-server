@@ -2,6 +2,7 @@
 Mon Mar 17 12:43:32 CET 2008 - jsrain@suse.cz
 
 - added 'StartupNotify=true' to the desktop file (bnc #304964)
+- 2.16.0
 
 -------------------------------------------------------------------
 Wed Jan  2 13:34:33 CET 2008 - mvidner@suse.cz
