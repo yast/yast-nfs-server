@@ -447,7 +447,7 @@ Your changes will be active after reboot.
 	if (enable_nfsv4) {
 	    summary = Summary::AddLine (summary, "NFSv4 support is enabled.");
 	    summary = Summary::AddLine (summary,
-			sformat(_("And the NFSv4 domain for idmapping is %1."),domain));
+			sformat(_("The NFSv4 domain for idmapping is %1."),domain));
 	}
 	else
 	    summary = Summary::AddLine (summary, "NFSv4 support is disabled.");

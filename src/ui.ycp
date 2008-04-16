@@ -85,7 +85,7 @@
 	    {
 		if (mountpoint == nil || mountpoint == "")
 		{
-		    Popup::Message(_("Please enter a non-empty export path. Eg: /exports"));
+		    Popup::Message(_("Enter a non-empty export path. For example, /exports."));
 		    ret = nil;
 		}
 		else
@@ -301,7 +301,7 @@ are already set."));
 	string domain = (string) SCR::Read(.etc.idmapd_conf,"Domain");
 	if (domain == nil)
 	{
-		Popup::Message(_("Unable to read /etc/idmapd.conf file. Defaulting the domain to 'localdomain'"));
+		Popup::Message(_("Unable to read the /etc/idmapd.conf file. Setting the default setting for the domain to 'localdomain'."));
 		domain = "localdomain";
 	}
 
@@ -330,14 +330,16 @@ a configuration dialog in which to specify the directories to export.</P>");
 	help_text = help_text + fw_cwm_widget["help"]:"";
 
 	help_text = help_text +
-_("<P>If the server needs to handle NFSv4 clients, enable the option <B>Enable NFSv4</B>,
-and fillin the NFSv4 domain name in the text entry, for id mapping daemon to use. Please leave
-it as localdomain or refer to man page for idmapd and idmapd.conf if you are not sure.</P>");
+_("<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>,
+and fill in the NFSv4 domain name you want the id mapping daemon to use. Leave
+it as localdomain or refer to the man page for idmapd and idmapd.conf if you are not sure.</P>
+");
 
 	help_text = help_text +
 	    // FIXME: use %1 as nfs-utils.src.rpm produces nfs-kernel-server.rpm
 _("<P>If the server and client must authenticate using GSS library, please enable the <B>Enable GSS Security</B> 
-checkbox. For being able to use GSS API, currently you need to have kerberos and gssapi (nfs-utils > 1.0.7) on your system</P>");
+checkbox. For being able to use GSS API, currently you need to have Kerberos and gssapi (nfs-utils > 1.0.7) on your system</P>
+");
 
 	/* The end of the definitions */
 
@@ -505,9 +507,9 @@ IP networks.</P>
 	if (NfsServer::enable_nfsv4)
 	{
 	    // Help, part 4 of 5, caution about fsid=0 in case NFSv4 is enabled.
-	    help_text = help_text + _("<p>The NFSv4 option is enabled in the previous page. Make sure that only one exported filesystem is marked with fsid=0 option for a particular client.</p>");
+	    help_text = help_text + _("<p>The NFSv4 option is enabled in the previous page. Make sure that only one exported filesystem is marked with the fsid=0 option for a particular client.</p>");
 
-	    help_text = help_text + _("<p>In case of multiple exports to a NFSv4 client, there is a need to bind the exported paths (not with fsid=0) to the one with fsid=0. To do this, simply add another export option, bind=/target/path where /target/path amounts to some directory existing below the fsid=0 - exported tree.</p>");
+	    help_text = help_text + _("<p>In case of multiple exports to a NFSv4 client, you need to bind the exported paths with no fsid=0 to the one with fsid=0. To do this, add another export option (bind=/target/path), where /target/path amounts to some directory existing below the fsid=0 exported tree.</p>");
 	}
 
 	// Help, part 5 of 5
