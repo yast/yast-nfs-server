@@ -3,8 +3,7 @@
 @HEADER@
 BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-devtools yast2-testsuite
 Requires:	yast2 >= 2.11.11
-Requires:       limal-nfs-server
-Requires:       limal-nfs-server-perl
+Requires:	yast2-nfs-common
 
 Provides:	yast2-config-nfs-server yast2-config-nfs-server-devel
 Obsoletes:	yast2-config-nfs-server yast2-config-nfs-server-devel
@@ -17,6 +16,15 @@ BuildArchitectures:	noarch
 Summary:	Configuration of nfs server
 
 %description
+-
+
+%package -n yast2-nfs-common
+Summary:	Configuration of NFS, common parts
+Group:		System/YaST
+Requires:       limal-nfs-server
+Requires:       limal-nfs-server-perl
+
+%description -n yast2-nfs-common
 -
 
 @PREP@
@@ -38,9 +46,12 @@ Summary:	Configuration of nfs server
 @moduledir@/NfsServer.ybc
 @desktopdir@/nfs_server.desktop
 @scrconfdir@/etc_exports.scr
-@scrconfdir@/etc_idmapd_conf.scr
-@scrconfdir@/cfg_nfs.scr
 @agentdir@/ag_exports
-@agentdir@/ag_idmapd_conf
 %doc @docdir@
 @schemadir@/autoyast/rnc/nfs_server.rnc
+
+%files -n yast2-nfs-common
+%defattr(-,root,root)
+@scrconfdir@/cfg_nfs.scr
+@scrconfdir@/etc_idmapd_conf.scr
+@agentdir@/ag_idmapd_conf
