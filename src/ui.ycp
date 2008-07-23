@@ -496,7 +496,7 @@ IP networks.</P>
 	if (use_star_for_anonymous)
 	{
 	    // Help, part 3 of 5, variant for kernel space server
-	    help_text = help_text + _("<p>Enter an asterisk (<tt>*</tt>) to specify all hosts.</p>");
+	    help_text = help_text + _("<p>Enter an asterisk (<tt>*</tt>) instead of a name to specify all hosts.</p>");
 	}
 	else
 	{
