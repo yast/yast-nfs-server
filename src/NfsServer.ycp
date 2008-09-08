@@ -359,7 +359,7 @@ exported directories.\n"));
 			if (! Service::Start("svcgssd"))
 			{
 			    // FIXME svcgssd is gone! (only nfsserver is left)
-				Report::Error(_("Unable to start svcgssd. Please ensure your kerberos and gssapi (nfs-utils) set up is fine."));
+				Report::Error(_("Unable to start svcgssd. Please ensure your kerberos and gssapi (nfs-utils) set up is correct."));
 				ok = false;
 			}
 		}

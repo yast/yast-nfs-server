@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Sep  8 13:48:46 CEST 2008 - mvidner@suse.cz
+
+- Applied proofreading changes from Andrew Spackman.
+
+-------------------------------------------------------------------
 Wed Jul 23 19:06:11 CEST 2008 - mvidner@suse.cz
 
 - Help text: clarified that "*" works only in host names, not network
