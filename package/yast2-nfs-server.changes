@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  2 11:09:47 CEST 2008 - mvidner@suse.cz
+
+- Use rpcbind by default and fall back to portmap (bnc#423026).
+- 2.17.1
+
+-------------------------------------------------------------------
 Mon Sep  8 13:48:46 CEST 2008 - mvidner@suse.cz
 
 - Applied proofreading changes from Andrew Spackman.

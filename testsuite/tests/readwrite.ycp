@@ -53,13 +53,13 @@
 	    "scripts": $[
 		"exists": true,
 		"runlevel": $[
-		    "portmap": service_on,
+		    "rpcbind": service_on,
 		    "nfsserver": service_on,
 		    "nfslock": service_on,
 		    ],
 		// their contents is not important for ServiceAdjust
 		"comment": $[
-		    "portmap": $[],
+		    "rpcbind": $[],
 		    "nfsserver": $[],
 		    "nfslock": $[],
 		    ],
