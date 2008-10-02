@@ -214,6 +214,24 @@ exported directories.\n"));
 	    return true;
     }
 
+
+    string portmapper = nil;
+
+    /**
+     * Get the used port mapper: since SLE11A3 we have rpcbind
+     * instead of portmap as the default (bnc#423026)
+     */
+    string Portmapper() {
+	if (portmapper == nil) {
+	    portmapper = Service::Find(["rpcbind", "portmap"]);
+	    if (portmapper == "") {
+		y2error("No portmapper found");
+		portmapper = "rpcbind";
+	    }
+	}
+	return portmapper;
+    }
+
     /**
      * Saves NFS server configuration. (exports(5))
      * Creates any missing directories.
@@ -302,7 +320,7 @@ exported directories.\n"));
 	}
 	else
 	{
-	    if (! Service::Enable("portmap"))
+	    if (! Service::Enable(Portmapper ()))
 	    {
 		Report::Error (Service::Error());
 		ok = false;
@@ -387,10 +405,10 @@ exported directories.\n"));
 
 	    if (!write_only)
 	    {
-		if (Service::Status("portmap") != 0 )
+		if (Service::Status(Portmapper ()) != 0 )
 		{
 		    // portmap must not be started if it is running already (see bug # 9999)
-		    Service::Start("portmap");
+		    Service::Start(Portmapper ());
 		}
 
 		Service::Stop("nfsserver");

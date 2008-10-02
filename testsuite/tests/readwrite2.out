@@ -2,13 +2,13 @@ Dump
 Dump	Read  - services are running
 Dump	
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Read	.init.scripts.exists "SuSEfirewall2_init" true
-Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
@@ -30,16 +30,16 @@ Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "rpcbind":$[]]
 Execute	.target.bash_output "/sbin/insserv -r /etc/init.d/nfsserver" $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
 Execute	.target.bash "/etc/init.d/nfslock stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
-Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "rpcbind":$[]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
@@ -47,7 +47,7 @@ Dump
 Dump	Read  - services are running
 Dump	
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
@@ -66,30 +66,31 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.runlevel "portmap" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.comment "portmap" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.runlevel "rpcbind" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.comment "rpcbind" $["nfsserver":$[], "rpcbind":$[]]
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
-Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "rpcbind":$[]]
 Execute	.target.bash_output "/sbin/insserv -d /etc/init.d/nfslock" $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "portmap":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
+Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "rpcbind":$[]]
 Read	.init.scripts.exists "idmapd" true
 Execute	.target.bash "/etc/init.d/idmapd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
 Execute	.target.bash "/etc/init.d/svcgssd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
 Execute	.target.bash "/etc/init.d/svcgssd stop" $["TERM":"raw"] 0
-Read	.init.scripts.exists "portmap" true
-Execute	.target.bash "/etc/init.d/portmap status" $["TERM":"raw"] 0
+Read	.init.scripts.exists "rpcbind" true
+Execute	.target.bash "/etc/init.d/rpcbind status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfslock" true
@@ -105,7 +106,7 @@ Dump
 Dump	Read  - services are stopped
 Dump	
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
@@ -129,15 +130,15 @@ Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
-Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
+Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "rpcbind":$[]]
 Read	.init.scripts.exists "nfslock" true
 Execute	.target.bash "/etc/init.d/nfslock stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
-Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
-Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
+Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "rpcbind":$[]]
 Read	.init.scripts.exists "SuSEfirewall2_init" true
 Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
@@ -145,7 +146,7 @@ Dump
 Dump	Read  - services are stopped
 Dump	
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
@@ -164,23 +165,23 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.exists "portmap" true
-Read	.init.scripts.runlevel "portmap" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
-Read	.init.scripts.comment "portmap" $["nfsserver":$[], "portmap":$[]]
-Execute	.target.bash_output "/sbin/insserv -d /etc/init.d/portmap" $["exit":0, "stderr":"", "stdout":""]
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.exists "rpcbind" true
+Read	.init.scripts.runlevel "rpcbind" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
+Read	.init.scripts.comment "rpcbind" $["nfsserver":$[], "rpcbind":$[]]
+Execute	.target.bash_output "/sbin/insserv -d /etc/init.d/rpcbind" $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
-Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
-Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfslock" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
+Read	.init.scripts.comment "nfslock" $["nfsserver":$[], "rpcbind":$[]]
 Execute	.target.bash_output "/sbin/insserv -d /etc/init.d/nfslock" $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "portmap":$["start":[], "stop":[]]]
-Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "portmap":$[]]
+Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
+Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "rpcbind":$[]]
 Execute	.target.bash_output "/sbin/insserv -d /etc/init.d/nfsserver" $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "idmapd" true
 Execute	.target.bash "/etc/init.d/idmapd status" $["TERM":"raw"] 0
@@ -188,8 +189,8 @@ Read	.init.scripts.exists "svcgssd" true
 Execute	.target.bash "/etc/init.d/svcgssd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
 Execute	.target.bash "/etc/init.d/svcgssd stop" $["TERM":"raw"] 0
-Read	.init.scripts.exists "portmap" true
-Execute	.target.bash "/etc/init.d/portmap status" $["TERM":"raw"] 0
+Read	.init.scripts.exists "rpcbind" true
+Execute	.target.bash "/etc/init.d/rpcbind status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfslock" true

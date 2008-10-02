@@ -54,12 +54,12 @@
 	    "scripts": $[
 		"exists": true,
 		"runlevel": $[
-		    "portmap": service_on,
+		    "rpcbind": service_on,
 		    "nfsserver": service_on,
 		    ],
 		// their contents is not important for ServiceAdjust
 		"comment": $[
-		    "portmap": $[],
+		    "rpcbind": $[],
 		    "nfsserver": $[],
 		    ],
 		],
@@ -87,9 +87,9 @@
     map READ2 = READ;
     READ2["init","scripts","exists"] = false;
 
-    // services portmap & nfsserver are stopped
+    // services rpcbind & nfsserver are stopped
     map READ3 = READ;
-    READ3["init","scripts","runlevel","portmap"]   = service_off;
+    READ3["init","scripts","runlevel","rpcbind"]   = service_off;
     READ3["init","scripts","runlevel","nfsserver"] = service_off;
 
     map WRITE = $[
@@ -113,7 +113,7 @@
 	    ],
 	];
 
-    // nfsserver and portmap are running
+    // nfsserver and rpcbind are running
     DUMP ("\nRead  - services are running\n");
     TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
     DUMP ("\nWrite - services will be stopped\n");
@@ -122,7 +122,7 @@
     // And Write
     TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
 
-    // nfsserver and portmap are running
+    // nfsserver and rpcbind are running
     DUMP ("\nRead  - services are running\n");
     TEST (``(NfsServer::Read ()), [READ, WRITE, EXECUTE], nil);
     DUMP ("\nWrite - services are running\n");
@@ -131,7 +131,7 @@
     // And Write
     TEST (``(NfsServer::Write ()), [READ, WRITE, EXECUTE], nil);
 
-    // nfsserver and portmap are stopped
+    // nfsserver and rpcbind are stopped
     DUMP ("\nRead  - services are stopped\n");
     TEST (``(NfsServer::Read ()), [READ3, WRITE, EXECUTE], nil);
     DUMP ("\nWrite - services will be stopped\n");
@@ -140,7 +140,7 @@
     // And Write
     TEST (``(NfsServer::Write ()), [READ3, WRITE, EXECUTE], nil);
 
-    // nfsserver and portmap are stopped
+    // nfsserver and rpcbind are stopped
     DUMP ("\nRead  - services are stopped\n");
     TEST (``(NfsServer::Read ()), [READ3, WRITE, EXECUTE], nil);
     DUMP ("\nWrite - services will be started\n");
