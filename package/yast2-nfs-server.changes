@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  9 11:32:57 CEST 2008 - jsuchome@suse.cz
+
+- fixed failing testsuite (Service.ycp)
+- 2.17.2 
+
+-------------------------------------------------------------------
 Thu Oct  2 11:09:47 CEST 2008 - mvidner@suse.cz
 
 - Use rpcbind by default and fall back to portmap (bnc#423026).
