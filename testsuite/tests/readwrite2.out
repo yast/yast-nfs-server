@@ -26,7 +26,7 @@ Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
 Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfsserver stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
@@ -34,7 +34,7 @@ Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":["3", "5"], "sto
 Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "rpcbind":$[]]
 Execute	.target.bash_output "/sbin/insserv -r /etc/init.d/nfsserver" $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
-Execute	.target.bash "/etc/init.d/nfslock stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfslock stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
@@ -88,15 +88,15 @@ Execute	.target.bash "/etc/init.d/idmapd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
 Execute	.target.bash "/etc/init.d/svcgssd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
-Execute	.target.bash "/etc/init.d/svcgssd stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/svcgssd stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "rpcbind" true
 Execute	.target.bash "/etc/init.d/rpcbind status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfsserver stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
-Execute	.target.bash "/etc/init.d/nfslock restart" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfslock restart" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver start" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfsserver start" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "SuSEfirewall2_init" true
@@ -126,14 +126,14 @@ Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
 Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfsserver stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfsserver":$["start":[], "stop":[]], "rpcbind":$["start":[], "stop":[]]]
 Read	.init.scripts.comment "nfsserver" $["nfsserver":$[], "rpcbind":$[]]
 Read	.init.scripts.exists "nfslock" true
-Execute	.target.bash "/etc/init.d/nfslock stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfslock stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.exists "nfslock" true
@@ -188,15 +188,15 @@ Execute	.target.bash "/etc/init.d/idmapd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
 Execute	.target.bash "/etc/init.d/svcgssd status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "svcgssd" true
-Execute	.target.bash "/etc/init.d/svcgssd stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/svcgssd stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "rpcbind" true
 Execute	.target.bash "/etc/init.d/rpcbind status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver stop" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfsserver stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfslock" true
-Execute	.target.bash "/etc/init.d/nfslock restart" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfslock restart" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver start" $["TERM":"raw"] 0
+Execute	.target.bash_output "/etc/init.d/nfsserver start" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Read	.init.scripts.exists "nfsserver" true
 Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
 Read	.init.scripts.exists "SuSEfirewall2_init" true
