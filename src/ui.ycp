@@ -391,6 +391,8 @@ checkbox. For being able to use GSS API, currently you need to have Kerberos and
 	// dialog title
 	Wizard::SetContents(_("NFS Server Configuration"),
 			      contents, help_text, true, true);
+	Wizard::DisableBackButton();
+	Wizard::SetAbortButton(`abort, Label::CancelButton() );
 
 	// initialize the widget (set the current value)
 	CWMFirewallInterfaces::OpenFirewallInit (fw_cwm_widget, "");
@@ -410,8 +412,7 @@ checkbox. For being able to use GSS API, currently you need to have Kerberos and
 	    start_nfs_server = (UI::QueryWidget(`id(`rbgroup), `CurrentButton) == `servyes);
 	    if (!start_nfs_server)
 	    {
-		Wizard::SetNextButton(`next, Label::FinishButton() );
-
+		Wizard::SetNextButton(`next, Label::OKButton() );
 	    }
 	    else
 	    {
@@ -469,6 +470,7 @@ checkbox. For being able to use GSS API, currently you need to have Kerberos and
 	    }
 	}
 
+	Wizard::RestoreBackButton();
 	Wizard::RestoreScreenShotName ();
 	return (symbol) ret;
     }
@@ -553,6 +555,7 @@ IP networks.</P>
 	    _("Directories to Export"),
 	    contents, help_text,
 	    Label::BackButton (), Label::FinishButton());
+	Wizard::SetAbortButton(`abort, Label::CancelButton() );
 
 	map event = nil;
 	any ret = nil;
