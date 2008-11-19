@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov 19 14:20:10 CET 2008 - mvidner@suse.cz
+
+- Fixed firewall port punching by updating the service reference
+  (bnc#446163).
+- 2.17.4
+
+-------------------------------------------------------------------
 Fri Nov  7 12:49:37 CET 2008 - mvidner@suse.cz
 
 - Adjusted dialog buttons according to YaST Style Guide
