@@ -312,7 +312,7 @@ are already set."));
 
 	// firewall widget using CWM
 	map<string, any> fw_settings = $[
-	    "services": [ "nfs-server" ],
+	    "services": [ "service:nfs-kernel-server" ], // bnc#446163
 	    "display_details": true,
 	    ];
 	map<string,any> fw_cwm_widget = CWMFirewallInterfaces::CreateOpenFirewallWidget (fw_settings);
