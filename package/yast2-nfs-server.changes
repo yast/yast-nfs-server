@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Dec  3 16:07:28 CET 2008 - kmachalkova@suse.cz
+
+- Missing strings marked for translation (bnc#449700)
+
+-------------------------------------------------------------------
 Wed Nov 19 14:20:10 CET 2008 - mvidner@suse.cz
 
 - Fixed firewall port punching by updating the service reference
