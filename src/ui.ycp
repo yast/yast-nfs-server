@@ -516,10 +516,10 @@ IP networks.</P>
 	    // Watch out, the space is necessary between br and slash.
 	    help_text = help_text + _("<p>In case of multiple exports to a NFSv4 client,
 you need to bind the exported paths with no fsid=0 to the one with fsid=0.
-To export the server paths <tt>/data</tt> and <tt>/data2</tt> as
-<tt>/</tt> and <tt>/more</tt>, respectively, use<br />
-<pre>/data       10.0.0.1(fsid=0,crossmnt,ro,...)
-/data/more  10.0.0.1(bind=/data2,ro,...)</pre>
+To export the server paths <tt>/Eve</tt> and <tt>/Adam</tt> as
+<tt>/</tt> and <tt>/husband</tt>, respectively, use<br />
+<pre>/Eve         10.0.0.1(fsid=0,crossmnt,ro,...)
+/Eve/husband 10.0.0.1(bind=/Adam,ro,...)</pre>
 </p>");
 	}
 
