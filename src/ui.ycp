@@ -511,7 +511,16 @@ IP networks.</P>
 	    // Help, part 4 of 5, caution about fsid=0 in case NFSv4 is enabled.
 	    help_text = help_text + _("<p>The NFSv4 option is enabled in the previous page. Make sure that only one exported filesystem is marked with the fsid=0 option for a particular client.</p>");
 
-	    help_text = help_text + _("<p>In case of multiple exports to a NFSv4 client, you need to bind the exported paths with no fsid=0 to the one with fsid=0. To do this, add another export option (bind=/target/path), where /target/path amounts to some directory existing below the fsid=0 exported tree.</p>");
+	    // bnc#471874, NFS4 is complex and so is our UI :-/
+	    // but let's fix the help at least
+	    // Watch out, the space is necessary between br and slash.
+	    help_text = help_text + _("<p>In case of multiple exports to a NFSv4 client,
+you need to bind the exported paths with no fsid=0 to the one with fsid=0.
+To export the server paths <tt>/Eve</tt> and <tt>/Adam</tt> as
+<tt>/</tt> and <tt>/husband</tt>, respectively, use<br />
+<pre>/Eve         10.0.0.1(fsid=0,crossmnt,ro,...)
+/Eve/husband 10.0.0.1(bind=/Adam,ro,...)</pre>
+</p>");
 	}
 
 	// Help, part 5 of 5
