@@ -200,7 +200,7 @@
 	if (withfsid)
 	    return default_options;
 	else
-	    return "fsid=0,crossmnt" + default_options; // bnc#471874 c1
+	    return "fsid=0,crossmnt," + default_options; // bnc#471874 c1
     }
 
 

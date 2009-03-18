@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Mar 16 14:45:43 CET 2009 - mvidner@suse.cz
+
+- Fixed 'unknown keyword "crossmntro"' in the default NFS4 options
+  (bnc#484663)
+- 2.17.7
+
+-------------------------------------------------------------------
 Tue Feb  3 16:26:12 CET 2009 - mvidner@suse.cz
 
 - Fixed the help for NFS4 bind mounts; added crossmnt (bnc#471874).
