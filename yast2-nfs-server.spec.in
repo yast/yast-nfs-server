@@ -17,7 +17,9 @@ BuildArchitectures:	noarch
 Summary:	YaST2 - NFS Server Configuration
 
 %description
--
+The YaST2 component for configuration of an NFS server. NFS stands for
+network file system access. It allows access to files on remote
+machines.
 
 %package -n yast2-nfs-common
 Summary:	Configuration of NFS, common parts
