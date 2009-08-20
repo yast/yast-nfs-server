@@ -17,6 +17,7 @@ X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstClonable=true
 X-SuSE-YaST-AutoInstRequires=lan
 X-SuSE-YaST-AutoInstSchema=nfs_server.rnc
+X-SuSE-YaST-Keywords=share,NFS,file,mount
 
 Icon=yast-nfs_server
 Exec=/sbin/yast2 nfs_server 
