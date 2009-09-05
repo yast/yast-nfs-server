@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Sep  5 06:00:13 CEST 2009 - mvidner@suse.cz
+
+- Added X-SuSE-YaST-Keywords for the Qt4 control center.
+- 2.18.0
+
+-------------------------------------------------------------------
 Mon Mar 16 14:45:43 CET 2009 - mvidner@suse.cz
 
 - Fixed 'unknown keyword "crossmntro"' in the default NFS4 options
