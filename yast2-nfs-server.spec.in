@@ -7,12 +7,7 @@ BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-devtools yast2-t
 # Service::Find
 Requires:	yast2 >= 2.17.28
 Requires:	yast2-nfs-common
-
-Provides:	yast2-config-nfs-server yast2-config-nfs-server-devel
-Obsoletes:	yast2-config-nfs-server yast2-config-nfs-server-devel
-Provides:	yast2-trans-nfs-server
-Obsoletes:	yast2-trans-nfs-server
-Provides:	yast2-config-network:/usr/lib/YaST2/clients/lan_nfs_server.ycp
+Recommends:     nfs-kernel-server
 
 BuildArchitectures:	noarch
 
