@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Sep 21 09:44:32 CEST 2009 - mvidner@suse.cz
+
+- Recommend nfs-kernel-server (it is required and will be installed at
+  runtime anyway, bnc#535544).
+- Removed compatibility dependencies for a 7 years old release.
+- 2.18.1
+
+-------------------------------------------------------------------
 Sat Sep  5 06:00:13 CEST 2009 - mvidner@suse.cz
 
 - Added X-SuSE-YaST-Keywords for the Qt4 control center.
