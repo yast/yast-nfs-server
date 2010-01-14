@@ -20,9 +20,8 @@ X-SuSE-YaST-AutoInstSchema=nfs_server.rnc
 X-SuSE-YaST-Keywords=share,NFS,file,mount
 
 Icon=yast-nfs_server
-Exec=/sbin/yast2 nfs_server 
+Exec=xdg-su -c "/sbin/yast2 nfs_server"
 
 Name=NFS Server
 GenericName=Configure an NFS server
-X-KDE-SubstituteUID=true
 StartupNotify=true
