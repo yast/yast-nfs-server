@@ -449,7 +449,7 @@ checkbox. For being able to use GSS API, currently you need to have Kerberos and
 	    // handle the events, enable/disable the button, show the popup if button clicked
 	    CWMFirewallInterfaces::OpenFirewallHandle (fw_cwm_widget, "", event);
 	    changed =
-		true ||		// TODO: fw changed, #44106
+		CWMFirewallInterfaces::OpenFirewallModified("") || // "" because method doesn't use parameter at all, nice :( 
 		start_nfs_server != NfsServer::start;
 
 	    if (ret == `abort && changed && !Popup::ReallyAbort (changed))
