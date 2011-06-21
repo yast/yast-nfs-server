@@ -67,7 +67,7 @@
 			    )
 			),
 		    `VSpacing(0.2),
-		    `HBox(
+		    `ButtonBox(
 			`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
 			`PushButton(`id(`cancel), `opt (`key_F9), Label::CancelButton())
 			),
@@ -190,7 +190,7 @@ Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-kernel-server
 				   `TextEntry(`id(`optsent),`opt(`notify), _("O&ptions"),opts),
 				   `VSpacing(0.2),
 				   // ok pushbutton: confirm the dialog
-				   `HBox(`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
+				   `ButtonBox(`PushButton(`id(`ok), `opt(`default, `key_F10), Label::OKButton()),
 					 `PushButton(`id(`cancel), `opt (`key_F9), Label::CancelButton())),
 				   `VSpacing(0.2)),
 			     `HSpacing(1)

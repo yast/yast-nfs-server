@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 21 17:32:17 UTC 2011 - jreidinger@novell.com
+
+- use button box for OK/Cancel (bnc#701262) 
+
+-------------------------------------------------------------------
 Mon Jun 20 14:39:17 UTC 2011 - jreidinger@novell.com
 
 - detect if settings changed (bnc#460163) 
