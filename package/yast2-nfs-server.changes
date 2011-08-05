@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug  5 12:34:17 CEST 2011 - tgoettlicher@suse.de
+
+- fixed .desktop file (bnc #681249)
+
+-------------------------------------------------------------------
 Tue Jun 21 17:32:17 UTC 2011 - jreidinger@novell.com
 
 - use button box for OK/Cancel (bnc#701262) 
