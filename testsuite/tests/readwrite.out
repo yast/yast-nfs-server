@@ -1,14 +1,12 @@
 Dump	Read
-Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.runlevel "nfsserver" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
+Execute	.target.bash "/sbin/chkconfig -c nfsserver 3" 0
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
-Read	.init.scripts.exists "SuSEfirewall2_init" true
-Read	.init.scripts.runlevel "SuSEfirewall2_init" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
-Read	.init.scripts.exists "SuSEfirewall2_init" true
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
+Execute	.target.bash "/sbin/chkconfig -c SuSEfirewall2_init 3" 0
+Execute	.target.bash "/sbin/chkconfig -c SuSEfirewall2_setup 3" 0
+Execute	.target.bash "/sbin/service SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	Write OK
 Read	.target.dir "/projects" nil
@@ -21,40 +19,21 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Read	.init.scripts.exists "rpcbind" true
-Read	.init.scripts.exists "rpcbind" true
-Read	.init.scripts.exists "rpcbind" true
-Read	.init.scripts.exists "rpcbind" true
 Read	.init.scripts.runlevel "rpcbind" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "rpcbind" $["nfslock":$[], "nfsserver":$[], "rpcbind":$[]]
-Read	.init.scripts.exists "nfslock" true
-Read	.init.scripts.exists "nfslock" true
-Read	.init.scripts.exists "nfslock" true
 Read	.init.scripts.runlevel "nfslock" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfslock" $["nfslock":$[], "nfsserver":$[], "rpcbind":$[]]
-Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.exists "nfsserver" true
-Read	.init.scripts.exists "nfsserver" true
 Read	.init.scripts.runlevel "nfsserver" $["nfslock":$["start":["3", "5"], "stop":["3", "5"]], "nfsserver":$["start":["3", "5"], "stop":["3", "5"]], "rpcbind":$["start":["3", "5"], "stop":["3", "5"]]]
 Read	.init.scripts.comment "nfsserver" $["nfslock":$[], "nfsserver":$[], "rpcbind":$[]]
-Read	.init.scripts.exists "idmapd" true
-Execute	.target.bash "/etc/init.d/idmapd status" $["TERM":"raw"] 0
-Read	.init.scripts.exists "svcgssd" true
-Execute	.target.bash "/etc/init.d/svcgssd status" $["TERM":"raw"] 0
-Read	.init.scripts.exists "svcgssd" true
-Execute	.target.bash_output "/etc/init.d/svcgssd stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Read	.init.scripts.exists "rpcbind" true
-Execute	.target.bash "/etc/init.d/rpcbind status" $["TERM":"raw"] 0
-Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash_output "/etc/init.d/nfsserver stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Read	.init.scripts.exists "nfslock" true
-Execute	.target.bash_output "/etc/init.d/nfslock restart" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash_output "/etc/init.d/nfsserver start" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Read	.init.scripts.exists "nfsserver" true
-Execute	.target.bash "/etc/init.d/nfsserver status" $["TERM":"raw"] 0
-Read	.init.scripts.exists "SuSEfirewall2_init" true
-Execute	.target.bash "/etc/init.d/SuSEfirewall2_init status" $["TERM":"raw"] 0
+Execute	.target.bash "/sbin/service idmapd status" $["TERM":"raw"] 0
+Execute	.target.bash "/sbin/service svcgssd status" $["TERM":"raw"] 0
+Execute	.target.bash_output "/sbin/service svcgssd stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
+Execute	.target.bash "/sbin/service rpcbind status" $["TERM":"raw"] 0
+Execute	.target.bash_output "/sbin/service nfsserver stop" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
+Execute	.target.bash_output "/sbin/service nfslock restart" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
+Execute	.target.bash_output "/sbin/service nfsserver start" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
+Execute	.target.bash "/sbin/service nfsserver status" $["TERM":"raw"] 0
+Execute	.target.bash "/sbin/service SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	Write KO
 Read	.target.dir "/projects" nil
