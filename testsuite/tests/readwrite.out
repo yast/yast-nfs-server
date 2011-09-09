@@ -1,11 +1,11 @@
 Dump	Read
-Execute	.target.bash "/sbin/chkconfig -c nfsserver 3" 0
+Execute	.target.bash "/sbin/chkconfig -l nfsserver | /usr/bin/grep -q '[0-6]:on'" 0
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
-Execute	.target.bash "/sbin/chkconfig -c SuSEfirewall2_init 3" 0
-Execute	.target.bash "/sbin/chkconfig -c SuSEfirewall2_setup 3" 0
+Execute	.target.bash "/sbin/chkconfig -l SuSEfirewall2_init | /usr/bin/grep -q '[0-6]:on'" 0
+Execute	.target.bash "/sbin/chkconfig -l SuSEfirewall2_setup | /usr/bin/grep -q '[0-6]:on'" 0
 Execute	.target.bash "/sbin/service SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	Write OK
