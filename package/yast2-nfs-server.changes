@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep  9 11:42:17 UTC 2011 - lslezak@suse.cz
+
+- updated testsuite (systemd adaptation)
+- 2.21.0
+
+-------------------------------------------------------------------
 Fri Aug  5 12:34:17 CEST 2011 - tgoettlicher@suse.de
 
 - fixed .desktop file (bnc #681249)
