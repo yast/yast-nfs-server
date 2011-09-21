@@ -83,7 +83,7 @@ define any NfsServerSequence () {
     CheckSyntaxErrors (NfsServer::exports);
 
     Wizard::CreateDialog ();
-    Wizard::SetDesktopIcon("nfs_server");
+    Wizard::SetDesktopTitleAndIcon("nfs_server");
 
     any result = Sequencer::Run(Aliases, Sequence);
 
