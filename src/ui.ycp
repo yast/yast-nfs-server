@@ -843,7 +843,7 @@ To export the server paths <tt>/Eve</tt> and <tt>/Adam</tt> as
     ];
 
     Wizard::CreateDialog ();
-    Wizard::SetDesktopIcon("nfs_server");
+    Wizard::SetDesktopTitleAndIcon("nfs_server");
 
 	symbol ret = Sequencer::Run(Aliases, Sequence);
 	UI::CloseDialog ();
