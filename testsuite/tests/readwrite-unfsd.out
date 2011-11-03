@@ -6,7 +6,6 @@ Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Execute	.target.bash "/sbin/chkconfig -l SuSEfirewall2_init | /usr/bin/grep -q '[0-6]:on'" 0
 Execute	.target.bash "/sbin/chkconfig -l SuSEfirewall2_setup | /usr/bin/grep -q '[0-6]:on'" 0
-Execute	.target.bash "/sbin/service SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	Write OK
 Read	.target.dir "/projects" nil
@@ -34,7 +33,6 @@ Execute	.target.bash_output "/sbin/service nfsserver stop" $["TERM":"raw"] $["ex
 Execute	.target.bash_output "/sbin/service nfslock restart" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Execute	.target.bash_output "/sbin/service nfsserver start" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Execute	.target.bash "/sbin/service nfsserver status" $["TERM":"raw"] 0
-Execute	.target.bash "/sbin/service SuSEfirewall2_init status" $["TERM":"raw"] 0
 Return	true
 Dump	Write KO
 Read	.target.dir "/projects" nil
