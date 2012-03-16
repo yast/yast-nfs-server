@@ -79,6 +79,7 @@
 	    ],
 	"target": $[
 	    "dir": nil,		// pretend none exist
+            "stat": $[ "dummy": true],
 	    ]
 	];
 
