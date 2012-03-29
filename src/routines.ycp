@@ -453,7 +453,8 @@ Only letters, digits, and the characters =/.,_- are allowed."));
 	    // %1 is a list of exported paths
 	    Report::Warning (sformat (_("There are unbalanced parentheses in export options
 for %1.
-Probably there is spurious whitespace in the configuration file."),
+Likely, there is a spurious whitespace in the configuration file.
+"),
 				      bad_shares_s));
 	}
     }

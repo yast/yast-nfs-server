@@ -345,7 +345,7 @@ exported directories.\n"));
 		{
 			if (! Service::Start("idmapd"))
 			{
-				Report::Error(_("Unable to start idmapd. Please check your domain setting."));
+				Report::Error(_("Unable to start idmapd. Check your domain setting."));
 				ok = false;
 			}
 		}
@@ -353,7 +353,7 @@ exported directories.\n"));
 		{
 			if (! Service::Restart("idmapd"))
 			{
-				Report::Error(_("Unable to restart idmapd"));
+				Report::Error(_("Unable to restart idmapd."));
 				ok = false;
 			}
 		}
@@ -364,7 +364,7 @@ exported directories.\n"));
 		{
 			if(!Service::Stop("idmapd"))
 			{
-				Report::Error(_("Unable to stop idmapd"));
+				Report::Error(_("Unable to stop idmapd."));
 				ok = false;
 			}
 		}
@@ -377,7 +377,7 @@ exported directories.\n"));
 			if (! Service::Start("svcgssd"))
 			{
 			    // FIXME svcgssd is gone! (only nfsserver is left)
-				Report::Error(_("Unable to start svcgssd. Please ensure your kerberos and gssapi (nfs-utils) set up is correct."));
+				Report::Error(_("Unable to start svcgssd. Ensure your kerberos and gssapi (nfs-utils) setup is correct."));
 				ok = false;
 			}
 		}

@@ -246,8 +246,9 @@ Use the kernel-based server (%2) to do that."), "nfs-server", "nfs-kernel-server
 	    if (ret == `ok && !NfsServer::enable_nfsv4)
 	    {
 		if (issubstring (opts,"fsid=0")) {
-		    Popup::Message(_("'fsid=0'is not a valid option unless 
-NFSv4 is enabled (previous page)"));
+		    Popup::Message(_("'fsid=0' is not a valid option unless 
+NFSv4 is enabled (previous page).
+"));
 		    ret = nil;
 		}
 	    }
@@ -330,15 +331,15 @@ a configuration dialog in which to specify the directories to export.</P>");
 	help_text = help_text + fw_cwm_widget["help"]:"";
 
 	help_text = help_text +
-_("<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>,
-and fill in the NFSv4 domain name you want the id mapping daemon to use. Leave
+_("<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>
+and fill in the NFSv4 domain name you want the ID mapping daemon to use. Leave
 it as localdomain or refer to the man page for idmapd and idmapd.conf if you are not sure.</P>
 ");
 
 	help_text = help_text +
 	    // FIXME: use %1 as nfs-utils.src.rpm produces nfs-kernel-server.rpm
-_("<P>If the server and client must authenticate using GSS library, please enable the <B>Enable GSS Security</B> 
-checkbox. For being able to use GSS API, currently you need to have Kerberos and gssapi (nfs-utils > 1.0.7) on your system</P>
+_("<P>If the server and client must authenticate using GSS library, check the
+<B>Enable GSS Security</B> box. To use GSS API, you currently need to have Kerberos and gssapi (nfs-utils > 1.0.7) on your system.</P>
 ");
 
 	/* The end of the definitions */
@@ -509,7 +510,7 @@ IP networks.</P>
 	if (NfsServer::enable_nfsv4)
 	{
 	    // Help, part 4 of 5, caution about fsid=0 in case NFSv4 is enabled.
-	    help_text = help_text + _("<p>The NFSv4 option is enabled in the previous page. Make sure that only one exported filesystem is marked with the fsid=0 option for a particular client.</p>");
+	    help_text = help_text + _("<p>NFSv4 is enabled. Make sure that only one exported filesystem is marked with the fsid=0 option for a particular client.</p>");
 
 	    // bnc#471874, NFS4 is complex and so is our UI :-/
 	    // but let's fix the help at least

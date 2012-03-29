@@ -254,14 +254,14 @@ define boolean NfsServerSetOptionHandler (map options) {
 
     if (v4domain != "") {
 	if (!NfsServer::enable_nfsv4) {
-	    CommandLine::Print(_("Domain cannot be set without enabling NFSv4. Please use the 'set enablev4' command."));
+	    CommandLine::Print(_("Domain cannot be set without enabling NFSv4. Use the 'set enablev4' command."));
 	    return false;
 	}
 	NfsServer::domain = v4domain;
     }
 
     if (nfs_sec == "" && enablev4 == "" && v4domain == "") {
-	CommandLine::Print(_("Command set must be used as in 'set option=value'. Please use 'set help' to get information about the options."));
+	CommandLine::Print(_("Command 'set' must be used in the form 'set option=value'. Use 'set help' to get information about available options."));
 	return false;
     }
 
@@ -300,7 +300,7 @@ map cmdline_description = $[
 	],
 	"set"		: $[
 	    "handler"	: NfsServerSetOptionHandler,
-	    "help"	: _("Set the parameters for domain, security and enablev4"),
+	    "help"	: _("Set the parameters for domain, security and enablev4."),
 	]
     ],
     "options"		: $[
@@ -319,15 +319,15 @@ map cmdline_description = $[
 	],
 	"domain"	: $[
 	    "type"	: "string",
-	    "help"	: _("Domain specification for NFSv4 Idmapping, such as 'localdomain' or 'abc.com' etc."),
+	    "help"	: _("Domain specification for NFSv4 ID mapping, such as 'localdomain' or 'abc.com' etc."),
 	],
 	"enablev4"	: $[
 	    "type"	: "string",
-	    "help"	: _("Yes/No option for enabling/disabling support for NFSv4"),
+	    "help"	: _("Yes/No option for enabling/disabling support for NFSv4."),
 	],
 	"security"	: $[
 	    "type"	: "string",
-	    "help"	: _("Yes/No option for enabling/disabling secure NFS"),
+	    "help"	: _("Yes/No option for enabling/disabling secure NFS."),
 	]
     ],
     "mappings"		: $[
