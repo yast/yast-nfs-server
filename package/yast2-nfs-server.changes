@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 16 08:03:24 UTC 2012 - mfilka@suse.com
+
+- allow colon in export options, see man 5 exports (sec= option)
+- bnc#775814
+- 2.21.4 
+
+-------------------------------------------------------------------
 Thu Mar 29 15:28:39 CEST 2012 - jsuchome@suse.cz
 
 - merged proofread texts 
