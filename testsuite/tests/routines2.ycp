@@ -38,6 +38,8 @@ no_root_squash,all_squash,no_all_squash";
 
   TEST (``(CheckExportOptions ("rw,all_squash")), [], nil);
   TEST (``(CheckExportOptions ("invalid:\options <> ?")), [], nil);
+  // colon is valid
+  TEST (``(CheckExportOptions ("sec=none:kerb5")), [], nil);
 
   TEST (``(CheckExportOptions_strict ("ro,insecure,all_squash")), [], nil);
   TEST (``(CheckExportOptions_strict (test_options)), [], nil);
