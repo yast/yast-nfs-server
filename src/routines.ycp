@@ -375,17 +375,18 @@ must not contain spaces.
 
     /**
      * Check for the validity of export options:
-     * [A-Za-z0-9=/.,_-]*
+     * [A-Za-z0-9=/.:,_-]*
      * If invalid, a message is displayed.
      * @param options	spaces and parentheses already removed
      * @return		whether valid
      */
     define boolean CheckExportOptions (string options) ``{
-	if (regexpmatch (options, "[^A-Za-z0-9=/.,_-]"))
+        // colon is allowed for sec= option, see man 5 exports
+	if (regexpmatch (options, "[^A-Za-z0-9=/.:,_-]"))
 	{
 	    // error popup message
 	    Report::Error (_("Invalid option.
-Only letters, digits, and the characters =/.,_- are allowed."));
+Only letters, digits, and the characters =/.:,_- are allowed."));
 	    return false;
 	}
 	return true;
