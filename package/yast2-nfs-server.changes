@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jan  3 15:41:07 UTC 2013 - locilka@suse.com
+
+- Testsuites adapted to switching Service module to systemd
+  (yast2-2.23.15)
+- 2.21.5
+
+-------------------------------------------------------------------
 Thu Aug 16 08:03:24 UTC 2012 - mfilka@suse.com
 
 - allow colon in export options, see man 5 exports (sec= option)
