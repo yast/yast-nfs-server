@@ -4,8 +4,7 @@ Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projec
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
-Execute	.target.bash "/bin/systemctl is-enabled SuSEfirewall2_init.service" 0
-Execute	.target.bash "/bin/systemctl is-enabled SuSEfirewall2_setup.service" 0
+Execute	.target.bash "/bin/systemctl is-enabled SuSEfirewall2.service" 0
 Return	true
 Dump	Write OK
 Read	.target.dir "/projects" nil

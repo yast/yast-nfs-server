@@ -3,8 +3,8 @@
 @HEADER@
 Group:	System/YaST
 License: GPL-2.0+
-# Service module switched to systemd
-BuildRequires:	yast2 >= 2.23.15
+# SuSEfirewall2_* services merged into one yast2-2.23.17
+BuildRequires:	yast2 >= 2.23.17
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite
 # Service::Find
 # Wizard::SetDesktopTitleAndIcon
