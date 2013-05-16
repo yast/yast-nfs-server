@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 16 15:21:24 CEST 2013 - locilka@suse.com
+
+- Adapted testsuites testing if service is enabled, implementation
+  has been changed in yast2 package (bnc#807507).
+- 2.21.7
+
+-------------------------------------------------------------------
 Mon Jan  7 09:09:02 UTC 2013 - locilka@suse.com
 
 - Testsuite adapted to merging SuSEfirewall2 services into one
