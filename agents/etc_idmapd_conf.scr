@@ -4,40 +4,50 @@
  * Summary:
  *   SCR Agent for reading/writing /etc/idmapd.conf
  * Access:
- *   Currently only write
+ *   R/W
  * Authors:
- *   Chakravarthi P <pchakravarthi@novell.com>
+ *   Ladislav Slezák <lslezak@suse.cz>
  * See:
- *   anyagent
- *   libscr
+ *   iniagent
  *   man idmapd.conf
- * Example:
- *   Partial /etc/idmapd.conf:
- *
- *   [General]
- *
- *   Verbosity=0
- *   Pipefs-Directory=/var/lib/nfs/rpc_pipefs
- *   Domain=abc.com
- *
- *   [<Another Section>]
- *   <name>=<value>
  *
  **
- *   Read(.etc.idmapd_conf, "Domain")
- *   (abc.com)
  *
- *   Read(.etc.idmapd_conf, "Verbosity")
- *   (0)
+ * Examples:
  *
- *   Write(.etc.idmapd_conf, $["Domain", "doodahh"])
- *   (false)
+ *   Read(.etc.idmapd_conf.value.General.Domain)
+ *   ("localdomain")
  *
- *   Write(.etc.idmapd_conf, $["Verbosity", "4"])
+ *   Read(.etc.idmapd_conf.value.General.Verbosity)
+ *   ("0")
+ *
+ *   Write(.etc.idmapd_conf.value.General.Verbosity, "4")
  *   (true)
  *
+ *   Write(.etc.idmapd_conf, nil)
+ *   (true)
  *
  */
-.etc.idmapd_conf
+.etc.idmapd_conf2
 
-`ag_idmapd_conf ()
+
+`ag_ini(
+    `IniAgent( "/etc/idmapd.conf",
+	$[
+	    "options"	: [ ],
+	    "comments"	: [ "^[ \t]*#.*", "#.*", "^[ \t]*$" ],
+	    "sections"	: [
+		$[ "begin" : [
+		    "^[ \t]*\\[[ \t]*(.*[^ \t])[ \t]*\\][ \t]*",
+		    "[%s]",
+		]],
+	    ],
+	    "params" : [
+		$[ "match" : [
+		    "^[ \t]*([^=]*[^ \t=])[ \t]*=[ \t]*(.*[^ \t]|)[ \t]*$" ,
+		    "%s = %s",
+		]],
+	    ],
+	]
+    )
+)

@@ -24,8 +24,6 @@ machines.
 %package -n yast2-nfs-common
 Summary:	Configuration of NFS, common parts
 Group:		System/YaST
-Requires:       limal-nfs-server
-Requires:       limal-nfs-server-perl
 
 %description -n yast2-nfs-common
 -
@@ -57,4 +55,3 @@ Requires:       limal-nfs-server-perl
 %defattr(-,root,root)
 @scrconfdir@/cfg_nfs.scr
 @scrconfdir@/etc_idmapd_conf.scr
-@agentdir@/ag_idmapd_conf
