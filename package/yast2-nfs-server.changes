@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jun 26 16:39:49 UTC 2013 - lslezak@suse.cz
+
+- use ini-agent instead of Limal for reading /etc/idmapd.conf file,
+  Limal has been dropped in Factory (FATE#313242).
+- 2.24.0
+
+-------------------------------------------------------------------
 Thu May 16 15:21:24 CEST 2013 - locilka@suse.com
 
 - Adapted testsuites testing if service is enabled, implementation

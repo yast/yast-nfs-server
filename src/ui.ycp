@@ -299,7 +299,7 @@ are already set."));
 	Wizard::SetScreenShotName ("nfs-server-1-start");
 
 	boolean start_nfs_server = NfsServer::start;
-	string domain = (string) SCR::Read(.etc.idmapd_conf,"Domain");
+	string domain = (string) SCR::Read(.etc.idmapd_conf.value.General.Domain);
 	if (domain == nil)
 	{
 		Popup::Message(_("Unable to read the /etc/idmapd.conf file. Setting the default setting for the domain to 'localdomain'."));
