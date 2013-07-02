@@ -28,7 +28,7 @@
  *   (true)
  *
  */
-.etc.idmapd_conf2
+.etc.idmapd_conf
 
 
 `ag_ini(
