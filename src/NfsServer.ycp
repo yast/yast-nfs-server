@@ -172,7 +172,7 @@
 
 	if (enable_nfsv4)
 	{
-	    domain = (string) SCR::Read(.etc.idmapd_conf,"Domain");
+	    domain = (string) SCR::Read(.etc.idmapd_conf.value.General.Domain);
 	}
 
 	boolean progress_orig = Progress::set (false);
@@ -275,7 +275,7 @@ exported directories.\n"));
 	if(enable_nfsv4)
 	{
 		SCR::Write(.sysconfig.nfs.NFS4_SUPPORT,"yes");
-		if( !( SCR::Write(.etc.idmapd_conf,["Domain",(string)domain]) ) )
+		if (!SCR::Write(.etc.idmapd_conf.value.General.Domain, (string)domain) || !(SCR::Write(.etc.idmapd_conf, nil)))
 		{
 		    Report::Error(_("Unable to write to idmapd.conf."));
 		}

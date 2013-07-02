@@ -4,8 +4,7 @@
 # $Id$
 #
 
-agent_SCRIPTS = ag_exports\
-		ag_idmapd_conf
+agent_SCRIPTS = ag_exports
 
 scrconf_DATA = etc_exports.scr\
 		etc_idmapd_conf.scr\
