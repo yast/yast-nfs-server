@@ -6,6 +6,7 @@ Return	false
 Return	false
 Return	false
 Return	true
+Log	Invalid option.
 Return	false
 Return	true
 Return	true

@@ -4,10 +4,10 @@
 
 AUTOMAKE_OPTIONS = dejagnu
 
-ycp_testfiles = $(wildcard tests/*.out) $(wildcard tests/*.err) $(wildcard tests/*.ycp) $(wildcard tests/*.yh)
+ycp_testfiles = $(wildcard tests/*.out) $(wildcard tests/*.err) $(wildcard tests/*.rb)
 
 epag_misc = lib/yast2_epag.exp run/runtest-epag.sh
-epag_testfiles = $(wildcard $(RPMNAME).test/ag_*.exp tests.epag/*.[rw].run tests.epag/*.[rw].data tests.epag/*.rw.ycp)
+epag_testfiles = $(wildcard $(RPMNAME).test/ag_*.exp tests.epag/*.[rw].run tests.epag/*.[rw].data tests.epag/*.rw.rb)
 EXTRA_DIST = $(ycp_testfiles) $(epag_testfiles) $(epag_misc)
 
 testsuite_prepare = @ydatadir@/testsuite/Makefile.testsuite

@@ -14,6 +14,8 @@ Recommends:     nfs-kernel-server
 
 BuildArchitectures:	noarch
 
+Requires:       yast2-ruby-bindings >= 1.0.0
+
 Summary:	YaST2 - NFS Server Configuration
 
 %description
@@ -40,11 +42,10 @@ Group:		System/YaST
 %defattr(-,root,root)
 %dir @yncludedir@/nfs_server
 @yncludedir@/nfs_server/*
-@clientdir@/nfs-server.ycp
-@clientdir@/nfs_server.ycp
-@clientdir@/nfs_server_auto.ycp
-@moduledir@/NfsServer.ycp
-@moduledir@/NfsServer.ybc
+@clientdir@/nfs-server.rb
+@clientdir@/nfs_server.rb
+@clientdir@/nfs_server_auto.rb
+@moduledir@/NfsServer.rb
 @desktopdir@/nfs_server.desktop
 @scrconfdir@/etc_exports.scr
 @agentdir@/ag_exports
