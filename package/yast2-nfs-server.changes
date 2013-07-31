@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul 31 08:34:01 UTC 2013 - yast-devel@opensuse.org
+
+- converted from YCP to Ruby by YCP Killer
+  (https://github.com/yast/ycp-killer)
+- version 3.0.0
+
+-------------------------------------------------------------------
 Wed Jun 26 16:39:49 UTC 2013 - lslezak@suse.cz
 
 - use ini-agent instead of Limal for reading /etc/idmapd.conf file,
