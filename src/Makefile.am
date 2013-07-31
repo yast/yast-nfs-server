@@ -1,29 +1,33 @@
-# Makefile.am for nfs-server/src
+# Sources for nfs-server
 
-myincludedir = @yncludedir@/nfs_server
+module_DATA = \
+  modules/NfsServer.rb
 
-client_DATA =		\
-	nfs-server.ycp	\
-	nfs_server.ycp	\
-	nfs_server_auto.ycp
+client_DATA = \
+  clients/nfs-server.rb \
+  clients/nfs_server.rb \
+  clients/nfs_server_auto.rb
 
-myinclude_DATA =	\
-	routines.ycp	\
-	ui.ycp
+yncludedir = @yncludedir@/nfs_server
+ynclude_DATA = \
+  include/nfs_server/ui.rb \
+  include/nfs_server/routines.rb
 
-module_DATA =		\
-	NfsServer.ycp
+scrconf_DATA = \
+  scrconf/cfg_nfs.scr \
+  scrconf/etc_idmapd_conf.scr \
+  scrconf/etc_exports.scr
 
-desktop_DATA = nfs_server.desktop
+agent_SCRIPTS = \
+  servers_non_y2/ag_exports
 
-rncdir =  $(schemadir)/autoyast/rnc
-rnc_DATA = nfs_server.rnc
+schemafilesdir = $(schemadir)/autoyast/rnc
+schemafiles_DATA = \
+  autoyast-rnc/nfs_server.rnc
 
-nfs_server:
-	ln -sf . nfs_server
+desktop_DATA = \
+  desktop/nfs_server.desktop
 
-ycpchook = nfs_server
-
-EXTRA_DIST = $(client_DATA) $(myinclude_DATA) $(module_DATA) $(desktop_DATA) $(rnc_DATA)
+EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(agent_SCRIPTS) $(schemafiles_DATA) $(desktop_DATA)
 
 include $(top_srcdir)/Makefile.am.common
