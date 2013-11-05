@@ -2,9 +2,9 @@ YaST NFS Server Module
 ======================
 
 The YaST NFS Server module manages configuration of an
-[NFS](http://en.wikipedia.org/wiki/Network_File_System) server. It's a part of
+[NFS](https://en.wikipedia.org/wiki/Network_File_System) server. It's a part of
 [YaST](https://en.opensuse.org/Portal:YaST) — installation and configuration
-tool for [openSUSE](http://www.opensuse.org/) and [SUSE Linux
+tool for [openSUSE](https://www.opensuse.org/) and [SUSE Linux
 Enterprise](https://www.suse.com/products/server/) (SLE).
 
 <p align="center">
@@ -40,15 +40,19 @@ Documentation
 -------------
 
 User-level documentation for this module is [available at TODO](TODO). See also
-[general YaST documentation](http://en.opensuse.org/Portal:YaST).
+[general YaST documentation](https://en.opensuse.org/Portal:YaST).
 
 Development
 -----------
 
-This module is developed as part of YaST. See [YaST development
-documentation](http://en.opensuse.org/openSUSE:YaST_development) for information
-about [YaST architecture](TODO), [development environment](TODO) and other
-development-related topics.
+This module is developed as part of YaST. See
+[YaST development documentation](
+  https://en.opensuse.org/openSUSE:YaST_development)
+for information about [YaST architecture](
+  https://en.opensuse.org/openSUSE:YaST:_Architecture_Overview),
+[development environment](
+https://en.opensuse.org/openSUSE:YaST:_Preparing_the_Development_Environment)
+and other development-related topics.
 
 To get the source code, clone the GitHub repository:
 
@@ -77,5 +81,5 @@ guidelines](CONTRIBUTING.md).
 
 If you have any question, feel free to ask at the [development mailing
 list](http://lists.opensuse.org/yast-devel/) or at the
-[#yast](http://webchat.freenode.net/?channels=%23yast) IRC channel on freenode.
+[#yast](https://webchat.freenode.net/?channels=%23yast) IRC channel on freenode.
 We'll do our best to provide a timely and accurate answer.
