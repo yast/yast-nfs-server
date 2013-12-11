@@ -28,7 +28,7 @@ License:        GPL-2.0+
 # Changed implementation for checking if service is enabled 2.23.23 (affects testsuite)
 BuildRequires:	yast2 >= 2.23.23
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite
-BuildRequires:  yast2-devtools >= 3.0.6
+BuildRequires:  yast2-devtools >= 3.1.10
 # Service::Find
 # Wizard::SetDesktopTitleAndIcon
 Requires:	yast2 >= 2.21.22
