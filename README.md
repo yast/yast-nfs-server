@@ -44,6 +44,9 @@ User-level documentation for this module is available in the
 
 [user]: http://activedoc.opensuse.org/book/opensuse-reference/chapter-18-sharing-file-systems-with-nfs
 
+Developer documentation specific for this module is in the [doc](doc)
+directory.
+
 Development
 -----------
 
