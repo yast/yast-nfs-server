@@ -14,9 +14,8 @@ Enterprise](https://www.suse.com/products/server/) (SLE).
 Features
 --------
 
-  * A
-  * B
-  * C
+  * NFSv3
+  * NFSv4
 
 Installation
 ------------
@@ -30,7 +29,7 @@ Running
 
 To run the module, use the following command:
 
-    $ sudo /sbin/yast2 nfs-server
+    $ sudo /usr/sbin/yast2 nfs-server
 
 This will run the module in text mode. For more options, including running in
 your desktop environment, see section on [running
@@ -39,8 +38,11 @@ YaST](https://en.opensuse.org/SDB:Starting_YaST) in the YaST documentation.
 Documentation
 -------------
 
-User-level documentation for this module is [available at TODO](TODO). See also
+User-level documentation for this module is available in the
+[openSUSE Reference documentation][user]. See also
 [general YaST documentation](https://en.opensuse.org/Portal:YaST).
+
+[user]: http://activedoc.opensuse.org/book/opensuse-reference/chapter-18-sharing-file-systems-with-nfs
 
 Development
 -----------
