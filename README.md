@@ -8,7 +8,7 @@ tool for [openSUSE](https://www.opensuse.org/) and [SUSE Linux
 Enterprise](https://www.suse.com/products/server/) (SLE).
 
 <p align="center">
-  <img src="http://imgbin.org/images/15301.png" alt="YaST NFS Server Module">
+  <img src="doc/screenshot.png" alt="YaST NFS Server Module screenshot">
 </p>
 
 Features
