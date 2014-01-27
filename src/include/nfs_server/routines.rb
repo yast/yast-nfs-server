@@ -145,55 +145,11 @@ module Yast
     end
 
     # Give out appropriate default options
-    # @param [Boolean] nfsv4	Is nfsv4 enabled ?
     # @param [Array<Hash>] exports	list of exports
     # @param [String] client	some string representation of the client (*, *.domain, ip address)
     # @return		a comma separated default options string, that is most appropriate
-    def GetDefaultOpts(nfsv4, exports, client)
-      exports = deep_copy(exports)
-      withfsid = false
-
-      return @default_options if !nfsv4
-
-      Builtins.foreach(
-        Convert.convert(
-          exports,
-          :from => "list <map>",
-          :to   => "list <map <string, any>>"
-        )
-      ) do |entry|
-        Builtins.foreach(
-          Convert.convert(
-            Ops.get(entry, "allowed") { ["()"] },
-            :from => "any",
-            :to   => "list <string>"
-          )
-        ) do |hostops|
-          pos = Builtins.findfirstof(hostops, "(")
-          opts = ""
-          clientexpr = ""
-          if pos != nil
-            opts = Builtins.substring(hostops, Ops.add(pos, 1))
-            clientexpr = Builtins.substring(hostops, 0, pos)
-
-            pos = Builtins.findfirstof(opts, ")")
-            opts = Builtins.substring(opts, 0, pos) if pos != nil
-          end
-          if ClientRelated(client, clientexpr) != 0
-            if Builtins.issubstring(opts, "fsid=0")
-              withfsid = true
-              raise Break
-            end
-          end
-        end
-        raise Break if withfsid
-      end
-
-      if withfsid
-        return @default_options
-      else
-        return Ops.add("fsid=0,crossmnt,", @default_options)
-      end # bnc#471874 c1
+    def GetDefaultOpts(exports, client)
+      return @default_options
     end
 
 
@@ -340,31 +296,23 @@ module Yast
       end
     end
 
+    # Returns currently selected directory configured for export via NFS.
+    def current_export_dir
+      UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+    end
+
 
     # @param [Array<Hash>] exports	list of exports
     # @return		a SelectionBox for the mountpoints, `id(`exportsbox) containing
     #			list of exported directory paths.
-    #			If nfsv4 is enabled return a table of 2 colums, first being the
-    #			export path and the second one having bindmount targets as specified
-    #			by in the export entries in /etc/exports
     def ExportsSelBox(exports)
-      exports = deep_copy(exports)
-      if NfsServer.enable_nfsv4
-        return Table(
-          Id(:exptable),
-          Opt(:notify, :immediate),
-          Header(_("Directories"), _("Bindmount Targets")),
-          ExportsRows(exports)
-        )
-      else
-        return SelectionBox(
-          Id(:exportsbox),
-          Opt(:notify),
-          # selection box label
-          _("Dire&ctories"),
-          ExportsItems(exports)
-        )
-      end
+      return SelectionBox(
+        Id(:exportsbox),
+        Opt(:notify),
+        # selection box label
+        _("Dire&ctories"),
+        ExportsItems(exports)
+      )
     end
 
     # Check for the validity of client specification:

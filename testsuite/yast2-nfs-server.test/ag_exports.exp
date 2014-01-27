@@ -1,7 +1,0 @@
-#
-# test driver for External Parser AGents
-#
-
-load_lib "yast2_epag.exp"
-# disable because ycpc -E does not do the kind of normalization we want
-#run_epag_tests "ag_exports"
