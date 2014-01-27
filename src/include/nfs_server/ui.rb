@@ -234,7 +234,7 @@ module Yast
           if hostchanged && !fromedit
             if !optchanged
               hosts = Convert.to_string(UI.QueryWidget(Id(:hostsent), :Value))
-              opts = GetDefaultOpts(NfsServer.enable_nfsv4, exports, hosts)
+              opts = GetDefaultOpts(exports, hosts)
               UI.ChangeWidget(Id(:optsent), :Value, opts)
               optchanged = true
             end
@@ -274,7 +274,7 @@ module Yast
       UI.CloseDialog
 
       if opts == ""
-        opts = GetDefaultOpts(NfsServer.enable_nfsv4, exports, hosts)
+        opts = GetDefaultOpts(exports, hosts)
       end
 
       opts = Builtins.deletechars(opts, " ()")
@@ -701,7 +701,7 @@ module Yast
               Builtins.sformat(
                 "%1(%2)",
                 @use_star_for_anonymous ? "*" : "",
-                GetDefaultOpts(NfsServer.enable_nfsv4, exports, "*")
+                GetDefaultOpts(exports, "*")
               )
             ]
             exports = Builtins.add(
