@@ -514,14 +514,14 @@ module Yast
     def ExportsDialog
       Wizard.SetScreenShotName("nfs-server-2-exports")
 
-      # Help, part 1 of 5
+      # Help, part 1 of 4
       help_text = _(
         "<P>The upper box contains all the directories to export.\n" +
           "If a directory is selected, the lower box shows the hosts allowed to\n" +
           "mount this directory.</P>\n"
       )
 
-      # Help, part 2 of 5
+      # Help, part 2 of 4
       help_text = Ops.add(
         help_text,
         _(
@@ -533,7 +533,7 @@ module Yast
 
       # #91175
       if @use_star_for_anonymous
-        # Help, part 3 of 5, variant for kernel space server
+        # Help, part 3 of 4, variant for kernel space server
         help_text = Ops.add(
           help_text,
           _(
@@ -541,40 +541,14 @@ module Yast
           )
         )
       else
-        # Help, part 3 of 5, variant for user space server
+        # Help, part 3 of 4, variant for user space server
         help_text = Ops.add(
           help_text,
           _("<p>Leave the field empty to specify all hosts.</p>")
         )
       end
 
-      if NfsServer.enable_nfsv4
-        # Help, part 4 of 5, caution about fsid=0 in case NFSv4 is enabled.
-        help_text = Ops.add(
-          help_text,
-          _(
-            "<p>NFSv4 is enabled. Make sure that only one exported filesystem is marked with the fsid=0 option for a particular client.</p>"
-          )
-        )
-
-        # bnc#471874, NFS4 is complex and so is our UI :-/
-        # but let's fix the help at least
-        # Watch out, the space is necessary between br and slash.
-        help_text = Ops.add(
-          help_text,
-          _(
-            "<p>In case of multiple exports to a NFSv4 client,\n" +
-              "you need to bind the exported paths with no fsid=0 to the one with fsid=0.\n" +
-              "To export the server paths <tt>/Eve</tt> and <tt>/Adam</tt> as\n" +
-              "<tt>/</tt> and <tt>/husband</tt>, respectively, use<br />\n" +
-              "<pre>/Eve         10.0.0.1(fsid=0,crossmnt,ro,...)\n" +
-              "/Eve/husband 10.0.0.1(bind=/Adam,ro,...)</pre>\n" +
-              "</p>"
-          )
-        )
-      end
-
-      # Help, part 5 of 5
+      # Help, part 4 of 4
       help_text = Ops.add(
         help_text,
         _("<P>Refer to <tt>man exports</tt> for more information.</P>\n")
