@@ -344,27 +344,14 @@ module Yast
     # @param [Array<Hash>] exports	list of exports
     # @return		a SelectionBox for the mountpoints, `id(`exportsbox) containing
     #			list of exported directory paths.
-    #			If nfsv4 is enabled return a table of 2 colums, first being the
-    #			export path and the second one having bindmount targets as specified
-    #			by in the export entries in /etc/exports
     def ExportsSelBox(exports)
-      exports = deep_copy(exports)
-      if NfsServer.enable_nfsv4
-        return Table(
-          Id(:exptable),
-          Opt(:notify, :immediate),
-          Header(_("Directories"), _("Bindmount Targets")),
-          ExportsRows(exports)
-        )
-      else
-        return SelectionBox(
-          Id(:exportsbox),
-          Opt(:notify),
-          # selection box label
-          _("Dire&ctories"),
-          ExportsItems(exports)
-        )
-      end
+      return SelectionBox(
+        Id(:exportsbox),
+        Opt(:notify),
+        # selection box label
+        _("Dire&ctories"),
+        ExportsItems(exports)
+      )
     end
 
     # Check for the validity of client specification:

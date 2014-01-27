@@ -648,31 +648,16 @@ module Yast
       oldmp = nil
       # preselect an item - convenience, button enabling
       if Ops.greater_than(Builtins.size(exports), 0)
-        if NfsServer.enable_nfsv4
-          UI.ChangeWidget(
-            Id(:exptable),
-            :CurrentItem,
-            Ops.get_string(exports, [0, "mountpoint"], "")
-          )
-        else
-          UI.ChangeWidget(
-            Id(:exportsbox),
-            :CurrentItem,
-            Ops.get_string(exports, [0, "mountpoint"], "")
-          )
-        end
+        UI.ChangeWidget(
+          Id(:exportsbox),
+          :CurrentItem,
+          Ops.get_string(exports, [0, "mountpoint"], "")
+        )
       end
       begin
-        mountpoint = ""
-        if NfsServer.enable_nfsv4
-          mountpoint = Convert.to_string(
-            UI.QueryWidget(Id(:exptable), :CurrentItem)
-          )
-        else
-          mountpoint = Convert.to_string(
-            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-          )
-        end
+        mountpoint = Convert.to_string(
+          UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+        )
 
         anymp = mountpoint != nil
 
@@ -724,23 +709,13 @@ module Yast
               { "mountpoint" => mountpoint2, "allowed" => default_allowed }
             )
             UI.ReplaceWidget(Id(:exportsrep), ExportsSelBox(exports))
-            if NfsServer.enable_nfsv4
-              UI.ChangeWidget(Id(:exptable), :CurrentItem, mountpoint2)
-            else
-              UI.ChangeWidget(Id(:exportsbox), :CurrentItem, mountpoint2)
-            end
+            UI.ChangeWidget(Id(:exportsbox), :CurrentItem, mountpoint2)
             simulated = :alweditbut
           end
         elsif ret == :mpeditbut
-          mp = nil
-
-          if NfsServer.enable_nfsv4
-            mp = Convert.to_string(UI.QueryWidget(Id(:exptable), :CurrentItem))
-          else
-            mp = Convert.to_string(
-              UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-            )
-          end
+          mp = Convert.to_string(
+            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+          )
 
           if mp != nil
             mountpoint2 = GetDirectory(mp, Builtins.filter(exports) do |ent|
@@ -756,25 +731,13 @@ module Yast
 
               UI.ReplaceWidget(Id(:exportsrep), ExportsSelBox(exports))
 
-              if NfsServer.enable_nfsv4
-                UI.ChangeWidget(Id(:exptable), :CurrentItem, mountpoint2)
-              else
-                UI.ChangeWidget(Id(:exportsbox), :CurrentItem, mountpoint2)
-              end
+              UI.ChangeWidget(Id(:exportsbox), :CurrentItem, mountpoint2)
             end
           end
         elsif ret == :mpdelbut
-          mountpoint2 = nil
-
-          if NfsServer.enable_nfsv4
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exptable), :CurrentItem)
-            )
-          else
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-            )
-          end
+          mountpoint2 = Convert.to_string(
+            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+          )
 
           exports = Builtins.filter(exports) do |entry|
             Ops.get_string(entry, "mountpoint", "") != mountpoint2
@@ -782,32 +745,18 @@ module Yast
 
           UI.ReplaceWidget(Id(:exportsrep), ExportsSelBox(exports))
           if Ops.greater_than(Builtins.size(exports), 0)
-            if NfsServer.enable_nfsv4
-              UI.ChangeWidget(
-                Id(:exptable),
-                :CurrentItem,
-                Ops.get_string(exports, [0, "mountpoint"], "")
-              )
-            else
-              UI.ChangeWidget(
-                Id(:exportsbox),
-                :CurrentItem,
-                Ops.get_string(exports, [0, "mountpoint"], "")
-              )
-            end
+            UI.ChangeWidget(
+              Id(:exportsbox),
+              :CurrentItem,
+              Ops.get_string(exports, [0, "mountpoint"], "")
+            )
           end
         elsif ret == :alwnewbut
           mountpoint2 = nil
 
-          if NfsServer.enable_nfsv4
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exptable), :CurrentItem)
-            )
-          else
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-            )
-          end
+          mountpoint2 = Convert.to_string(
+            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+          )
 
           if mountpoint2 != nil
             allowed = FindAllowed(exports, mountpoint2)
@@ -838,24 +787,12 @@ module Yast
                 :Items,
                 AllowedTableItems(allowed)
               )
-              if NfsServer.enable_nfsv4
-                UI.ReplaceWidget(Id(:exportsrep), ExportsSelBox(exports))
-                UI.ChangeWidget(Id(:exptable), :CurrentItem, mountpoint2)
-              end
             end
           end
         elsif ret == :alweditbut
-          mountpoint2 = nil
-
-          if NfsServer.enable_nfsv4
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exptable), :CurrentItem)
-            )
-          else
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-            )
-          end
+          mountpoint2 = Convert.to_string(
+            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+          )
 
           if mountpoint2 != nil
             allowed = FindAllowed(exports, mountpoint2)
@@ -898,24 +835,12 @@ module Yast
                 :Items,
                 AllowedTableItems(allowed)
               )
-              if NfsServer.enable_nfsv4
-                UI.ReplaceWidget(Id(:exportsrep), ExportsSelBox(exports))
-                UI.ChangeWidget(Id(:exptable), :CurrentItem, mountpoint2)
-              end
             end
           end
         elsif ret == :alwdelbut
-          mountpoint2 = nil
-
-          if NfsServer.enable_nfsv4
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exptable), :CurrentItem)
-            )
-          else
-            mountpoint2 = Convert.to_string(
-              UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-            )
-          end
+          mountpoint2 = Convert.to_string(
+            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+          )
 
           if mountpoint2 != nil
             allowed = FindAllowed(exports, mountpoint2)
@@ -936,10 +861,6 @@ module Yast
                 :Items,
                 AllowedTableItems(allowed)
               )
-              if NfsServer.enable_nfsv4
-                UI.ReplaceWidget(Id(:exportsrep), ExportsSelBox(exports))
-                UI.ChangeWidget(Id(:exptable), :CurrentItem, mountpoint2)
-              end
             end
           end
         elsif ret == :abort && !Popup.ReallyAbort(true)
