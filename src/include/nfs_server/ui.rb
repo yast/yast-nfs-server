@@ -387,13 +387,10 @@ module Yast
         )
       fw_contents =
         # frame label
-        Frame(
-          _("Firewall"),
-          VBox(
-            VSpacing(0.2),
-            Ops.get_term(fw_cwm_widget, "custom_widget", Empty()),
-            VSpacing(0.2)
-          )
+        VBox(
+          VSpacing(0.2),
+          Ops.get_term(fw_cwm_widget, "custom_widget", Empty()),
+          VSpacing(0.2)
         )
 
       nfsv4_contents = Frame(
