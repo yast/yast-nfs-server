@@ -626,9 +626,7 @@ module Yast
         )
       end
       begin
-        mountpoint = Convert.to_string(
-          UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-        )
+        mountpoint = current_export_dir
 
         anymp = mountpoint != nil
 
@@ -684,9 +682,7 @@ module Yast
             simulated = :alweditbut
           end
         elsif ret == :mpeditbut
-          mp = Convert.to_string(
-            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-          )
+          mp = current_export_dir
 
           if mp != nil
             mountpoint2 = GetDirectory(mp, Builtins.filter(exports) do |ent|
@@ -706,9 +702,7 @@ module Yast
             end
           end
         elsif ret == :mpdelbut
-          mountpoint2 = Convert.to_string(
-            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-          )
+          mountpoint2 = current_export_dir
 
           exports = Builtins.filter(exports) do |entry|
             Ops.get_string(entry, "mountpoint", "") != mountpoint2
@@ -723,11 +717,7 @@ module Yast
             )
           end
         elsif ret == :alwnewbut
-          mountpoint2 = nil
-
-          mountpoint2 = Convert.to_string(
-            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-          )
+          mountpoint2 = current_export_dir
 
           if mountpoint2 != nil
             allowed = FindAllowed(exports, mountpoint2)
@@ -761,9 +751,7 @@ module Yast
             end
           end
         elsif ret == :alweditbut
-          mountpoint2 = Convert.to_string(
-            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-          )
+          mountpoint2 = current_export_dir
 
           if mountpoint2 != nil
             allowed = FindAllowed(exports, mountpoint2)
@@ -809,9 +797,7 @@ module Yast
             end
           end
         elsif ret == :alwdelbut
-          mountpoint2 = Convert.to_string(
-            UI.QueryWidget(Id(:exportsbox), :CurrentItem)
-          )
+          mountpoint2 = current_export_dir
 
           if mountpoint2 != nil
             allowed = FindAllowed(exports, mountpoint2)

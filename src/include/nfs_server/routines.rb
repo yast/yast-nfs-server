@@ -296,6 +296,11 @@ module Yast
       end
     end
 
+    # Returns currently selected directory configured for export via NFS.
+    def current_export_dir
+      UI.QueryWidget(Id(:exportsbox), :CurrentItem)
+    end
+
 
     # @param [Array<Hash>] exports	list of exports
     # @return		a SelectionBox for the mountpoints, `id(`exportsbox) containing
