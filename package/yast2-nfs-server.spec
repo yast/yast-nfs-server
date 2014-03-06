@@ -17,8 +17,9 @@
 
 
 Name:           yast2-nfs-server
-Version:        3.1.2
+Version:        3.1.3
 Release:        0
+URL:            https://github.com/yast/yast-nfs-server
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
