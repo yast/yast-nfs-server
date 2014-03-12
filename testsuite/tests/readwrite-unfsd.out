@@ -19,13 +19,13 @@ Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
 Execute	.target.bash "/bin/systemctl is-enabled rpcbind.service" 0
 Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
-Execute	.target.bash "/bin/systemctl status idmapd.service" $["TERM":"raw"] 0
-Execute	.target.bash "/bin/systemctl status svcgssd.service" $["TERM":"raw"] 0
+Execute	.target.bash "/bin/systemctl is-active idmapd.service" $["TERM":"raw"] 0
+Execute	.target.bash "/bin/systemctl is-active svcgssd.service" $["TERM":"raw"] 0
 Execute	.target.bash_output "/bin/systemctl stop svcgssd.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl status rpcbind.service" $["TERM":"raw"] 0
+Execute	.target.bash "/bin/systemctl is-active rpcbind.service" $["TERM":"raw"] 0
 Execute	.target.bash_output "/bin/systemctl stop nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
 Execute	.target.bash_output "/bin/systemctl start nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl status nfsserver.service" $["TERM":"raw"] 0
+Execute	.target.bash "/bin/systemctl is-active nfsserver.service" $["TERM":"raw"] 0
 Return	true
 Dump	Write KO
 Read	.target.dir "/projects" nil

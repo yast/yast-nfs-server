@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 12 10:12:12 UTC 2014 - vmoravec@suse.com
+
+- Fix testuite due to changes in yast2
+- 3.1.4
+
+-------------------------------------------------------------------
 Thu Mar  6 11:04:45 UTC 2014 - vmoravec@suse.com
 
 - Fix testsuite due to changes in yast2
