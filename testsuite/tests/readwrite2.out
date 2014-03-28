@@ -1,12 +1,10 @@
 Dump	
 Dump	Read  - services are running
 Dump	
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
-Execute	.target.bash "/bin/systemctl is-enabled SuSEfirewall2.service" 0
 Return	true
 Dump	
 Dump	Write - services will be stopped
@@ -21,17 +19,10 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Execute	.target.bash_output "/bin/systemctl stop nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
-Execute	.target.bash_output "/bin/systemctl  disable nfsserver.service" $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash_output "/bin/systemctl stop nfslock.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-enabled nfslock.service" 0
-Execute	.target.bash_output "/bin/systemctl  disable nfslock.service" $["exit":0, "stderr":"", "stdout":""]
 Return	true
 Dump	
 Dump	Read  - services are running
 Dump	
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
@@ -50,22 +41,16 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Execute	.target.bash "/bin/systemctl is-enabled rpcbind.service" 0
-Execute	.target.bash "/bin/systemctl is-enabled nfslock.service" 0
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
-Execute	.target.bash "/bin/systemctl is-active idmapd.service" $["TERM":"raw"] 0
-Execute	.target.bash "/bin/systemctl is-active svcgssd.service" $["TERM":"raw"] 0
-Execute	.target.bash_output "/bin/systemctl stop svcgssd.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-active rpcbind.service" $["TERM":"raw"] 0
-Execute	.target.bash_output "/bin/systemctl stop nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash_output "/bin/systemctl restart nfslock.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash_output "/bin/systemctl start nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-active nfsserver.service" $["TERM":"raw"] 0
-Return	true
+Log	[DEPRECIATION] `Find' is deprecated; use `SystemdService.find` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	Unable to restart the NFS server.
+Return	false
 Dump	
 Dump	Read  - services are stopped
 Dump	
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
@@ -84,17 +69,10 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Execute	.target.bash_output "/bin/systemctl stop nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
-Execute	.target.bash_output "/bin/systemctl  disable nfsserver.service" $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash_output "/bin/systemctl stop nfslock.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-enabled nfslock.service" 0
-Execute	.target.bash_output "/bin/systemctl  disable nfslock.service" $["exit":0, "stderr":"", "stdout":""]
 Return	true
 Dump	
 Dump	Read  - services are stopped
 Dump	
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
 Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
@@ -113,15 +91,9 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Execute	.target.bash "/bin/systemctl is-enabled rpcbind.service" 0
-Execute	.target.bash "/bin/systemctl is-enabled nfslock.service" 0
-Execute	.target.bash "/bin/systemctl is-enabled nfsserver.service" 0
-Execute	.target.bash "/bin/systemctl is-active idmapd.service" $["TERM":"raw"] 0
-Execute	.target.bash "/bin/systemctl is-active svcgssd.service" $["TERM":"raw"] 0
-Execute	.target.bash_output "/bin/systemctl stop svcgssd.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-active rpcbind.service" $["TERM":"raw"] 0
-Execute	.target.bash_output "/bin/systemctl stop nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash_output "/bin/systemctl restart nfslock.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash_output "/bin/systemctl start nfsserver.service" $["TERM":"raw"] $["exit":0, "stderr":"", "stdout":""]
-Execute	.target.bash "/bin/systemctl is-active nfsserver.service" $["TERM":"raw"] 0
-Return	true
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
+Log	Unable to restart the NFS server.
+Return	false
