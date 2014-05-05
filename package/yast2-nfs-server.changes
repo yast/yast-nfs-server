@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon May  5 15:54:01 CEST 2014 - locilka@suse.com
+
+- Obsolete Service.Status calls replaced with Service.active?
+- Finally dropped obsolete 'portmap' support (using only rpcbind)
+- Adapted testsuite
+- 3.1.6
+
+-------------------------------------------------------------------
 Fri Mar 28 15:47:26 UTC 2014 - vmoravec@suse.com
 
 - Fix testsuite again

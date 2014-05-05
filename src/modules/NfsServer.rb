@@ -76,7 +76,8 @@ module Yast
       @have_nfslock = true
 
 
-      @portmapper = nil
+      # Since SLE 11, there's no portmapper, but rpcbind
+      @portmapper = "rpcbind"
     end
 
     # Function sets internal variable, which indicates, that any
@@ -202,19 +203,6 @@ module Yast
       true
     end
 
-    # Get the used port mapper: since SLE11A3 we have rpcbind
-    # instead of portmap as the default (bnc#423026)
-    def Portmapper
-      if @portmapper == nil
-        @portmapper = Service.Find(["rpcbind", "portmap"])
-        if @portmapper == ""
-          Builtins.y2error("No portmapper found")
-          @portmapper = "rpcbind"
-        end
-      end
-      @portmapper
-    end
-
     # Saves NFS server configuration. (exports(5))
     # Creates any missing directories.
     # @return true on success
@@ -292,7 +280,7 @@ module Yast
           end
         end
       else
-        if !Service.Enable(Portmapper())
+        if !Service.Enable(@portmapper)
           Report.Error(Service.Error)
           ok = false
         end
@@ -308,23 +296,22 @@ module Yast
         end
 
         if @enable_nfsv4
-          if Service.Status("idmapd") == 3
-            if !Service.Start("idmapd")
+          if !Service.active?("idmapd")
+            unless Service.Start("idmapd")
               Report.Error(
                 _("Unable to start idmapd. Check your domain setting.")
               )
               ok = false
             end
-          end
-          if Service.Status("idmapd") == 0
-            if !Service.Restart("idmapd")
+          else
+            unless Service.Restart("idmapd")
               Report.Error(_("Unable to restart idmapd."))
               ok = false
             end
           end
         else
-          if Service.Status("idmapd") == 3
-            if !Service.Stop("idmapd")
+          unless Service.active?("idmapd")
+            unless Service.Stop("idmapd")
               Report.Error(_("Unable to stop idmapd."))
               ok = false
             end
@@ -332,8 +319,8 @@ module Yast
         end
 
         if @nfs_security
-          if Service.Status("svcgssd") == 3
-            if !Service.Start("svcgssd")
+          if !Service.active?("svcgssd")
+            unless Service.Start("svcgssd")
               # FIXME svcgssd is gone! (only nfsserver is left)
               Report.Error(
                 _(
@@ -342,18 +329,17 @@ module Yast
               )
               ok = false
             end
-          end
-          if Service.Status("svcgssd") == 0
-            if !Service.Restart("svcgssd")
+          else
+            unless Service.Restart("svcgssd")
               Report.Error(
-                _("'svcgssd' is already running. Unable to restart it.")
+                _("Unable to restart 'svcgssd' service.")
               )
               ok = false
             end
           end
         else
-          if Service.Status("svcgssd") == 0
-            if !Service.Stop("svcgssd")
+          if Service.active?("svcgssd")
+            unless Service.Stop("svcgssd")
               Report.Error(_("'svcgssd' is running. Unable to stop it."))
               ok = false
             end
@@ -361,16 +347,15 @@ module Yast
         end
 
         if !@write_only
-          if Service.Status(Portmapper()) != 0
-            # portmap must not be started if it is running already (see bug # 9999)
-            Service.Start(Portmapper())
+          unless Service.active?(@portmapper)
+            Service.Start(@portmapper)
           end
 
           Service.Stop("nfsserver")
           Service.Restart("nfslock") if @have_nfslock
           Service.Start("nfsserver")
 
-          if Service.Status("nfsserver") != 0
+          unless Service.active?("nfsserver")
             # error popup message
             Report.Error(
               _(

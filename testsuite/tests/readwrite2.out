@@ -41,11 +41,6 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Log	[DEPRECIATION] `Find' is deprecated; use `SystemdService.find` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
 Log	Unable to restart the NFS server.
 Return	false
 Dump	
@@ -91,9 +86,5 @@ Write	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/proje
 Write	.sysconfig.nfs.NFS4_SUPPORT "no" true
 Write	.sysconfig.nfs.NFS_SECURITY_GSS "no" true
 Write	.sysconfig.nfs nil true
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
-Log	[DEPRECIATION] `Status' is deprecated; use `active?` instead
 Log	Unable to restart the NFS server.
 Return	false

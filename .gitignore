@@ -23,3 +23,9 @@ mkinstalldirs
 stamp-h*
 *.pot
 *.ami
+/configure.ac
+/doc/autodocs/
+/testsuite/raw.*
+/testsuite/run/runtest.sh
+*.bak
+/testsuite/yast2-nfs-server.test/
