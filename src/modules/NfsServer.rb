@@ -24,7 +24,6 @@ module Yast
       Yast.import "Progress"
       Yast.import "Report"
       Yast.import "Service"
-      Yast.import "SystemdService"
       Yast.import "Summary"
       Yast.import "SuSEFirewall"
       Yast.import "Wizard"
@@ -333,7 +332,7 @@ module Yast
           else
             unless Service.Restart("svcgssd")
               Report.Error(
-                _("'svcgssd' is already running. Unable to restart it.")
+                _("Unable to restart 'svcgssd' service.")
               )
               ok = false
             end
