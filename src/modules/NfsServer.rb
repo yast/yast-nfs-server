@@ -49,7 +49,7 @@ module Yast
       @domain = ""
 
       # Should the server be started?
-      # New since 9.0: Exports are independent of this setting.
+      # Exports are independent of this setting.
       @start = false
 
       # @example
@@ -285,29 +285,6 @@ module Yast
         if !Service.Enable("nfsserver")
           Report.Error(Service.Error)
           ok = false
-        end
-
-        if @enable_nfsv4
-          if !Service.active?("idmapd")
-            unless Service.Start("idmapd")
-              Report.Error(
-                _("Unable to start idmapd. Check your domain setting.")
-              )
-              ok = false
-            end
-          else
-            unless Service.Restart("idmapd")
-              Report.Error(_("Unable to restart idmapd."))
-              ok = false
-            end
-          end
-        else
-          unless Service.active?("idmapd")
-            unless Service.Stop("idmapd")
-              Report.Error(_("Unable to stop idmapd."))
-              ok = false
-            end
-          end
         end
 
         if @nfs_security
