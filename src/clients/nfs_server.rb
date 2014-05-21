@@ -165,13 +165,7 @@ module Yast
         "exports"  => { :next => :ws_finish, :abort => :abort }
       }
 
-      # If nfs-kernel-server nor nfs-server is not installed, install nfs-kernel-server.
-      # TODO: require installation of alternate packages
-      if !Package.Installed("nfs-server")
-        @use_star_for_anonymous = true
-        @spaces_allowed = true
-        return nil if !Package.InstallAll(NfsServer.required_packages)
-      end
+      Package.InstallAll(NfsServer.required_packages) or return nil
 
       if !NfsServer.Read
         Builtins.y2error("read error, bye")
@@ -267,7 +261,7 @@ module Yast
         return false
       end
       host = Ops.get_string(options, "hosts", "")
-      host = @use_star_for_anonymous ? "*" : "" if host == ""
+      host = "*" if host == ""
       opts = Ops.get_string(options, "options", "")
       opts = @default_options if opts == ""
       default_allowed = [Builtins.sformat("%1(%2)", host, opts)]
