@@ -64,10 +64,6 @@ module Yast
       #
       @exports = []
 
-      # Do we have nfslock? (nfs-utils: yes, nfs-server: no)
-      # FIXME: check nfs-kernel-server
-      @have_nfslock = true
-
       # Since SLE 11, there's no portmapper, but rpcbind
       @portmapper = "rpcbind"
     end
@@ -94,15 +90,6 @@ module Yast
     # @see #exports
     def Import(settings)
       settings = deep_copy(settings)
-      # if (size (settings) == 0)
-      # {
-      #     // Reset - just continue with Set (#24544).
-      # }
-
-      # To avoid enabling nfslock if it does not exist during autoinstall
-      @have_nfslock = Convert.to_boolean(
-        SCR.Read(path(".init.scripts.exists"), "nfslock")
-      )
       Set(settings)
       true
     end
@@ -139,9 +126,6 @@ module Yast
         SCR.Read(path(".etc.exports")),
         :from => "any",
         :to   => "list <map <string, any>>"
-      )
-      @have_nfslock = Convert.to_boolean(
-        SCR.Read(path(".init.scripts.exists"), "nfslock")
       )
       @enable_nfsv4 = SCR.Read(path(".sysconfig.nfs.NFS4_SUPPORT")) == "yes"
       @nfs_security = SCR.Read(path(".sysconfig.nfs.NFS_SECURITY_GSS")) == "yes"
@@ -264,23 +248,10 @@ module Yast
           Report.Error(Service.Error)
           ok = false
         end
-        if @have_nfslock
-          Service.Stop("nfslock") if !@write_only
-          if !Service.Disable("nfslock")
-            Report.Error(Service.Error)
-            ok = false
-          end
-        end
       else
         if !Service.Enable(@portmapper)
           Report.Error(Service.Error)
           ok = false
-        end
-        if @have_nfslock
-          if !Service.Enable("nfslock")
-            Report.Error(Service.Error)
-            ok = false
-          end
         end
         if !Service.Enable("nfsserver")
           Report.Error(Service.Error)
@@ -320,9 +291,7 @@ module Yast
             Service.Start(@portmapper)
           end
 
-          Service.Stop("nfsserver")
-          Service.Restart("nfslock") if @have_nfslock
-          Service.Start("nfsserver")
+          Service.Restart("nfsserver")
 
           unless Service.active?("nfsserver")
             # error popup message
