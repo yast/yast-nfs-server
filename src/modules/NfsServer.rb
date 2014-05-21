@@ -28,7 +28,6 @@ module Yast
       Yast.import "SuSEFirewall"
       Yast.import "Wizard"
 
-
       # default value of settings modified
       @modified = false
 
@@ -36,24 +35,18 @@ module Yast
       #
       @required_packages = ["nfs-kernel-server"]
 
-
       # Write only, used during autoinstallation.
       # Don't run services and SuSEconfig, it's all done at one place.
       @write_only = false
 
-
       # Enable nfsv4
       @enable_nfsv4 = true
-
 
       # GSS Security ?
       @nfs_security = false
 
-
       # Domain name to be used for nfsv4 (idmapd.conf)
       @domain = ""
-
-
 
       # Should the server be started?
       # New since 9.0: Exports are independent of this setting.
@@ -74,7 +67,6 @@ module Yast
       # Do we have nfslock? (nfs-utils: yes, nfs-server: no)
       # FIXME: check nfs-kernel-server
       @have_nfslock = true
-
 
       # Since SLE 11, there's no portmapper, but rpcbind
       @portmapper = "rpcbind"
@@ -416,7 +408,6 @@ module Yast
 
       summary
     end
-
 
     # Return required packages for auto-installation
     # @return [Hash] of packages to be installed and to be removed
