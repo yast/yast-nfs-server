@@ -28,7 +28,6 @@ module Yast
       Yast.import "SuSEFirewall"
       Yast.import "Wizard"
 
-
       # default value of settings modified
       @modified = false
 
@@ -36,27 +35,21 @@ module Yast
       #
       @required_packages = ["nfs-kernel-server"]
 
-
       # Write only, used during autoinstallation.
       # Don't run services and SuSEconfig, it's all done at one place.
       @write_only = false
 
-
       # Enable nfsv4
       @enable_nfsv4 = true
-
 
       # GSS Security ?
       @nfs_security = false
 
-
       # Domain name to be used for nfsv4 (idmapd.conf)
       @domain = ""
 
-
-
       # Should the server be started?
-      # New since 9.0: Exports are independent of this setting.
+      # Exports are independent of this setting.
       @start = false
 
       # @example
@@ -70,11 +63,6 @@ module Yast
       # ]
       #
       @exports = []
-
-      # Do we have nfslock? (nfs-utils: yes, nfs-server: no)
-      # FIXME: check nfs-kernel-server
-      @have_nfslock = true
-
 
       # Since SLE 11, there's no portmapper, but rpcbind
       @portmapper = "rpcbind"
@@ -102,15 +90,6 @@ module Yast
     # @see #exports
     def Import(settings)
       settings = deep_copy(settings)
-      # if (size (settings) == 0)
-      # {
-      #     // Reset - just continue with Set (#24544).
-      # }
-
-      # To avoid enabling nfslock if it does not exist during autoinstall
-      @have_nfslock = Convert.to_boolean(
-        SCR.Read(path(".init.scripts.exists"), "nfslock")
-      )
       Set(settings)
       true
     end
@@ -147,9 +126,6 @@ module Yast
         SCR.Read(path(".etc.exports")),
         :from => "any",
         :to   => "list <map <string, any>>"
-      )
-      @have_nfslock = Convert.to_boolean(
-        SCR.Read(path(".init.scripts.exists"), "nfslock")
       )
       @enable_nfsv4 = SCR.Read(path(".sysconfig.nfs.NFS4_SUPPORT")) == "yes"
       @nfs_security = SCR.Read(path(".sysconfig.nfs.NFS_SECURITY_GSS")) == "yes"
@@ -272,50 +248,14 @@ module Yast
           Report.Error(Service.Error)
           ok = false
         end
-        if @have_nfslock
-          Service.Stop("nfslock") if !@write_only
-          if !Service.Disable("nfslock")
-            Report.Error(Service.Error)
-            ok = false
-          end
-        end
       else
         if !Service.Enable(@portmapper)
           Report.Error(Service.Error)
           ok = false
         end
-        if @have_nfslock
-          if !Service.Enable("nfslock")
-            Report.Error(Service.Error)
-            ok = false
-          end
-        end
         if !Service.Enable("nfsserver")
           Report.Error(Service.Error)
           ok = false
-        end
-
-        if @enable_nfsv4
-          if !Service.active?("idmapd")
-            unless Service.Start("idmapd")
-              Report.Error(
-                _("Unable to start idmapd. Check your domain setting.")
-              )
-              ok = false
-            end
-          else
-            unless Service.Restart("idmapd")
-              Report.Error(_("Unable to restart idmapd."))
-              ok = false
-            end
-          end
-        else
-          unless Service.active?("idmapd")
-            unless Service.Stop("idmapd")
-              Report.Error(_("Unable to stop idmapd."))
-              ok = false
-            end
-          end
         end
 
         if @nfs_security
@@ -351,9 +291,7 @@ module Yast
             Service.Start(@portmapper)
           end
 
-          Service.Stop("nfsserver")
-          Service.Restart("nfslock") if @have_nfslock
-          Service.Start("nfsserver")
+          Service.Restart("nfsserver")
 
           unless Service.active?("nfsserver")
             # error popup message
@@ -416,7 +354,6 @@ module Yast
 
       summary
     end
-
 
     # Return required packages for auto-installation
     # @return [Hash] of packages to be installed and to be removed

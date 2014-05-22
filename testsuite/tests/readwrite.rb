@@ -44,14 +44,12 @@ module Yast
             "exists"   => true,
             "runlevel" => {
               "rpcbind"   => @service_on,
-              "nfsserver" => @service_on,
-              "nfslock"   => @service_on
+              "nfsserver" => @service_on
             },
             # their contents is not important for ServiceAdjust
             "comment"  => {
               "rpcbind"   => {},
-              "nfsserver" => {},
-              "nfslock"   => {}
+              "nfsserver" => {}
             }
           }
         },

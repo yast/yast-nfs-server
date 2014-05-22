@@ -2,7 +2,6 @@ Dump
 Dump	Read  - services are running
 Dump	
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
-Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true
@@ -24,7 +23,6 @@ Dump
 Dump	Read  - services are running
 Dump	
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
-Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true
@@ -47,7 +45,6 @@ Dump
 Dump	Read  - services are stopped
 Dump	
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
-Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true
@@ -69,7 +66,6 @@ Dump
 Dump	Read  - services are stopped
 Dump	
 Read	.etc.exports [$["allowed":["proj*.local.domain(rw)"], "mountpoint":"/projects"], $["allowed":["*.local.domain(ro)", "@trusted(rw)"], "mountpoint":"/usr"], $["allowed":["(ro,insecure,all_squash)"], "mountpoint":"/pub"]]
-Read	.init.scripts.exists "nfslock" true
 Read	.sysconfig.nfs.NFS4_SUPPORT nil
 Read	.sysconfig.nfs.NFS_SECURITY_GSS nil
 Return	true

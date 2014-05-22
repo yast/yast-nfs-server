@@ -33,16 +33,6 @@ module Yast
       Yast.import "Sequencer"
       Yast.import "Wizard"
       Yast.include include_target, "nfs_server/routines.rb"
-
-      # The kernel-based server can handle spaces in paths,
-      # the user-mode server cannot.
-      @spaces_allowed = false
-
-      # The kernel based server complains about an empty host specification
-      # and wants us to use "*". But the user mode server would match it
-      # only with an unqualified name. We must not use "*" there
-      # to mean an anonymous client.
-      @use_star_for_anonymous = false
     end
 
     # Ask user for a directory to export. Allow browsing.
@@ -103,21 +93,6 @@ module Yast
               # error popup message
               Popup.Message(
                 _("The exports table already contains this directory.")
-              )
-              ret = nil
-            elsif !@spaces_allowed &&
-                Builtins.findfirstof(mountpoint, " \t") != nil
-              Popup.Message(
-                Builtins.sformat(
-                  # message popup; %1, %2 are package names
-                  _(
-                    "The user mode NFS server (%1) cannot export directories\n" +
-                      "with spaces in their names.\n" +
-                      "Use the kernel-based server (%2) to do that."
-                  ),
-                  "nfs-server",
-                  "nfs-kernel-server"
-                )
               )
               ret = nil
             elsif Ops.less_than(SCR.Read(path(".target.size"), mountpoint), 0) &&
@@ -219,11 +194,8 @@ module Yast
         end
 
         hosts = Convert.to_string(UI.QueryWidget(Id(:hostsent), :Value))
-        if @use_star_for_anonymous && hosts == ""
+        if hosts == ""
           hosts = "*"
-          UI.ChangeWidget(Id(:hostsent), :Value, hosts)
-        elsif !@use_star_for_anonymous && hosts == "*" # #91175
-          hosts = ""
           UI.ChangeWidget(Id(:hostsent), :Value, hosts)
         end
 
@@ -519,37 +491,22 @@ module Yast
       )
 
       # Help, part 2 of 4
-      help_text = Ops.add(
-        help_text,
+      help_text +=
         _(
           "<P><b>Host Wild Card</b> sets which hosts can access the selected directory.\n" +
             "It can be a single host, groups, wild cards, or\n" +
             "IP networks.</P>\n"
         )
-      )
 
-      # #91175
-      if @use_star_for_anonymous
-        # Help, part 3 of 4, variant for kernel space server
-        help_text = Ops.add(
-          help_text,
+      # Help, part 3 of 4
+      help_text +=
           _(
             "<p>Enter an asterisk (<tt>*</tt>) instead of a name to specify all hosts.</p>"
           )
-        )
-      else
-        # Help, part 3 of 4, variant for user space server
-        help_text = Ops.add(
-          help_text,
-          _("<p>Leave the field empty to specify all hosts.</p>")
-        )
-      end
 
       # Help, part 4 of 4
-      help_text = Ops.add(
-        help_text,
+      help_text +=
         _("<P>Refer to <tt>man exports</tt> for more information.</P>\n")
-      )
 
       exports = deep_copy(NfsServer.exports)
 
@@ -666,13 +623,7 @@ module Yast
           mountpoint2 = GetDirectory(nil, exports)
 
           if mountpoint2 != nil
-            default_allowed = [
-              Builtins.sformat(
-                "%1(%2)",
-                @use_star_for_anonymous ? "*" : "",
-                GetDefaultOpts(exports, "*")
-              )
-            ]
+            default_allowed = [ "*(%s)" % GetDefaultOpts(exports, "*") ]
             exports = Builtins.add(
               exports,
               { "mountpoint" => mountpoint2, "allowed" => default_allowed }

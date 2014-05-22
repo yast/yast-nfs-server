@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 21 14:21:22 UTC 2014 - mvidner@suse.com
+
+- Avoid "Unable to start idmapd" (bnc#878878).
+- Removed dead code dealing with the user space nfs-server.rpm.
+- 3.1.7
+
+-------------------------------------------------------------------
 Mon May  5 15:54:01 CEST 2014 - locilka@suse.com
 
 - Obsolete Service.Status calls replaced with Service.active?

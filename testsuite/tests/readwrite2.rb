@@ -71,8 +71,6 @@ module Yast
         }
       }
 
-      # pretend nfslock does not exist
-      #   not used
       @READ2 = deep_copy(@READ)
       Ops.set(@READ2, ["init", "scripts", "exists"], false)
 
