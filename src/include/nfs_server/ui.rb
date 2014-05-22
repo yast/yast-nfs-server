@@ -491,28 +491,22 @@ module Yast
       )
 
       # Help, part 2 of 4
-      help_text = Ops.add(
-        help_text,
+      help_text +=
         _(
           "<P><b>Host Wild Card</b> sets which hosts can access the selected directory.\n" +
             "It can be a single host, groups, wild cards, or\n" +
             "IP networks.</P>\n"
         )
-      )
 
       # Help, part 3 of 4
-      help_text = Ops.add(
-          help_text,
+      help_text +=
           _(
             "<p>Enter an asterisk (<tt>*</tt>) instead of a name to specify all hosts.</p>"
           )
-        )
 
       # Help, part 4 of 4
-      help_text = Ops.add(
-        help_text,
+      help_text +=
         _("<P>Refer to <tt>man exports</tt> for more information.</P>\n")
-      )
 
       exports = deep_copy(NfsServer.exports)
 
@@ -629,12 +623,7 @@ module Yast
           mountpoint2 = GetDirectory(nil, exports)
 
           if mountpoint2 != nil
-            default_allowed = [
-              Builtins.sformat(
-                "*(%1)",
-                GetDefaultOpts(exports, "*")
-              )
-            ]
+            default_allowed = [ "*(%s)" % GetDefaultOpts(exports, "*") ]
             exports = Builtins.add(
               exports,
               { "mountpoint" => mountpoint2, "allowed" => default_allowed }
