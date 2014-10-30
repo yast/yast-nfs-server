@@ -1,6 +1,9 @@
 YaST NFS Server Module
 ======================
 
+[![Travis Build](https://travis-ci.org/yast/yast-nfs-server.svg?branch=master)](https://travis-ci.org/yast/yast-nfs-server)
+[![Jenkins Build](http://img.shields.io/jenkins/s/https/ci.opensuse.org/yast-nfs-server-master.svg)](https://ci.opensuse.org/view/Yast/job/yast-nfs-server-master/)
+
 The YaST NFS Server module manages configuration of an
 [NFS](https://en.wikipedia.org/wiki/Network_File_System) server. It's a part of
 [YaST](https://en.opensuse.org/Portal:YaST) — installation and configuration
