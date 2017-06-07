@@ -29,3 +29,5 @@ stamp-h*
 /testsuite/run/runtest.sh
 *.bak
 /testsuite/yast2-nfs-server.test/
+/.yardoc
+/doc/autodocs
