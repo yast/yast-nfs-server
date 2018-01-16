@@ -281,13 +281,9 @@ module Yast
 
       changed = false
 
-      # firewall widget using CWM
-      fw_settings = {
-        "services"        => ["service:nfs-kernel-server"], # bnc#446163
-        "display_details" => true
-      }
       fw_cwm_widget = CWMFirewallInterfaces.CreateOpenFirewallWidget(
-        fw_settings
+        "services"        => ["mountd", "nfs", "rpc-bind"],
+        "display_details" => true
       )
 
       help_text =
