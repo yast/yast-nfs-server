@@ -281,13 +281,9 @@ module Yast
 
       changed = false
 
-      # firewall widget using CWM
-      fw_settings = {
-        "services"        => ["service:nfs-kernel-server"], # bnc#446163
-        "display_details" => true
-      }
       fw_cwm_widget = CWMFirewallInterfaces.CreateOpenFirewallWidget(
-        fw_settings
+        "services"        => ["nfs-kernel-server"],
+        "display_details" => true
       )
 
       help_text =
@@ -464,7 +460,7 @@ module Yast
       end while ret != :back && ret != :next && ret != :abort
 
       if ret == :next
-        # grab current settings, store them to SuSEFirewall::
+        # grab current settings, store them to firewalld::
         CWMFirewallInterfaces.OpenFirewallStore(fw_cwm_widget, "", event)
         NfsServer.start = start_nfs_server
         NfsServer.domain = Convert.to_string(

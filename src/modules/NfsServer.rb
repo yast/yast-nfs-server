@@ -15,6 +15,7 @@
 # $Id$
 #
 require "yast"
+require "y2firewall/firewalld"
 
 module Yast
   class NfsServerClass < Module
@@ -25,7 +26,6 @@ module Yast
       Yast.import "Report"
       Yast.import "Service"
       Yast.import "Summary"
-      Yast.import "SuSEFirewall"
       Yast.import "Wizard"
 
       # default value of settings modified
@@ -137,7 +137,7 @@ module Yast
       end
 
       progress_orig = Progress.set(false)
-      SuSEFirewall.Read
+      firewalld.read
       Progress.set(progress_orig)
 
       @exports != nil
@@ -306,8 +306,7 @@ module Yast
       end
 
       progress_orig = Progress.set(false)
-      SuSEFirewall.WriteOnly
-      SuSEFirewall.ActivateConfiguration if !@write_only
+      @write_only ? firewalld.write_only : firewalld.write
       Progress.set(progress_orig)
 
       Progress.NextStage
@@ -379,6 +378,12 @@ module Yast
     publish :function => :Write, :type => "boolean ()"
     publish :function => :Summary, :type => "string ()"
     publish :function => :AutoPackages, :type => "map ()"
+
+  private
+
+    def firewalld
+      Y2Firewall::Firewalld.instance
+    end
   end
 
   NfsServer = NfsServerClass.new

@@ -17,7 +17,7 @@
 
 
 Name:           yast2-nfs-server
-Version:        3.1.9
+Version:        4.0.0
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
 
@@ -26,13 +26,12 @@ Source0:        %{name}-%{version}.tar.bz2
 
 Group:	        System/YaST
 License:        GPL-2.0+
-# Changed implementation for checking if service is enabled 2.23.23 (affects testsuite)
-BuildRequires:	yast2 >= 2.23.23
+# SuSEFirewall2 replaced by firewalld (fate#323460)
+BuildRequires:	yast2 >= 4.0.39
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite
 BuildRequires:  yast2-devtools >= 3.1.10
-# Service::Find
-# Wizard::SetDesktopTitleAndIcon
-Requires:	yast2 >= 2.21.22
+# SuSEFirewall2 replaced by firewalld (fate#323460)
+Requires:	yast2 >= 4.0.39
 Requires:	yast2-nfs-common
 Recommends:     nfs-kernel-server
 
