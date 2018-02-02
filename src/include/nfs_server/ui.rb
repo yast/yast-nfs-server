@@ -282,7 +282,7 @@ module Yast
       changed = false
 
       fw_cwm_widget = CWMFirewallInterfaces.CreateOpenFirewallWidget(
-        "services"        => ["mountd", "nfs", "rpc-bind"],
+        "services"        => ["nfs-kernel-server"],
         "display_details" => true
       )
 
