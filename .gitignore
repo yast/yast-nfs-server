@@ -30,5 +30,3 @@ stamp-h*
 *.bak
 /testsuite/yast2-nfs-server.test/
 .yardoc/
-doc/
-doc/index.html
