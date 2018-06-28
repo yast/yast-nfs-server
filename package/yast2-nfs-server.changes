@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 28 09:40:46 CEST 2018 - schubi@suse.de
+
+- Added additional searchkeys to desktop file (fate#321043).
+- 4.0.1
+
+-------------------------------------------------------------------
 Fri Feb  2 15:16:24 UTC 2018 - knut.anderssen@suse.com
 
 - Replace SuSEFirewall2 by firewalld (fate#323460)
