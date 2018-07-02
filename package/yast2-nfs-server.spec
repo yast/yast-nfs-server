@@ -17,7 +17,7 @@
 
 
 Name:           yast2-nfs-server
-Version:        4.0.0
+Version:        4.0.1
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
 
