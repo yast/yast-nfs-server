@@ -25,7 +25,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
 Group:	        System/YaST
-License:        GPL-2.0+
+License:        GPL-2.0-or-later
 # SuSEFirewall2 replaced by firewalld (fate#323460)
 BuildRequires:	yast2 >= 4.0.39
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite
