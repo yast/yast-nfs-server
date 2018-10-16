@@ -75,6 +75,7 @@ Group:		System/YaST
 %{yast_scrconfdir}/etc_exports.scr
 %{yast_agentdir}/ag_exports
 %doc %{yast_docdir}
+%license COPYING
 %{yast_schemadir}/autoyast/rnc/nfs_server.rnc
 
 %files -n yast2-nfs-common
