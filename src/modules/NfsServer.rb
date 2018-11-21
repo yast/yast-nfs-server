@@ -19,6 +19,8 @@ require "y2firewall/firewalld"
 
 module Yast
   class NfsServerClass < Module
+    SERVICE = "nfs-server".freeze
+
     def main
       textdomain "nfs_server"
 
@@ -121,7 +123,7 @@ module Yast
     # from SCR (.sysnconfig.nfs) and SCR (.etc.idmapd_conf),if necessary.
     # @return true on success
     def Read
-      @start = Service.Enabled("nfsserver")
+      @start = Service.Enabled(SERVICE)
       @exports = Convert.convert(
         SCR.Read(path(".etc.exports")),
         :from => "any",
@@ -242,9 +244,9 @@ module Yast
       Progress.NextStage
 
       if !@start
-        Service.Stop("nfsserver") if !@write_only
+        Service.Stop(SERVICE) if !@write_only
 
-        if !Service.Disable("nfsserver")
+        if !Service.Disable(SERVICE)
           Report.Error(Service.Error)
           ok = false
         end
@@ -253,7 +255,7 @@ module Yast
           Report.Error(Service.Error)
           ok = false
         end
-        if !Service.Enable("nfsserver")
+        if !Service.Enable(SERVICE)
           Report.Error(Service.Error)
           ok = false
         end
@@ -291,9 +293,9 @@ module Yast
             Service.Start(@portmapper)
           end
 
-          Service.Restart("nfsserver")
+          Service.Restart(SERVICE)
 
-          unless Service.active?("nfsserver")
+          unless Service.active?(SERVICE)
             # error popup message
             Report.Error(
               _(
