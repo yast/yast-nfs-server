@@ -19,6 +19,8 @@ require "y2firewall/firewalld"
 
 module Yast
   class NfsServerClass < Module
+    SERVICE = "nfs-server".freeze
+
     def main
       textdomain "nfs_server"
 
@@ -68,26 +70,31 @@ module Yast
       @portmapper = "rpcbind"
     end
 
-    # Function sets internal variable, which indicates, that any
-    # settings were modified, to "true"
+    # Sets an internal variable to indicate if settings were modified
     def SetModified
       @modified = true
 
       nil
     end
 
-    # Functions which returns if the settings were modified
-    # @return [Boolean]  settings were modified
+    # Whether the settings were modified
+    #
+    # @return [Boolean]
     def GetModified
       @modified
     end
 
     # Get all NFS server configuration from a map.
-    # When called by nfs_server_auto (preparing autoinstallation data)
-    # the map may be empty.
-    # @param [Hash] settings	$["start_nfsserver": "nfs_exports":]
-    # @return	success
+    #
+    # When called by nfs_server_auto (preparing autoinstallation data) the map may be empty.
+    #
+    # @param [Hash] settings
+    # @option settings [Boolean] start_nfsserver
+    # @option settings [Array] nfs_exports
+    #
     # @see #exports
+    #
+    # @return	[true]
     def Import(settings)
       settings = deep_copy(settings)
       Set(settings)
@@ -95,7 +102,10 @@ module Yast
     end
 
     # Set the variables just as is and without complaining
-    # @param [Hash] settings $[ start_nfsserver:, nfs_exports:, ]
+    #
+    # @param [Hash] settings
+    # @option settings [Boolean] start_nfsserver
+    # @option settings [Array] nfs_exports
     def Set(settings)
       settings = deep_copy(settings)
       @start = Ops.get_boolean(settings, "start_nfsserver", false)
@@ -109,19 +119,24 @@ module Yast
       nil
     end
 
-
     # Dump the NFS settings to a map, for autoinstallation use.
-    # @return	$["start_nfsserver": "nfs_exports":]
+    #
     # @see #exports
+    #
+    # @return [Hash] a map with NFS settings, necessary for autoinstallation
+    #   * "start_nfsserver" [Boolean]
+    #   * "nfs_exports" [Array]
     def Export
       { "start_nfsserver" => @start, "nfs_exports" => @exports }
     end
 
-    # Reads NFS settings from the SCR (.etc.exports),
-    # from SCR (.sysnconfig.nfs) and SCR (.etc.idmapd_conf),if necessary.
-    # @return true on success
+    # Reads NFS settings
+    #
+    # From the SCR (.etc.exports), (.sysnconfig.nfs), and (.etc.idmapd_conf) if necessary.
+    #
+    # @return [Boolean] true on success; false otherwise
     def Read
-      @start = Service.Enabled("nfsserver")
+      @start = Service.Enabled(SERVICE)
       @exports = Convert.convert(
         SCR.Read(path(".etc.exports")),
         :from => "any",
@@ -145,6 +160,7 @@ module Yast
 
 
     # Saves /etc/exports and creates missing directories.
+    #
     # @return true on success
     def WriteExports
       # create missing directories.
@@ -180,8 +196,10 @@ module Yast
     end
 
     # Saves NFS server configuration. (exports(5))
-    # Creates any missing directories.
-    # @return true on success
+    #
+    # @note It creates any missing directories.
+    #
+    # @return [Boolean] true on success; false otherwise
     def Write
       # if there is still work to do, don't return false immediately
       # but remember the error
@@ -242,9 +260,9 @@ module Yast
       Progress.NextStage
 
       if !@start
-        Service.Stop("nfsserver") if !@write_only
+        Service.Stop(SERVICE) if !@write_only
 
-        if !Service.Disable("nfsserver")
+        if !Service.Disable(SERVICE)
           Report.Error(Service.Error)
           ok = false
         end
@@ -253,7 +271,7 @@ module Yast
           Report.Error(Service.Error)
           ok = false
         end
-        if !Service.Enable("nfsserver")
+        if !Service.Enable(SERVICE)
           Report.Error(Service.Error)
           ok = false
         end
@@ -291,9 +309,9 @@ module Yast
             Service.Start(@portmapper)
           end
 
-          Service.Restart("nfsserver")
+          Service.Restart(SERVICE)
 
-          unless Service.active?("nfsserver")
+          unless Service.active?(SERVICE)
             # error popup message
             Report.Error(
               _(
@@ -314,7 +332,7 @@ module Yast
       ok
     end
 
-    # @return A summary for autoyast
+    # @return [String] A summary for AutoYaST
     def Summary
       summary = ""
       # summary header; directories exported by NFS
@@ -355,7 +373,10 @@ module Yast
     end
 
     # Return required packages for auto-installation
-    # @return [Hash] of packages to be installed and to be removed
+    #
+    # @return [Hash] list of packages to be installed or removed
+    #   * "install" [Array] packages to be installed
+    #   * "remove" [Array] an empty array since there is nothing to be removed
     def AutoPackages
       { "install" => @required_packages, "remove" => [] }
     end

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov 21 16:27:55 UTC 2018 - dgonzalez@suse.com
+
+- Use the real name for nfs-server service instead an alias
+  (bsc#1116779).
+- 4.0.2
+
+-------------------------------------------------------------------
 Tue Oct 16 16:11:30 CEST 2018 - schubi@suse.de
 
 - Added license file to spec.
