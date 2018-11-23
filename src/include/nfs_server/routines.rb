@@ -244,8 +244,8 @@ module Yast
     end
 
 
-    # @param clients	list of "host(opts)" strings
-    # @return		a string that has comma-separated list of bind target paths.
+    # @param entry list of "host(opts)" strings
+    # @return	[String] a comma-separated list of bind target paths.
     def getbindpaths(entry)
       entry = deep_copy(entry)
       exportpath = Ops.get_string(entry, "mountpoint", "")
