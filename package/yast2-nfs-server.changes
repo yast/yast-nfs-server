@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sun Nov 25 20:03:51 UTC 2018 - Noah Davis <noahadvs@gmail.com>
+
+- Provide icon with module (boo#1109310)
+
+-------------------------------------------------------------------
 Wed Nov 21 16:27:55 UTC 2018 - dgonzalez@suse.com
 
 - Use the real name for nfs-server service instead an alias
