@@ -28,6 +28,7 @@ schemafiles_DATA = \
 desktop_DATA = \
   desktop/nfs_server.desktop
 
+scalabledir = @icondir@/hicolor/scalable/apps
 scalable_DATA = \
   icons/hicolor/scalable/apps/yast-nfs-server.svg
 
