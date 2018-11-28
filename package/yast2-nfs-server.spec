@@ -74,7 +74,7 @@ Group:		System/YaST
 %{yast_desktopdir}/nfs_server.desktop
 %{yast_scrconfdir}/etc_exports.scr
 %{yast_agentdir}/ag_exports
-%{_datadir}/icons/*
+%{yast_icondir}
 %doc %{yast_docdir}
 %license COPYING
 %{yast_schemadir}/autoyast/rnc/nfs_server.rnc
