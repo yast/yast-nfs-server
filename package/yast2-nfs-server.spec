@@ -17,7 +17,7 @@
 
 
 Name:           yast2-nfs-server
-Version:        4.0.2
+Version:        4.0.3
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
 
@@ -74,6 +74,7 @@ Group:		System/YaST
 %{yast_desktopdir}/nfs_server.desktop
 %{yast_scrconfdir}/etc_exports.scr
 %{yast_agentdir}/ag_exports
+%{yast_icondir}
 %doc %{yast_docdir}
 %license COPYING
 %{yast_schemadir}/autoyast/rnc/nfs_server.rnc

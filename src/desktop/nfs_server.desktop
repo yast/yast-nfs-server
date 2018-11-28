@@ -17,7 +17,7 @@ X-SuSE-YaST-AutoInstRequires=lan
 X-SuSE-YaST-AutoInstSchema=nfs_server.rnc
 X-SuSE-YaST-Keywords=share,NFS,file,mount,network
 
-Icon=yast-nfs_server
+Icon=yast-nfs-server
 Exec=xdg-su -c "/sbin/yast2 nfs_server"
 
 Name=NFS Server
