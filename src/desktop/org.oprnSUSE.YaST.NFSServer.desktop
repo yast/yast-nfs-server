@@ -20,6 +20,7 @@ X-SuSE-YaST-Keywords=share,NFS,file,mount,network
 Icon=yast-nfs-server
 Exec=xdg-su -c "/sbin/yast2 nfs_server"
 
-Name=NFS Server
-GenericName=Configure an NFS server
+Name=YaST NFS Server
+GenericName=NFS Server
+Comment=Configure an NFS server
 StartupNotify=true
