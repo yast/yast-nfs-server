@@ -29,7 +29,7 @@ Source0:        %{name}-%{version}.tar.bz2
 # SuSEFirewall2 replaced by firewalld (fate#323460)
 BuildRequires:  yast2 >= 4.0.39
 BuildRequires:  perl-XML-Writer update-desktop-files yast2-testsuite
-BuildRequires:  yast2-devtools >= 3.1.10
+BuildRequires:  yast2-devtools >= 4.2.2
 
 # SuSEFirewall2 replaced by firewalld (fate#323460)
 Requires:       yast2 >= 4.0.39
