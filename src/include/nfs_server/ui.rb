@@ -794,7 +794,7 @@ module Yast
       }
 
       Wizard.CreateDialog
-      Wizard.SetDesktopTitleAndIcon("org.oprnSUSE.YaST.NFSServer")
+      Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.NFSServer")
 
       ret = Sequencer.Run(_Aliases, _Sequence)
       UI.CloseDialog

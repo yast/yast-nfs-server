@@ -175,7 +175,7 @@ module Yast
       CheckSyntaxErrors(NfsServer.exports)
 
       Wizard.CreateDialog
-      Wizard.SetDesktopTitleAndIcon("org.oprnSUSE.YaST.NFSServer")
+      Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.NFSServer")
 
       result = Sequencer.Run(_Aliases, _Sequence)
 

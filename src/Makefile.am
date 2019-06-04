@@ -26,7 +26,7 @@ schemafiles_DATA = \
   autoyast-rnc/nfs_server.rnc
 
 desktop_DATA = \
-  desktop/org.oprnSUSE.YaST.NFSServer.desktop
+  desktop/org.opensuse.yast.NFSServer.desktop
 
 scalabledir = @icondir@/hicolor/scalable/apps
 scalable_DATA = \
