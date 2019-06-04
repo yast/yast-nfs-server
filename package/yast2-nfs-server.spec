@@ -12,34 +12,33 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
 
 Name:           yast2-nfs-server
-Version:        4.1.0
+Summary:        YaST2 - NFS Server Configuration
+Version:        4.2.0
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
+Group:          System/YaST
+License:        GPL-2.0-or-later
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
-Group:	        System/YaST
-License:        GPL-2.0-or-later
 # SuSEFirewall2 replaced by firewalld (fate#323460)
-BuildRequires:	yast2 >= 4.0.39
-BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite
-BuildRequires:  yast2-devtools >= 3.1.10
+BuildRequires:  yast2 >= 4.0.39
+BuildRequires:  perl-XML-Writer update-desktop-files yast2-testsuite
+BuildRequires:  yast2-devtools >= 4.2.2
+
 # SuSEFirewall2 replaced by firewalld (fate#323460)
-Requires:	yast2 >= 4.0.39
-Requires:	yast2-nfs-common
-Recommends:     nfs-kernel-server
-
-BuildArchitectures:	noarch
-
+Requires:       yast2 >= 4.0.39
+Requires:       yast2-nfs-common
 Requires:       yast2-ruby-bindings >= 1.0.0
 
-Summary:	YaST2 - NFS Server Configuration
+Recommends:     nfs-kernel-server
+
+BuildArch:      noarch
 
 %description
 The YaST2 component for configuration of an NFS server. NFS stands for
@@ -47,39 +46,39 @@ network file system access. It allows access to files on remote
 machines.
 
 %package -n yast2-nfs-common
-Summary:	Configuration of NFS, common parts
-Group:		System/YaST
+Summary:        Configuration of NFS, common parts
+Group:          System/YaST
 
 %description -n yast2-nfs-common
--
+Common data for the NFS client and server modules
 
 %prep
-%setup -n %{name}-%{version}
+%setup -q
 
 %build
 %yast_build
 
 %install
 %yast_install
-
+%yast_metainfo
 
 %files
-%defattr(-,root,root)
-%dir %{yast_yncludedir}/nfs_server
-%{yast_yncludedir}/nfs_server/*
-%{yast_clientdir}/nfs-server.rb
-%{yast_clientdir}/nfs_server.rb
-%{yast_clientdir}/nfs_server_auto.rb
-%{yast_moduledir}/NfsServer.rb
-%{yast_desktopdir}/nfs_server.desktop
+%{yast_yncludedir}
+%{yast_clientdir}
+%{yast_clientdir}
+%{yast_clientdir}
+%{yast_moduledir}
+%{yast_desktopdir}
+%{yast_metainfodir}
 %{yast_scrconfdir}/etc_exports.scr
-%{yast_agentdir}/ag_exports
+%{yast_agentdir}
 %{yast_icondir}
 %doc %{yast_docdir}
 %license COPYING
-%{yast_schemadir}/autoyast/rnc/nfs_server.rnc
+%{yast_schemadir}
 
 %files -n yast2-nfs-common
-%defattr(-,root,root)
 %{yast_scrconfdir}/cfg_nfs.scr
 %{yast_scrconfdir}/etc_idmapd_conf.scr
+
+%changelog
