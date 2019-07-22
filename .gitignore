@@ -14,7 +14,7 @@ config.sub
 configure
 configure.in
 depcomp
-doc/
+doc/autodocs
 install-sh
 libtool
 ltconfig
