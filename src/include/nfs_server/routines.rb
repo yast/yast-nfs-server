@@ -347,7 +347,7 @@ module Yast
     # @return		whether valid
     def CheckExportOptions(options)
       # colon is allowed for sec= option, see man 5 exports
-      if !options.tr("A-Za-z0-9=/.:,_-","").empty?
+      if !options.tr("A-Za-z0-9=/.:,_-", "").empty?
         # error popup message
         Report.Error(
           _(
