@@ -202,7 +202,7 @@ module Yast
         if ret == :optsent
           # Update the opts value when changed, otherwise the value validated
           # later could be the cached one.
-          opts = UI.ChangeWidget(Id(:optsent), :Value, opts)
+          opts = Convert.to_string(UI.QueryWidget(Id(:optsent), :Value))
           # check to see if user has changed options entry in the dialogue
           # thrown due to a "Add Hosts" (as opposed to editing existing ones).
           # If yes, suggest the user with a suitable default option set.
