@@ -18,6 +18,9 @@ require "yast"
 
 module Yast
   class NfsServerClass < Module
+    SERVICE = "nfs-server".freeze
+    GSSERVICE = "rpc-svcgssd".freeze
+
     def main
       textdomain "nfs_server"
 
@@ -121,7 +124,7 @@ module Yast
     # from SCR (.sysnconfig.nfs) and SCR (.etc.idmapd_conf),if necessary.
     # @return true on success
     def Read
-      @start = Service.Enabled("nfsserver")
+      @start = Service.Enabled(SERVICE)
       @exports = Convert.convert(
         SCR.Read(path(".etc.exports")),
         :from => "any",
@@ -242,9 +245,9 @@ module Yast
       Progress.NextStage
 
       if !@start
-        Service.Stop("nfsserver") if !@write_only
+        Service.Stop(SERVICE) if !@write_only
 
-        if !Service.Disable("nfsserver")
+        if !Service.Disable(SERVICE)
           Report.Error(Service.Error)
           ok = false
         end
@@ -253,34 +256,33 @@ module Yast
           Report.Error(Service.Error)
           ok = false
         end
-        if !Service.Enable("nfsserver")
+        if !Service.Enable(SERVICE)
           Report.Error(Service.Error)
           ok = false
         end
 
         if @nfs_security
-          if !Service.active?("svcgssd")
-            unless Service.Start("svcgssd")
-              # FIXME svcgssd is gone! (only nfsserver is left)
+          if !Service.active?(GSSERVICE)
+            unless Service.Start(GSSERVICE)
               Report.Error(
                 _(
-                  "Unable to start svcgssd. Ensure your kerberos and gssapi (nfs-utils) setup is correct."
+                  "Unable to start #{GSSERVICE}. Ensure your kerberos and gssapi (nfs-utils) setup is correct."
                 )
               )
               ok = false
             end
           else
-            unless Service.Restart("svcgssd")
+            unless Service.Restart(GSSERVICE)
               Report.Error(
-                _("Unable to restart 'svcgssd' service.")
+                _("Unable to restart '#{GSSERVICE}' service.")
               )
               ok = false
             end
           end
         else
-          if Service.active?("svcgssd")
-            unless Service.Stop("svcgssd")
-              Report.Error(_("'svcgssd' is running. Unable to stop it."))
+          if Service.active?(GSSERVICE)
+            unless Service.Stop(GSSERVICE)
+              Report.Error(_("'#{GSSERVICE}' is running. Unable to stop it."))
               ok = false
             end
           end
@@ -291,9 +293,9 @@ module Yast
             Service.Start(@portmapper)
           end
 
-          Service.Restart("nfsserver")
+          Service.Restart(SERVICE)
 
-          unless Service.active?("nfsserver")
+          unless Service.active?(SERVICE)
             # error popup message
             Report.Error(
               _(
