@@ -283,7 +283,7 @@ module Yast
               # FIXME #{GSSERVICE} is gone! (only nfsserver is left)
               Report.Error(
                 _(
-                  "Unable to start #{GSSERVICE}. Ensure your kerberos and gssapi (nfs-utils) setup is correct."
+                  "Unable to start svcgssd. Ensure your kerberos and gssapi (nfs-utils) setup is correct."
                 )
               )
               ok = false
@@ -291,7 +291,7 @@ module Yast
           else
             unless Service.Restart(GSSERVICE)
               Report.Error(
-                _("Unable to restart '#{GSSERVICE}' service.")
+                _("Unable to restart 'svcgssd' service.")
               )
               ok = false
             end
@@ -299,7 +299,7 @@ module Yast
         else
           if Service.active?(GSSERVICE)
             unless Service.Stop(GSSERVICE)
-              Report.Error(_("'#{GSSERVICE}' is running. Unable to stop it."))
+              Report.Error(_("'svcgssd' is running. Unable to stop it."))
               ok = false
             end
           end
