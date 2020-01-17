@@ -20,7 +20,8 @@ require "y2firewall/firewalld"
 module Yast
   class NfsServerClass < Module
     SERVICE = "nfs-server".freeze
-
+    GSSERVICE = "rpc-svcgssd".freeze
+    
     def main
       textdomain "nfs_server"
 
@@ -277,9 +278,9 @@ module Yast
         end
 
         if @nfs_security
-          if !Service.active?("svcgssd")
-            unless Service.Start("svcgssd")
-              # FIXME svcgssd is gone! (only nfsserver is left)
+          if !Service.active?(GSSERVICE)
+            unless Service.Start(GSSERVICE)
+              # FIXME #{GSSERVICE} is gone! (only nfsserver is left)
               Report.Error(
                 _(
                   "Unable to start svcgssd. Ensure your kerberos and gssapi (nfs-utils) setup is correct."
@@ -288,7 +289,7 @@ module Yast
               ok = false
             end
           else
-            unless Service.Restart("svcgssd")
+            unless Service.Restart(GSSERVICE)
               Report.Error(
                 _("Unable to restart 'svcgssd' service.")
               )
@@ -296,8 +297,8 @@ module Yast
             end
           end
         else
-          if Service.active?("svcgssd")
-            unless Service.Stop("svcgssd")
+          if Service.active?(GSSERVICE)
+            unless Service.Stop(GSSERVICE)
               Report.Error(_("'svcgssd' is running. Unable to stop it."))
               ok = false
             end
