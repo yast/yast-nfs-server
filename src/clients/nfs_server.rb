@@ -118,14 +118,22 @@ module Yast
           "enablev4"   => {
             "type"     => "enum",
             "typespec" => ["yes", "no"],
-            "help"     => _(
-              "'yes'/'no option for enabling/disabling support for NFSv4."
+            "help"     => format(
+              # TRANSLATORS %{yes} and %{no} is untranslated input values yes
+              # and no which is not localized
+              _("%{yes}'/'%{no}' option for enabling/disabling support for NFSv4."),
+              yes: "yes", no: "no"
             )
           },
           "security"   => {
             "type"     => "enum",
             "typespec" => ["yes", "no"],
-            "help"     => _("'yes'/'no' option for enabling/disabling secure NFS.")
+            "help"     => format(
+              # TRANSLATORS %{yes} and %{no} is untranslated input values yes
+              # and no which is not localized
+              _("%{yes}'/'%{no}' option for enabling/disabling support for NFSv4."),
+              yes: "yes", no: "no"
+            )
           }
         },
         "mappings"   => {
@@ -303,7 +311,10 @@ module Yast
         end
       end
 
-      CommandLine.Print(_("Mount point not found.")) if !deleted
+      if !deleted
+        # TRANSLATORS %s is directory where it should be mounted, but it is mounted there.
+        CommandLine.Print(format(_("Mount point '%s' not found."), mountpoint))
+      end
 
       deleted
     end
