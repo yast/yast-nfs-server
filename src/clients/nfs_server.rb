@@ -119,8 +119,8 @@ module Yast
             "type"     => "enum",
             "typespec" => ["yes", "no"],
             "help"     => format(
-              # TRANSLATORS %{yes} and %{no} is untranslated input values yes
-              # and no which is not localized
+              # TRANSLATORS %{yes} and %{no} are not translated input values "yes"
+              # and "no" which is not localized.
               _("%{yes}'/'%{no}' option for enabling/disabling support for NFSv4."),
               yes: "yes", no: "no"
             )
@@ -129,8 +129,8 @@ module Yast
             "type"     => "enum",
             "typespec" => ["yes", "no"],
             "help"     => format(
-              # TRANSLATORS %{yes} and %{no} is untranslated input values yes
-              # and no which is not localized
+              # TRANSLATORS %{yes} and %{no} are not translated input values "yes"
+              # and "no" which is not localized.
               _("%{yes}'/'%{no}' option for enabling/disabling support for NFSv4."),
               yes: "yes", no: "no"
             )
@@ -312,7 +312,7 @@ module Yast
       end
 
       if !deleted
-        # TRANSLATORS %s is directory where it should be mounted, but it is mounted there.
+        # TRANSLATORS %s is mountpoint that is not found in nfs server configuration.
         CommandLine.Print(format(_("Mount point '%s' not found."), mountpoint))
       end
 
