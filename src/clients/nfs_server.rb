@@ -51,14 +51,15 @@ module Yast
         "finish"     => fun_ref(NfsServer.method(:Write), "boolean ()"),
         "actions"    => {
           "summary" => {
-            "handler" => fun_ref(
+            "handler"  => fun_ref(
               method(:NfsServerSummaryHandler),
               "boolean (map)"
             ),
             # command line action help
-            "help"    => _(
+            "help"     => _(
               "NFS server configuration summary"
-            )
+            ),
+            "readonly" => true
           },
           "start"   => {
             "handler" => fun_ref(
@@ -115,14 +116,24 @@ module Yast
             )
           },
           "enablev4"   => {
-            "type" => "string",
-            "help" => _(
-              "Yes/No option for enabling/disabling support for NFSv4."
+            "type"     => "enum",
+            "typespec" => ["yes", "no"],
+            "help"     => format(
+              # TRANSLATORS %{yes} and %{no} are not translated input values "yes"
+              # and "no" which is not localized.
+              _("%{yes}'/'%{no}' option for enabling/disabling support for NFSv4."),
+              yes: "yes", no: "no"
             )
           },
           "security"   => {
-            "type" => "string",
-            "help" => _("Yes/No option for enabling/disabling secure NFS.")
+            "type"     => "enum",
+            "typespec" => ["yes", "no"],
+            "help"     => format(
+              # TRANSLATORS %{yes} and %{no} are not translated input values "yes"
+              # and "no" which is not localized.
+              _("%{yes}'/'%{no}' option for enabling/disabling support for NFSv4."),
+              yes: "yes", no: "no"
+            )
           }
         },
         "mappings"   => {
@@ -200,7 +211,7 @@ module Yast
       end
 
       CommandLine.Print(RichText.Rich2Plain(NfsServer.Summary))
-      false
+      true
     end
 
     # check if neccessary packages are installed
@@ -225,8 +236,10 @@ module Yast
     # @param [Hash] options command options
     # @return whether successful
     def NfsServerStartHandler(options)
-      options = deep_copy(options)
-      return false if NfsServer.start
+      if NfsServer.start
+        CommandLine.Print(_("NFS server already running."))
+        return false
+      end
       return false if !check_packages
       NfsServer.start = true
       true
@@ -236,7 +249,10 @@ module Yast
     # @param [Hash] options command options
     # @return whether successful
     def NfsServerStopHandler(options)
-      options = deep_copy(options)
+      if !NfsServer.start
+        CommandLine.Print(_("NFS server is already stopped."))
+        return false
+      end
       return false if !NfsServer.start
       NfsServer.start = false
       true
@@ -295,6 +311,11 @@ module Yast
         end
       end
 
+      if !deleted
+        # TRANSLATORS %s is mountpoint that is not found in nfs server configuration.
+        CommandLine.Print(format(_("Mount point '%s' not found."), mountpoint))
+      end
+
       deleted
     end
 
@@ -317,7 +338,7 @@ module Yast
         if !NfsServer.enable_nfsv4
           CommandLine.Print(
             _(
-              "Domain cannot be set without enabling NFSv4. Use the 'set enablev4' command."
+              "Domain cannot be set without enabling NFSv4. Use the 'set enablev4=yes' command."
             )
           )
           return false
