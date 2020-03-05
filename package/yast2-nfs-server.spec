@@ -28,8 +28,10 @@ Source0:        %{name}-%{version}.tar.bz2
 
 # SuSEFirewall2 replaced by firewalld (fate#323460)
 BuildRequires:  yast2 >= 4.0.39
-BuildRequires:  perl-XML-Writer update-desktop-files yast2-testsuite
+BuildRequires:  update-desktop-files
 BuildRequires:  yast2-devtools >= 4.2.2
+BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
+BuildRequires:  rubygem(%rb_default_ruby_abi:rspec)
 
 # SuSEFirewall2 replaced by firewalld (fate#323460)
 Requires:       yast2 >= 4.0.39
@@ -55,8 +57,10 @@ Common data for the NFS client and server modules
 %prep
 %setup -q
 
+%check
+%yast_check
+
 %build
-%yast_build
 
 %install
 %yast_install
