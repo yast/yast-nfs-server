@@ -30,3 +30,4 @@ stamp-h*
 *.bak
 /testsuite/yast2-nfs-server.test/
 .yardoc/
+/coverage
