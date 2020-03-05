@@ -1,3 +1,0 @@
-# test strings that appear to be ycp non-strings
-# actually it could fail only on malformed exports, but let's be robust
-true	boolean-host(rw)
