@@ -18,7 +18,7 @@
 
 Name:           yast2-nfs-server
 Summary:        YaST2 - NFS Server Configuration
-Version:        4.3.0
+Version:        4.3.1
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
 Group:          System/YaST
@@ -39,6 +39,8 @@ Requires:       yast2-nfs-common
 Requires:       yast2-ruby-bindings >= 1.0.0
 
 Recommends:     nfs-kernel-server
+
+Supplements:    autoyast(nfs-server)
 
 BuildArch:      noarch
 
