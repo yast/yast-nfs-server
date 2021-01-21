@@ -1,8 +1,12 @@
 YaST NFS Server Module
 ======================
 
-[![Travis Build](https://travis-ci.org/yast/yast-nfs-server.svg?branch=master)](https://travis-ci.org/yast/yast-nfs-server)
-[![Jenkins Build](http://img.shields.io/jenkins/s/https/ci.opensuse.org/yast-nfs-server-master.svg)](https://ci.opensuse.org/view/Yast/job/yast-nfs-server-master/)
+[![Workflow Status](https://github.com/yast/yast-nfs-server/workflows/CI/badge.svg?branch=master)](
+https://github.com/yast/yast-nfs-server/actions?query=branch%3Amaster)
+[![Jenkins Status](https://ci.opensuse.org/buildStatus/icon?job=yast-yast-nfs-server-master)](
+https://ci.opensuse.org/view/Yast/job/yast-yast-nfs-server-master/)
+[![Coverage Status](https://img.shields.io/coveralls/yast/yast-nfs-server.svg)](https://coveralls.io/r/yast/yast-nfs-server?branch=master)
+[![inline docs](http://inch-ci.org/github/yast/yast-nfs-server.svg?branch=master)](http://inch-ci.org/github/yast/yast-nfs-server)
 
 The YaST NFS Server module manages configuration of an
 [NFS](https://en.wikipedia.org/wiki/Network_File_System) server. It's a part of
