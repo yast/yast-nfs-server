@@ -69,6 +69,11 @@ describe Yast::NfsServer do
   end
 
   describe ".Write" do
+    before do
+      allow(Yast::Service).to receive(:Enable).and_return true
+      allow(Yast::Service).to receive(:Disable).and_return true
+    end
+
     it "writes nfs4 enablement" do
       subject.enable_nfsv4 = false
 
@@ -101,14 +106,18 @@ describe Yast::NfsServer do
       subject.exports = [{"mountpoint" => "/test1"}]
 
       expect(Yast::SCR).to receive(:Execute).with(path(".target.mkdir"), "/test1")
+        .and_return true
 
       subject.Write
     end
 
     it "writes exports" do
       subject.exports = [{"mountpoint" => "/test1"}]
+      allow(Yast::SCR).to receive(:Execute).with(path(".target.mkdir"), "/test1")
+        .and_return true
 
       expect(Yast::SCR).to receive(:Write).with(path(".etc.exports"), subject.exports)
+        .and_return true
 
       subject.Write
     end
@@ -140,6 +149,9 @@ describe Yast::NfsServer do
     context "start flag is set to true" do
       before do
         subject.start = true
+
+        # As last step, #write checks if the server was indeed started
+        allow(Yast::Service).to receive(:active?).with("nfs-server").and_return(true)
       end
 
       it "enables rpcbind service" do
@@ -161,7 +173,7 @@ describe Yast::NfsServer do
 
         it "stops rpc-svcgssd if running" do
           allow(Yast::Service).to receive(:active?).with("rpc-svcgssd").and_return(true)
-          expect(Yast::Service).to receive(:Stop).with("rpc-svcgssd")
+          expect(Yast::Service).to receive(:Stop).with("rpc-svcgssd").and_return true
 
           subject.Write
         end
@@ -174,14 +186,14 @@ describe Yast::NfsServer do
 
         it "restarts rpc-svcgssd if running" do
           allow(Yast::Service).to receive(:active?).with("rpc-svcgssd").and_return(true)
-          expect(Yast::Service).to receive(:Restart).with("rpc-svcgssd")
+          expect(Yast::Service).to receive(:Restart).with("rpc-svcgssd").and_return true
 
           subject.Write
         end
 
         it "starts rpc-svcgssd if not running" do
           allow(Yast::Service).to receive(:active?).with("rpc-svcgssd").and_return(false)
-          expect(Yast::Service).to receive(:Start).with("rpc-svcgssd")
+          expect(Yast::Service).to receive(:Start).with("rpc-svcgssd").and_return true
 
           subject.Write
         end
@@ -194,7 +206,7 @@ describe Yast::NfsServer do
 
         it "ensures rpcbind is running" do
           allow(Yast::Service).to receive(:active?).with("rpcbind").and_return(false)
-          expect(Yast::Service).to receive(:Start).with("rpcbind")
+          expect(Yast::Service).to receive(:Start).with("rpcbind").and_return true
 
           subject.Write
         end
