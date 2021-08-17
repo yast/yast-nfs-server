@@ -40,7 +40,7 @@ Requires:       yast2-ruby-bindings >= 1.0.0
 
 Recommends:     nfs-kernel-server
 
-Supplements:    autoyast(nfs-server)
+Supplements:    autoyast(nfs_server)
 
 BuildArch:      noarch
 
