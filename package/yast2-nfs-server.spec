@@ -18,7 +18,7 @@
 
 Name:           yast2-nfs-server
 Summary:        YaST2 - NFS Server Configuration
-Version:        4.4.2
+Version:        4.5.0
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
 Group:          System/YaST
