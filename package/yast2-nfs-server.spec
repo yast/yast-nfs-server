@@ -85,6 +85,5 @@ Common data for the NFS client and server modules
 
 %files -n yast2-nfs-common
 %{yast_scrconfdir}/cfg_nfs.scr
-%{yast_scrconfdir}/etc_idmapd_conf.scr
 
 %changelog
