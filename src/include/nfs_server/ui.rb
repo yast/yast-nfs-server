@@ -440,9 +440,6 @@ module Yast
         # grab current settings, store them to firewalld::
         CWMFirewallInterfaces.OpenFirewallStore(fw_cwm_widget, "", event)
         NfsServer.start = start_nfs_server
-        NfsServer.domain = Convert.to_string(
-          UI.QueryWidget(Id(:domain), :Value)
-        )
         return :finish if !start_nfs_server
       end
 
