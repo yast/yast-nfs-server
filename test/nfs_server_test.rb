@@ -51,16 +51,6 @@ describe Yast::NfsServer do
       expect(subject.nfs_security).to eq true
     end
 
-    context "nfs4 is enabled" do
-      it "reads domain from idmapd" do
-        allow(Yast::SCR).to receive(:Read).with(path(".sysconfig.nfs.NFS4_SUPPORT")).and_return("yes")
-        allow(Yast::SCR).to receive(:Read).with(path(".etc.idmapd_conf.value.General.Domain")).and_return("SUSE")
-
-        subject.Read
-        expect(subject.domain).to eq "SUSE"
-      end
-    end
-
     it "reads firewall settings" do
       expect(Y2Firewall::Firewalld.instance).to receive(:read)
 
@@ -88,18 +78,6 @@ describe Yast::NfsServer do
       expect(Yast::SCR).to receive(:Write).with(path(".sysconfig.nfs.NFS_SECURITY_GSS"), "yes")
 
       subject.Write
-    end
-
-    context "nfs4 is enabled" do
-      it "writes domain to idmapd" do
-        expect(Yast::SCR).to receive(:Write).with(path(".sysconfig.nfs.NFS4_SUPPORT"), "yes")
-        expect(Yast::SCR).to receive(:Write).with(path(".etc.idmapd_conf.value.General.Domain"), "SUSE")
-
-        subject.domain = "SUSE"
-        subject.enable_nfsv4 = true
-
-        subject.Write
-      end
     end
 
     it "creates all directories used as mount point in exports" do

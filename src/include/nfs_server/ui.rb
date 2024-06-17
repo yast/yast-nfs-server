@@ -267,18 +267,6 @@ module Yast
       Wizard.SetScreenShotName("nfs-server-1-start")
 
       start_nfs_server = NfsServer.start
-      domain = Convert.to_string(
-        SCR.Read(path(".etc.idmapd_conf.value.General.Domain"))
-      )
-      if domain == nil
-        Popup.Message(
-          _(
-            "Unable to read the /etc/idmapd.conf file. Setting the default setting for the domain to 'localdomain'."
-          )
-        )
-        domain = "localdomain"
-      end
-
       enable_nfsv4 = NfsServer.enable_nfsv4
       nfs_security = NfsServer.nfs_security
 
@@ -308,9 +296,8 @@ module Yast
       help_text = Ops.add(
         help_text,
         _(
-          "<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>\n" +
-            "and fill in the NFSv4 domain name you want the ID mapping daemon to use. Leave\n" +
-            "it as localdomain or refer to the man page for idmapd and idmapd.conf if you are not sure.</P>\n"
+          "<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>.\n" +
+            "Refer to the man page for idmapd and idmapd.conf if you are not sure with user / group names mappings.</P>\n"
         )
       )
 
@@ -376,8 +363,6 @@ module Yast
               enable_nfsv4
             )
           ),
-          VSpacing(0.2),
-          TextEntry(Id(:domain), _("Enter NFSv4 do&main name:"), domain),
           VSpacing(0.2)
         )
       )
@@ -419,12 +404,6 @@ module Yast
       # initialize the widget (set the current value)
       CWMFirewallInterfaces.OpenFirewallInit(fw_cwm_widget, "")
 
-      if enable_nfsv4
-        UI.ChangeWidget(Id(:domain), :Enabled, true)
-      else
-        UI.ChangeWidget(Id(:domain), :Enabled, false)
-      end
-
       event = nil
       ret = nil
       begin
@@ -441,11 +420,6 @@ module Yast
         if ret == :enable_nfsv4
           enable_nfsv4 = UI.QueryWidget(Id(:enable_nfsv4), :Value) == true
           NfsServer.enable_nfsv4 = enable_nfsv4
-          if enable_nfsv4
-            UI.ChangeWidget(Id(:domain), :Enabled, true)
-          else
-            UI.ChangeWidget(Id(:domain), :Enabled, false)
-          end
         end
 
         if ret == :nfs_security
@@ -466,9 +440,6 @@ module Yast
         # grab current settings, store them to firewalld::
         CWMFirewallInterfaces.OpenFirewallStore(fw_cwm_widget, "", event)
         NfsServer.start = start_nfs_server
-        NfsServer.domain = Convert.to_string(
-          UI.QueryWidget(Id(:domain), :Value)
-        )
         return :finish if !start_nfs_server
       end
 

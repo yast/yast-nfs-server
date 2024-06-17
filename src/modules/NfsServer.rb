@@ -48,9 +48,6 @@ module Yast
       # GSS Security ?
       @nfs_security = false
 
-      # Domain name to be used for nfsv4 (idmapd.conf)
-      @domain = ""
-
       # Should the server be started?
       # Exports are independent of this setting.
       @start = false
@@ -114,7 +111,6 @@ module Yast
       # #260723, #287338: fix wrongly initialized variables
       # but do not extend the schema yet
       @enable_nfsv4 = false
-      @domain = ""
       @nfs_security = false
 
       nil
@@ -145,12 +141,6 @@ module Yast
       )
       @enable_nfsv4 = SCR.Read(path(".sysconfig.nfs.NFS4_SUPPORT")) == "yes"
       @nfs_security = SCR.Read(path(".sysconfig.nfs.NFS_SECURITY_GSS")) == "yes"
-
-      if @enable_nfsv4
-        @domain = Convert.to_string(
-          SCR.Read(path(".etc.idmapd_conf.value.General.Domain"))
-        )
-      end
 
       progress_orig = Progress.set(false)
       firewalld.read
@@ -243,10 +233,6 @@ module Yast
       end
       if @enable_nfsv4
         SCR.Write(path(".sysconfig.nfs.NFS4_SUPPORT"), "yes")
-        if !SCR.Write(path(".etc.idmapd_conf.value.General.Domain"), @domain) ||
-            !SCR.Write(path(".etc.idmapd_conf"), nil)
-          Report.Error(_("Unable to write to idmapd.conf."))
-        end
       else
         SCR.Write(path(".sysconfig.nfs.NFS4_SUPPORT"), "no")
       end
@@ -353,10 +339,6 @@ module Yast
       # add information reg NFSv4 support, domain and security
       if @enable_nfsv4
         summary = Summary.AddLine(summary, "NFSv4 support is enabled.")
-        summary = Summary.AddLine(
-          summary,
-          Builtins.sformat(_("The NFSv4 domain for idmapping is %1."), @domain)
-        )
       else
         summary = Summary.AddLine(summary, "NFSv4 support is disabled.")
       end
@@ -390,7 +372,6 @@ module Yast
     publish :variable => :write_only, :type => "boolean"
     publish :variable => :enable_nfsv4, :type => "boolean"
     publish :variable => :nfs_security, :type => "boolean"
-    publish :variable => :domain, :type => "string"
     publish :variable => :start, :type => "boolean"
     publish :variable => :exports, :type => "list <map <string, any>>"
     publish :function => :Import, :type => "boolean (map)"

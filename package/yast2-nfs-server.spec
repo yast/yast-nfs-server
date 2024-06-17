@@ -18,7 +18,7 @@
 
 Name:           yast2-nfs-server
 Summary:        YaST2 - NFS Server Configuration
-Version:        5.0.0
+Version:        5.0.1
 Release:        0
 URL:            https://github.com/yast/yast-nfs-server
 Group:          System/YaST
@@ -85,6 +85,5 @@ Common data for the NFS client and server modules
 
 %files -n yast2-nfs-common
 %{yast_scrconfdir}/cfg_nfs.scr
-%{yast_scrconfdir}/etc_idmapd_conf.scr
 
 %changelog
