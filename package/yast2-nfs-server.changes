@@ -2,7 +2,7 @@
 Wed Jun 12 08:22:45 UTC 2024 - Michal Filka <mfilka@suse.com>
 
 - bsc#1218158
-  - dropped reading / writing domain from / to idmapd.conf 
+  - dropped reading/writing domain from/to idmapd.conf 
 - 5.0.1
 
 -------------------------------------------------------------------
