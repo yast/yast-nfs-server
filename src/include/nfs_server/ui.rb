@@ -296,7 +296,7 @@ module Yast
       help_text = Ops.add(
         help_text,
         _(
-          "<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>\n" +
+          "<P>If the server needs to handle NFSv4 clients, check <B>Enable NFSv4</B>.\n" +
             "Refer to the man page for idmapd and idmapd.conf if you are not sure with user / group names mappings.</P>\n"
         )
       )
