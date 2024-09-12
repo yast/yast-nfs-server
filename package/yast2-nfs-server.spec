@@ -1,7 +1,7 @@
 #
 # spec file for package yast2-nfs-server
 #
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2023 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -30,8 +30,8 @@ Source0:        %{name}-%{version}.tar.bz2
 BuildRequires:  yast2 >= 4.0.39
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2-devtools >= 4.2.2
-BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
 BuildRequires:  rubygem(%rb_default_ruby_abi:rspec)
+BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
 
 # SuSEFirewall2 replaced by firewalld (fate#323460)
 Requires:       yast2 >= 4.0.39
